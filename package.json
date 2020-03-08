@@ -6,8 +6,8 @@
   "author": "kaysonwu <kayson@huida.cn>",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack-dev-server",
-    "build": "webpack"
+    "dev": "webpack-dev-server --mode=development --config=./config/webpack.ts",
+    "build": "webpack --mode=production --config=./config/webpack.ts"
   },
   "dependencies": {
     "antd": "^4.0.0",
@@ -25,8 +25,17 @@
     "@types/react-redux": "^7.0.0",
     "@types/webpack": "^4.0.0",
     "@types/webpack-dev-server": "^3.1.0",
+    "@types/webpack-merge": "^4.1.0",
+    "babel-plugin-import": "^1.9.0",
+    "css-loader": "^3.0.0",
+    "less": "^3.0.0",
+    "less-loader": "^5.0.0",
+    "style-loader": "^1.0.0",
+    "ts-node": "^8.0.0",
     "typescript": "^3.0.0",
     "webpack": "^4.0.0",
-    "webpack-dev-server": "^3.1.0"
+    "webpack-cli": "^3.0.0",
+    "webpack-dev-server": "^3.1.0",
+    "webpack-merge": "^4.1.0"
   }
 }
