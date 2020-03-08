@@ -1,0 +1,17 @@
+{
+  "name": "react-app",
+  "description": "React web application scaffold",
+  "version": "2.0.0",
+  "main": "index.js",
+  "author": "kaysonwu <kayson@huida.cn>",
+  "license": "MIT",
+  "scripts": {},
+  "dependencies": {
+    "antd": "^4.0.0",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.0.0"
+  }
+}
