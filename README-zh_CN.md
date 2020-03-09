@@ -61,17 +61,20 @@ git clone -b 3.x https://github.com/kaysonwu/react-app.git
 [redux-saga](https://www.npmjs.com/package/redux-saga) | Redux 中间件，用于异步状态管理 | ✔️
 [@babel/core](https://www.npmjs.com/package/@babel/core) | babel 核心库 | ❌ | 7.x 是最新版, `7.4.0` 起支持 `core-js@3`
 [@babel/preset-env](https://www.npmjs.com/package/@babel/preset-env) | babel env 预设 | ❌ | 与 babel 核心库保持一致
+[@types/html-webpack-plugin](https://www.npmjs.com/package/@types/html-webpack-plugin) | html-webpack-plugin 包的 typescript 声明文件 | ❌ | 与包版本保持一致
 [@types/node](https://www.npmjs.com/package/@types/node) | node 包的 typescript 声明文件，**webpack 配置依赖它** | ❌
 [@types/react](https://www.npmjs.com/package/@types/react) | react 包的 typescript 声明文件 | ❌ | 与包版本保持一致
 [@types/react-dom](https://www.npmjs.com/package/@types/react-dom) | react-dom 包的 typescript 声明文件 | ❌ | 与包版本保持一致
-[@types/react-redux](https://www.npmjs.com/package/@types/react-redux) | react-redux 包的 typescript 声明文件 | ❌
+[@types/react-redux](https://www.npmjs.com/package/@types/react-redux) | react-redux 包的 typescript 声明文件 | ❌ | 与包版本保持一致
 [@types/webpack](https://www.npmjs.com/package/@types/webpack) | webpack 包的 typescript 声明文件 | ❌ | 与包版本保持一致
 [@types/webpack-dev-server](https://www.npmjs.com/package/@types/webpack-dev-server) | webpack-dev-server 包的 typescript 声明文件 | ❌ | 与包版本保持一致
 [@types/webpack-merge](https://www.npmjs.com/package/@types/webpack-merge) | webpack-merge 包的 typescript 声明文件 | ❌ | 与包版本保持一致
 [babel-loader](https://www.npmjs.com/package/babel-loader) | 使用 babel 编译 javascript 文件 | ❌  | 8.x 是最新版, `8.0.0` 起支持 babel7
 [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) | 按需模块导入的 babel 插件，用于 antd 的按需导入 | ❌  | 1.x 是最新版, `1.9.0` 起支持 babel7
+[clean-webpack-plugin](https://www.npmjs.com/package/clean-webpack-plugin) | 用于在构建之前删除您的构建文件夹 | ❌  | 3.x 是最新版, 
 [core-js](https://www.npmjs.com/package/core-js) | Javascript 模块化标准库，包含完整的 polyfills. **IE11 依赖它** | ❌  | 3.x 是最新版
 [css-loader](https://www.npmjs.com/package/css-loader) |  解释 @import 和 url() | ❌ | 3.x 是最新版
+[html-webpack-plugin](https://www.npmjs.com/package/html-webpack-plugin) |  简化 HTML 文件创建，并注入服务模块 | ❌ | 3.x 是最新版, `3.2.0` 为了与声明文件保持一致
 [less](https://www.npmjs.com/package/less) |  CSS 预处理语言 | ❌ | less-loader 4.1.0 起支持 less >= v3.0.0
 [less-loader](https://www.npmjs.com/package/less-loader) | 编译 `less` 到 `css` | ❌ | 5.0.0 起已经取消对 < webpack4.x 和 < node 6 的支持
 [regenerator-runtime](https://www.npmjs.com/package/regenerator-runtime) | 解释 `generator` 和 `async` 等函数  | ❌ | 0.13.x 是最新版

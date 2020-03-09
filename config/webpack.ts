@@ -1,4 +1,4 @@
-import { resolve, sep, join } from 'path';
+import { resolve, join } from 'path';
 import { ConfigurationFactory } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import merge from 'webpack-merge';
@@ -6,13 +6,14 @@ import dev from './webpack.dev';
 import pro from './webpack.pro';
 
 const root = resolve(__dirname, '..');
+
 const config : ConfigurationFactory = (env, { mode }) => {
 
   return merge({
     mode,
-    // output: {
-    //   path: join(root, 'public')
-    // },
+    output: {
+      path: join(root, 'public')
+    },
     resolve: {
       extensions: ['.tsx', '.ts', '.js']
     },
