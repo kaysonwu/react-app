@@ -125,7 +125,7 @@ git clone -b 3.x https://github.com/kaysonwu/react-app.git
 
 ## 笔记
 
-### 代码分割与懒加载 <a id="code-splitting">🔗</a>
+### 代码分割与懒加载 <a id="code-splitting"></a>
 
 > 参考文献： [webpack 代码分离](https://webpack.docschina.org/guides/code-splitting/)、[import 语法](https://webpack.docschina.org/api/module-methods#import-)、[webpack 使用不同语言进行配置](https://webpack.docschina.org/configuration/configuration-languages/)
 
@@ -193,7 +193,7 @@ import(
 
 上面示例，用 `webpackChunkName` 选项指定了新的 `chunk` 名称，并将该 `bundle` 存放至 `pages` 文件夹内。 从 `webpack 2.6.0` 开始，魔术注释加入了 `[index]` 和 `[request]` 占位符，分别支持赋予一个递增的数字和实际解析的文件名。
 
-### 国际化 <a id="i18n-cn">🔗</a> 
+### 国际化 <a id="i18n-cn"></a> 
 
 [react-intl](https://www.npmjs.com/package/react-intl) 可以很好的帮助我们搭建国际化应用。有时，面对不同语言的翻译文案，我们希望能做到按需加载。
 
@@ -213,7 +213,7 @@ import(
 
 2. 请使用英文作为键的首选语言
 
-### 最低可支持 IE9 <a id="IE9">🔗</a> 
+### 最低可支持 IE9 <a id="IE9"></a> 
 
 😂 当你面对低版本浏览器报错时，是不是内心极度焦躁？haha~ 我也经历过这样的煎熬。现在，请你放松我将为你梳理出最佳解决方案，让你可以轻松解决任何报错。首先，我们先来了解下为什么会出现这样的报错？
 
