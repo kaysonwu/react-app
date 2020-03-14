@@ -1,5 +1,6 @@
 const { resolve, join } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const LoadablePlugin = require('@loadable/webpack-plugin')
 const merge = require('webpack-merge');
 const prod = require('./webpack.prod');
 const dev = require('./webpack.dev');
@@ -60,30 +61,24 @@ module.exports = (env, { mode, target }) => {
       ]
     },
     optimization: {
-      minimize: false,
-      // splitChunks: {
-      //   cacheGroups: {
-      //     commons: {
-      //       name: "vendor",
-      //       chunks: "all",
-      //      // chunks: 'all',
-      //     }
-      //   }
-      // }
+      minimize: false
     }
   }, (isNode ? ({
     // Node target for server side render.
     entry: {
-      app: join(src, 'server.tsx'),
+      server: join(src, 'server.tsx'),
     },
     output: {
       path: serverPath,
-      libraryTarget: "commonjs2"
-    }
+   //   libraryTarget: "commonjs2"
+    },
+    plugins: [
+      new LoadablePlugin()
+    ]
   }) : ({
     // Web target client side render.
     entry: {
-      server: join(src, 'index.tsx')
+      app: join(src, 'index.tsx')
     },
     output: {
       path: clientPath

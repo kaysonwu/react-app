@@ -1,0 +1,24 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "debug": false,
+        "targets": {
+          "node": true
+        }
+      }
+    ],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    [
+      "import", 
+      {
+        "libraryName": "antd",
+        "style": true
+      }
+    ],
+    "@loadable/babel-plugin"
+  ]
+}
