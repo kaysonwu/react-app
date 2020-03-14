@@ -4,17 +4,23 @@ const merge = require('webpack-merge');
 const prod = require('./webpack.prod');
 const dev = require('./webpack.dev');
 
+// Path constants.
 const root = resolve(__dirname, '..');
-const modules = join(root, 'node_modules');
-console.log(modules)
-const src = resolve(__dirname, '..', 'src');
+const src = join(root, 'src');
+const serverPath = join(root, 'server');  // Server build directory
+const clientPath = join(root, 'public');  // Client build directory
 
-module.exports = (env, { mode }) => {
+module.exports = (env, { mode, target }) => {
+  
+  const isProd = mode === 'production';
+  const isNode = target === 'node';
+
   return merge({
-    mode,
+    mode: 'none',
+    target,
     output: {
-      filename: '[name].js',
-      publicPath: "/"
+      publicPath: '/',
+      filename: '[name].js'
     },
     resolve: {
       extensions: ['.js', '.ts', '.tsx', '.jsx'],
@@ -27,26 +33,7 @@ module.exports = (env, { mode }) => {
       rules: [
         {
           test: /\.tsx?$/,
-          // include: [
-          //   join(modules, 'react-intl'),
-          //   join(modules, 'intl-messageformat'),
-          //   join(modules, 'intl-messageformat-parser'),
-          //   root
-          // ],
-          exclude: path => {
-
-            if (/node_modules/.test(path) && ! (/react-intl|intl-messageformat|intl-messageformat-parser/).test(path)) {
-              return true;
-            }
-            console.log("jsx", path)  
-            return false;
-
-            if (/node_modules\/(?!react-intl|intl-messageformat|intl-messageformat-parser)/.test(path)) {
-
-            } else{
-              console.log('tsx', path);
-            }
-          },
+          exclude: /node_modules(\/|\\)(?!react-intl|intl-messageformat|intl-messageformat-parser)/,
           use: [
             'babel-loader',
             'ts-loader'
@@ -54,22 +41,7 @@ module.exports = (env, { mode }) => {
         },
         {
           test: /\.jsx?$/,
-          // include: [
-         
-          //   join(modules, 'react-intl'),
-          //   join(modules, 'intl-messageformat'),
-          //   join(modules, 'intl-messageformat-parser'),
-          //   root,
-          // ],
-          exclude: path => {
-
-            if (/node_modules/.test(path) && ! (/react-intl|intl-messageformat|intl-messageformat-parser/).test(path)) {
-              return true;
-            }
-            console.log("jsx", path)  
-            return false;
-           
-         },
+          exclude: /node_modules(\/|\\)(?!react-intl|intl-messageformat|intl-messageformat-parser)/,
           use: 'babel-loader'
         },
         {
@@ -87,10 +59,42 @@ module.exports = (env, { mode }) => {
         }
       ]
     },
+    optimization: {
+      minimize: false,
+      // splitChunks: {
+      //   cacheGroups: {
+      //     commons: {
+      //       name: "vendor",
+      //       chunks: "all",
+      //      // chunks: 'all',
+      //     }
+      //   }
+      // }
+    }
+  }, (isNode ? ({
+    // Node target for server side render.
+    entry: {
+      app: join(src, 'server.tsx'),
+    },
+    output: {
+      path: serverPath,
+      libraryTarget: "commonjs2"
+    }
+  }) : ({
+    // Web target client side render.
+    entry: {
+      server: join(src, 'index.tsx')
+    },
+    output: {
+      path: clientPath
+    },
+    devServer: {
+      contentBase: clientPath,
+    },
     plugins: [
       new HtmlWebpackPlugin({
         template: join(src, 'index.html')
       })
     ]
-  }, (mode === 'production' ? prod : dev))
+  })), (isProd ? prod : dev))
 };
