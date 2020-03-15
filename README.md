@@ -6,7 +6,7 @@
 --- | --- | --- | --- | --- | --- |
 Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
 
-它是一个企业级的脚手架，更形似一个框架。不管你是新手还是老司机，你都可以轻松入门到精通。笔记部分记录了我搭建这个脚手架的经验，希望可以帮助到你。
+&nbsp;&nbsp;&nbsp;&nbsp;它是一个企业级的脚手架，更形似一个框架。你能从中获取搭建脚手架的经验，也能从这里开始你的项目。
 
 ## 特性
 
@@ -15,7 +15,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
 - 🌷 [内置 antd UI 框架](https://ant.design/)
 - ✂️ [代码分割](#code-splitting)
 - 🚀 [懒加载](#lazy-loading)   
-- 🌏 [国际化](#i18n-cn)
+- 🌏 [国际化](#i18n)
 - 📌 [最低可支持 IE9](#IE9)
 - 🍔 [dva 型数据流](#dva)
 - 🎯 [服务端渲染](#ssr)
@@ -123,7 +123,7 @@ git clone -b 3.x https://github.com/kaysonwu/react-app.git
 [webpack-dev-server](https://www.npmjs.com/package/webpack-dev-server) | 提供开发服务 | ❌ | 3.x 是最新版, `3.1.0` 为了与声明文件保持一致
 [webpack-merge](https://www.npmjs.com/package/webpack-merge) | 合并 webpack 配置 | ❌ | 4.x 是最新版，`4.1.0` 为了与声明文件保持一致
 
-## 笔记
+## 文档
 
 ### 代码分割与懒加载 <a id="code-splitting"></a>
 
@@ -180,7 +180,7 @@ git clone -b 3.x https://github.com/kaysonwu/react-app.git
         }
       }
       ```
-`webpack` 不需要特别的配置，就能编译 `import()` 语法了，接下来，通过参考 [react-loadable](https://www.npmjs.com/package/react-loadable) 或 [@loadable/component](https://www.npmjs.com/package/@loadable/component) 的文档，来使用 `import()` 即可。
+`webpack` 不需要特别的配置，就能编译 `import()` 语法了，接下来，通过参考 [react-loadable](https://github.com/thejameskyle/react-loadable) 或 [@loadable/component](https://loadable-components.com/docs/getting-started/) 的文档，来使用 `import()` 即可。
 
 另外，`webpack` 针对 `import()` 语法编译，还提供了 [魔术注释](https://webpack.docschina.org/api/module-methods#magic-comments)，它可以帮助你更好的命名 `bundle` 与优化模块的加载方式。
 
@@ -193,25 +193,217 @@ import(
 
 上面示例，用 `webpackChunkName` 选项指定了新的 `chunk` 名称，并将该 `bundle` 存放至 `pages` 文件夹内。 从 `webpack 2.6.0` 开始，魔术注释加入了 `[index]` 和 `[request]` 占位符，分别支持赋予一个递增的数字和实际解析的文件名。
 
-### 国际化 <a id="i18n-cn"></a> 
+### 懒加载 <a id="lazy-loading"></a>
 
-[react-intl](https://www.npmjs.com/package/react-intl) 可以很好的帮助我们搭建国际化应用。有时，面对不同语言的翻译文案，我们希望能做到按需加载。
+> 参考文献：[webpack 懒加载](https://webpack.docschina.org/guides/lazy-loading/)
 
-建议：
+&nbsp;&nbsp;&nbsp;&nbsp;懒加载或者按需加载，是一种很好的优化网页或应用的方式。这种方式实际上是先把你的代码在一些逻辑断点处分离开，然后在一些代码块中完成某些操作后，立即引用或即将引用另外一些新的代码块。这样加快了应用的初始加载速度，减轻了它的总体体积，因为某些代码块可能永远不会被加载。
 
-1. 不使用短键，应使用翻译字符串作为键
+&nbsp;&nbsp;&nbsp;&nbsp;本脚手架使用了 [React](https://zh-hans.reactjs.org/docs/code-splitting.html#reactlazy) 官方推荐的代码拆分库 [@loadable/component](https://loadable-components.com)，并用它实现了页面、语言包、数据模型等代码的拆分与按需加载。接下来我将分别展示与之相关的代码。
 
-   ```json
-    {
-      // Bad
-      "welcome": "Welcome to our application",
+#### 页面
 
-      // Good
-      "Welcome to our application": "欢迎使用我们的应用程序"
-    }
-   ``` 
+#### 语言包
 
-2. 请使用英文作为键的首选语言
+
+### 国际化 <a id="i18n"></a> 
+
+&nbsp;&nbsp;&nbsp;&nbsp;国际化（internationalization）是设计和制造容易适应不同区域要求的产品的一种方式。它要求从产品中抽离所有地域语言，国家/地区和文化相关的元素。换言之，应用程序的功能和代码设计考虑在不同地区运行的需要，其代码简化了不同本地版本的生产。开发这样的程序的过程，就称为国际化。
+
+&nbsp;&nbsp;&nbsp;&nbsp;本脚手架选用了由雅虎团队专门为 [React](https://zh-hans.reactjs.org) 应用设计的国际化库 [react-intl](https://github.com/formatjs/react-intl)。脚手架的语言文件默认都放在 `src/locales` 目录中。在此目录中，相应的语言文件存放在相应的子目录下，例如：
+
+```text
+├── src                                 
+    ├── locales                      
+      ├── zh-CN               // 简体中文语言
+        ├── home.ts           // Home 页面语言 
+        └── index.ts          // 公共语言
+```
+
+&nbsp;&nbsp;&nbsp;&nbsp;将公共与页面语言分离是为了实现懒加载，在较小的应用中效果可能不是很明显，但是，随着你的应用语言文件增大它的收益就会变得越发明显。
+
+**注意：** 页面语言文件的命名应当遵循路由的路径，当存在嵌套路径时，只需以 `-` 替代路径分隔符 `/` 命名语言文件即可。如果你不喜欢 `-` 你需要修改 `src/utils/locale.ts` 中的 `getNameFromPath` 函数，例如：
+
+```typescript
+export function getNameFromPath(path: string) {
+
+  ...
+
+//  return path.replace('/', '-');
+
+ // 将 - 修改成 . 
+  return path.replace('/', '.');
+}
+```
+
+#### 引入 antd
+
+&nbsp;&nbsp;&nbsp;&nbsp;[Antd Design](https://ant.design) 团队为 [React](https://zh-hans.reactjs.org) 提供了一款优秀的 UI 框架，。为了让它也保持国际化，我们需要在公共语言文件中引入它的语言文件，示例：
+
+```typescript
+import antd from 'antd/es/locale-provider/zh_CN';
+
+const zh_CN : Locale = {
+  antd,
+  Hello: "你好"
+};
+
+export default zh_CN;
+```
+
+#### 区域设置
+
+&nbsp;&nbsp;&nbsp;&nbsp;你可以使用 `/src/utils/locale` 中的 `setLocale` 方法动态地更改应用运行过程中使用的语言：
+
+```tsx
+import React from 'react';
+import { setLocale } from '@/utils/locale';
+
+export default () => {
+
+  const handleClick = () => {
+    setLocale('en');
+  }
+
+  return (
+    <button onClick={handleClick}>修改语言</button>
+  )
+}
+```
+
+#### 确定当前语言环境
+
+&nbsp;&nbsp;&nbsp;&nbsp;你可以使用 `/src/utils/locale` 中的 `getLocale` 和 `isLocale` 方法确定当前的区域设置或者检查语言环境是否为给定值：
+
+```tsx
+import React from 'react';
+import { getLocale, isLocale } from '@/utils/locale';
+
+export default () => {
+
+  const locale = getLocale();
+
+  if (isLocale('en')) {
+
+  }
+}
+```
+
+#### 定义翻译字符串
+
+&nbsp;&nbsp;&nbsp;&nbsp;所有语言文件必须返回 `键值对` 类型数据，语言文件建议使用 `typescript` 或 `javascript` 语言编写，如果你需要使用 `json` 编写，你需要在 `config/webpack.js` 文件中加入 `json` 解析后缀，参照：
+
+```javascript
+module.exports = (env, { mode, target }) => {
+  ...
+  return merge({
+    ...
+    resolve: {
+      extensions: ['.js', '.ts', '.tsx', '.jsx', 'json'],
+    },
+  })
+}      
+```
+
+**使用短键**
+
+&nbsp;&nbsp;&nbsp;&nbsp;脚手架默认开启了代码分割与懒加载，所以，即使你不使用前缀也不用担心 `id` 冲突。例如：
+
+```typescript
+// /src/locales/zh-CN/index.ts
+const zh_CN : Locale = {
+  Hello: "你好"
+};
+```
+**使用翻译字符串作为键**
+
+&nbsp;&nbsp;&nbsp;&nbsp;对于有大量翻译需求的应用，如果每条翻译语句都要一一使用 `短键` 来定义，那么当你在组件中尝试去引用这些 `短键` 的时候，很容易变得混乱。其次，如果你的备用语言是英语，那么，即使你没有创建英语语言包也可以更好的使用 `id` 作为回退文案。因此，**建议你使用翻译字符串作为键** 来定义语言包文件。例如：
+
+```typescript
+// /src/locales/zh-CN/index.ts
+const zh_CN : Locale = {
+  "Hello World!": "你好，世界！"
+};
+```
+
+#### 检索翻译字符串
+
+&nbsp;&nbsp;&nbsp;&nbsp;你可以使用 [react-intl API](https://github.com/formatjs/react-intl/blob/master/docs/API.md) 或组件从语言文件中检索，例如：
+
+```tsx
+import React from 'react';
+import { useIntl, FormattedMessage } from 'react-intl';
+
+export default () => {
+
+  const intl = useIntl();
+
+  return (
+    <div>{intl.formatMessage({ id: 'Hello Wolrd!' })}</div>
+
+    // 组件的方式
+    // <FormattedMessage id="Hello Wolrd!" />
+  );
+}
+```
+
+**翻译字符串中的参数替换**
+
+&nbsp;&nbsp;&nbsp;&nbsp;如果需要，你可以在翻译字符串中定义占位符。所有的占位符使用花括号包裹 `{}` 。例如，你可以使用占位符 `name` 定义欢迎消息：
+
+```typescript
+// /src/locales/zh-CN/index.js
+export default {
+  "Hello": "你好，{name}!"
+};
+```
+
+&nbsp;&nbsp;&nbsp;&nbsp;现在，你可以传递 `values` 参数，它会将值替换到翻译字符串的占位符中：
+
+```tsx
+import React from 'react';
+import { useIntl, FormattedMessage } from 'react-intl';
+
+export default () => {
+
+  const intl = useIntl();
+
+  return (
+    <div>{intl.formatMessage({ id: 'Hello' }, { name: '世界' })}</div>
+
+    // 组件的方式
+    // <FormattedMessage id="Hello" values={{ name: '世界' }} />
+  );
+}
+```
+
+&nbsp;&nbsp;&nbsp;&nbsp;使用方法先介绍到这里，你还可以通过 [react-intl 文档](https://github.com/formatjs/react-intl/blob/master/docs/README.md) 去探索更多高级用法。
+
+#### 搭建步骤
+
+&nbsp;&nbsp;&nbsp;&nbsp;首先，我们需要安装相关依赖包
+
+```shell
+yarn add react-intl @loadable/component
+```
+
+&nbsp;&nbsp;&nbsp;&nbsp;接下来，准备一些辅助函数
+
+```typescript
+// /src/utils/locale.ts
+
+// 解析路由路径到语言文件名称
+function getNameFromPath(path: string) => string;
+
+// 获取当前的区域设置
+function getLocale(fallback: string) => string;
+
+// 检查语言环境是否为给定值
+function isLocale(locale: string) => boolean;
+
+// 设置区域
+function setLocale(locale: string) => void
+```
 
 ### 最低可支持 IE9 <a id="IE9"></a>
 
@@ -232,6 +424,7 @@ import(
 ---|---|---
 [react-dom@>=16.0.0](https://zh-hans.reactjs.org/docs/react-dom.html#browser-support) | IE9+ | [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)、[Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)
 [react-intl@>=4.0.0](https://github.com/formatjs/react-intl/blob/master/docs/Getting-Started.md#runtime-requirements) | IE11+ | Intl
+[@loadable/components](https://loadable-components.com/docs/faq/#which-browsers-are-supported) | IE9+ | Map、Set
 
 ### 服务端渲染 <a id="ssr"></a>
 
