@@ -243,7 +243,7 @@ export function getNameFromPath(path: string) {
 &nbsp;&nbsp;&nbsp;&nbsp;[Antd Design](https://ant.design) 团队为 [React](https://zh-hans.reactjs.org) 提供了一款优秀的 UI 框架，。为了让它也保持国际化，我们需要在公共语言文件中引入它的语言文件，示例：
 
 ```typescript
-import antd from 'antd/es/locale-provider/zh_CN';
+import antd from 'antd/lib/locale-provider/zh_CN';
 
 const zh_CN : Locale = {
   antd,
