@@ -6,14 +6,14 @@ import Loadable from './loadable';
 
 interface LocaleProviderProps extends Omit<ConfigProviderProps, 'locale'> {
   locale: string;
-  files?: string[]
+  // Language files. path relative to @/locales
+  files?: string[]; 
 }
 
 const LocaleProvider = ({ locale, files, children, ...props }: LocaleProviderProps) => {
-  const paths = (files || ['index']).map(file => (file.indexOf('/') !== -1 ? file : `${locale}/${file}`));
   return (
-    <Loadable paths={paths}>
-      {({ antd, ...messages }) => {
+    <Loadable paths={files || [locale]}>
+      {({ antd, ...messages }: any) => {
         const intl = <IntlProvider locale={locale} messages={messages}>{children}</IntlProvider>
         return antd ? <ConfigProvider {...props} locale={antd}>{intl}</ConfigProvider> : intl;
       }}
