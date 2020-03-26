@@ -19,8 +19,10 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
 - 📌 [最低可支持 IE9](#IE9)
 - 🍔 [dva 型数据流](#dva)
 - 🎯 [服务端渲染](#ssr)
-- 🌟 [数据模拟](#ssr)
+- 💎 [条件编译](#conditional-compile)
+- 🌟 [数据模拟](#mock)
 - 🐛 [自动化测试](#test)
+
 
 ## <a id="usage"></a> 使用
 
@@ -430,7 +432,9 @@ function setLocale(locale: string) => void
 
 > 参考：[Loadable Components 服务器端渲染指南](https://loadable-components.com/docs/server-side-rendering/)
 
-代码分割的好处，是可以实现懒加载。[@loadable/components](https://www.npmjs.com/package/@loadable/components) 提供了很好的服务端渲染支持，根据指南我们首先安装指定的依赖包：
+&nbsp;&nbsp;&nbsp;&nbsp;服务端渲染一个很常见的场景是当用户（或搜索引擎爬虫）第一次请求页面时，用它来做初始渲染。当服务器接收到请求后，它把需要的组件渲染成 HTML 字符串，然后把它返回给客户端（这里统指浏览器）。之后，客户端会接手渲染控制权。
+
+&nbsp;&nbsp;&nbsp;&nbsp;在服务端渲染时，代码被分割后，需要懒加载[@loadable/server](https://www.npmjs.com/package/@loadable/components) 提供了很好的服务端渲染支持，根据指南我们首先安装指定的依赖包：
 
 ```shell
 yarn add @loadable/server@^5.12.0
@@ -444,6 +448,44 @@ yarn add -D @loadable/babel-plugin@^5.12.0 @loadable/webpack-plugin@^5.12.0
 
 如果一个类型需要多处引用，建议使用全局声明文件替代。全局声明文件放置在 `typings` 文件夹内。编写全局声明文件时，不可使用 `import` 和 `export` 等模块关键字，否则会当成模块处理。具体请参见：[issue](https://github.com/microsoft/TypeScript/issues/37294)
 
+### 条件编译 <a id="conditional-compile"></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;—般情况下，源程序中的每一行代码都要参加编译。但有时候出于对程序代码优化或面向环境的考虑，希望只对其中一部分内容进行编译。此时就需要在程序中加上条件，让编译器只对满足条件的代码进行编译，将不满足条件的代码舍弃，这就是条件编译。
+
+&nbsp;&nbsp;&nbsp;&nbsp;[webpack-preprocessor-loader](https://github.com/afterwind-io/preprocessor-loader) 为 `Javascript` 提供了类似 `C` 语言的条件编译指令，你可以通过这些指令拆分客户端及服务端的渲染代码。在处理懒加载的时候，通常需要使用 [错误边界](https://zh-hans.reactjs.org/docs/error-boundaries.html) 来捕获错误以防止整个应用崩溃，但是它不支持服务端渲染。这意味着错误边界部分的代码对服务端是毫无意义的，为了剥离出这部分代码，只需使用条件编译指令即可。
+
+```tsx
+import React from 'react';
+// #!if browser
+import ErrorBoundary from './boundary';
+// #!endif
+import { LocaleFile } from '@/utils/loadable';
+
+interface Props {
+  paths: string[];
+  children: (messages: ILocale) => React.ReactNode;
+}
+
+export default ({ paths, children  }: Props) => {
+  return paths.reduceRight((fn, path) => {
+    return (messages: ILocale) => {
+      return (
+        // #!if browser
+        <ErrorBoundary fallback={() => fn(messages)}>
+        {/* #!endif */}
+          <LocaleFile path={path}>
+            { ({ default: _ }: any) => fn({ ...messages, ..._ }) }
+          </LocaleFile>
+        {/* #!if browser */}
+        </ErrorBoundary>
+        // #!endif
+      );
+    }
+  }, children)({}) as JSX.Element;
+}
+```
+
+`browser` 变量，是 [webpack-preprocessor-loader](https://github.com/afterwind-io/preprocessor-loader) `params` 选项的自定义变量，用来区分代码运行环境。
 
 ### 路由匹配
 
