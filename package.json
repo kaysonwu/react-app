@@ -2,18 +2,22 @@
   "name": "react-app",
   "description": "React web application scaffold",
   "version": "2.0.0",
-  "main": "index.js",
   "author": "kaysonwu <kayson@huida.cn>",
   "license": "MIT",
   "scripts": {
     "dev": "webpack-dev-server --mode=development --target=web --config=./config/webpack.js",
     "build": "webpack --mode=production --target=web --config=./config/webpack.js",
-    "build:server": "webpack --mode=production --target=node --config=./config/webpack.js"
+    "build:server": "webpack --mode=production --target=node --config=./config/webpack.js",
+    "build:node": "babel --out-file server/server.js --config-file ./config/babel.node.json ./src/node.tsx",
+    "build:ssr": "yarn build && yarn build:server && yarn build:node",
+    "start": "node ./server/server.js"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.0.0",
     "@loadable/component": "^5.12.0",
     "@loadable/server": "^5.12.0",
-    "antd": "^4.0.0",
+    "antd": "^4.0.3",
+    "classnames": "^2.2.0",
     "core-js": "^3.6.0",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
@@ -25,12 +29,18 @@
     "regenerator-runtime": "^0.13.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.5.0",
     "@babel/core": "^7.4.0",
+    "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.4.0",
     "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.0.0",
     "@loadable/babel-plugin": "^5.12.0",
     "@loadable/webpack-plugin": "^5.12.0",
+    "@types/classnames": "^2.2.0",
+    "@types/express": "^4.17.3",
     "@types/loadable__component": "^5.10.0",
+    "@types/loadable__server": "^5.12.0",
     "@types/node": "^12.0.0",
     "@types/react": "^16.8.0",
     "@types/react-dom": "^16.8.0",
@@ -41,6 +51,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "commander": "^4.0.0",
     "css-loader": "^3.0.0",
+    "express": "^4.17.1",
     "html-webpack-plugin": "^3.2.0",
     "less": "^3.0.0",
     "less-loader": "^5.0.0",
@@ -50,6 +61,8 @@
     "webpack": "^4.0.0",
     "webpack-cli": "^3.0.0",
     "webpack-dev-server": "^3.1.0",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.0",
+    "webpack-node-externals": "^1.7.2",
+    "webpack-preprocessor-loader": "^1.1.2"
   }
 }
