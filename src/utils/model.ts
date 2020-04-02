@@ -8,13 +8,10 @@ const PRELOADED_STATE = '__PRELOADED_STATE__';
 
 class ModelManager {
 
-  private models: Record<string, Omit<IModel, 'id'> & { saga: ReturnType<typeof coverSaga> }>;
-  private ids: string[];
+  private models: Record<string, Omit<IModel, 'id'> & { saga: ReturnType<typeof coverSaga> }> = {};
+  private ids: string[] = [];
 
   constructor(models: IModel[]) {
-    this.models = {};
-    this.ids = [];
-
     this.add(...models);
     this.effect = this.effect.bind(this);
   }
@@ -27,7 +24,6 @@ class ModelManager {
       }
       return state;
     }
-
     return state;
   }
 
@@ -43,7 +39,6 @@ class ModelManager {
    * @Internal
    */
   public reducer = (nextState: any, action: Action) => {
-
     const [id, key] = this.splitActionType(action);
     const { reducers } = this.get(id, {});
 
@@ -62,7 +57,6 @@ class ModelManager {
    * @Internal
    */
   public *effect(action: Action) {
-
     const [id, key] = this.splitActionType(action);
     const { effects, saga } = this.get(id, {});
     
@@ -113,19 +107,17 @@ function coverSaga(id: string) {
       if (typeof pattern === 'string') {
         return take(fixActionType(pattern, id));
       } else if (Array.isArray(pattern)) {
-        return take(pattern.map(t => (typeof t === 'string') ? fixActionType(t, id) : t))
+        return take(pattern.map(t => (typeof t === 'string') ? fixActionType(t, id) : t));
       }
-
-      return take(pattern)
+      return take(pattern);
     }
-  }
+  };
 }
 
 function fixActionType(type: string, id: string) {
   if (type.indexOf(MODEL_SEPARATOR) === -1) {
     return id + MODEL_SEPARATOR + type;
   }
-
   return type;
 }
 
@@ -137,7 +129,7 @@ function createStoreFromModel(models: IModel[], preloadedState?: PreloadedState<
   const store = createStore(reducer, preloadedState, applyMiddleware(sagaMiddleware, ...middlewares));
 
   sagaMiddleware.run(function*() {
-    yield takeEvery('*', effect)
+    yield takeEvery('*', effect);
   });
 
   return {
@@ -152,13 +144,12 @@ function createStoreFromModel(models: IModel[], preloadedState?: PreloadedState<
 
 // #if browser
 export function configureStore(models: IModel[], ...middlewares: Middleware<any, any, any>[]) {
-
   const state = window[PRELOADED_STATE];
 
   if (state !== undefined) {
     delete window[PRELOADED_STATE];
   }
-
+  
   return createStoreFromModel(models, state, ...middlewares);
 }
 // #!else
