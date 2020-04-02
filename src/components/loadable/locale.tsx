@@ -3,7 +3,7 @@ import loadable from '@loadable/component';
 import ErrorBoundary from './boundary';
 
 const Locale = loadable.lib(
-  (props: any) => import(`@/locales/${props.path}`),
+  (props: any) => import(/* webpackChunkName: "locales/[request]" */`@/locales/${props.path}`),
   {
     cacheKey: props => `locales/${props.path}`
   }
