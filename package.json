@@ -11,7 +11,8 @@
     "build:node": "babel --out-file server/server.js --config-file ./config/babel.node.json ./src/node.tsx",
     "build:util": "babel --out-file server/utils/model.js --config-file ./config/babel.node.json ./src/utils/model.ts",
     "build:ssr": "yarn build && yarn build:server && yarn build:node",
-    "start": "node ./server/server.js"
+    "start": "node ./server/server.js",
+    "test": "jest"
   },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
@@ -55,6 +56,7 @@
     "css-loader": "^3.0.0",
     "express": "^4.17.1",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^25.0.0",
     "less": "^3.0.0",
     "less-loader": "^5.0.0",
     "style-loader": "^1.0.0",
