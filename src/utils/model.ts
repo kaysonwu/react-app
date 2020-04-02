@@ -1,10 +1,11 @@
-import { createStore, applyMiddleware, Middleware } from 'redux';
+import { createStore, applyMiddleware, Middleware, PreloadedState } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import * as Saga from 'redux-saga/effects';
 
 const { take, put, putResolve, takeEvery } = Saga;
-
 const MODEL_SEPARATOR = '/';
+const PRELOADED_STATE = '__PRELOADED_STATE__';
+
 class ModelManager {
 
   private models: Record<string, Omit<IModel, 'id'> & { saga: ReturnType<typeof coverSaga> }>;
@@ -128,15 +129,13 @@ function fixActionType(type: string, id: string) {
   return type;
 }
 
-export function configureStore(models: IModel[], ...middlewares: Middleware<any, any, any>[]) {
-  const { reducer, effect, add, has, remove } = new ModelManager(models);
-  const states = models.reduce((states: Record<string, any>, model) => { 
-    states[model.id] = { ...model.state };
-    return states;
-  }, {});
+export type Store = ReturnType<typeof createStoreFromModel>;
 
+function createStoreFromModel(models: IModel[], preloadedState?: PreloadedState<any>, ...middlewares: Middleware<any, any, any>[]) {
+  const { reducer, effect, add, has, remove } = new ModelManager(models);
   const sagaMiddleware = createSagaMiddleware();
-  const store = createStore(reducer, states, applyMiddleware(sagaMiddleware, ...middlewares));
+  const store = createStore(reducer, preloadedState, applyMiddleware(sagaMiddleware, ...middlewares));
+
   sagaMiddleware.run(function*() {
     yield takeEvery('*', effect)
   });
@@ -151,33 +150,54 @@ export function configureStore(models: IModel[], ...middlewares: Middleware<any,
   };
 }
 
-// #!if !browser
+// #if browser
+export function configureStore(models: IModel[], ...middlewares: Middleware<any, any, any>[]) {
+
+  const state = window[PRELOADED_STATE];
+
+  if (state !== undefined) {
+    delete window[PRELOADED_STATE];
+  }
+
+  return createStoreFromModel(models, state, ...middlewares);
+}
+// #!else
+
+export function createStateScript(state: any) {
+  return `
+    <script type="text/javascript">
+      window.${PRELOADED_STATE} = ${JSON.stringify(state).replace(/</g, '\\u003c')}
+    </script>
+  `;
+}
+
 export function prepareStore
 (
   models: IModel[], 
   request: any, 
-  done: (store: ReturnType<typeof configureStore>) => void, 
+  done: (store: Store) => void, 
   ...middlewares: Middleware<any, any, any>[]
 ) {
   const fn: Promise<any>[] = [];
-  const indices: number[] = [];
-  const modelled: IModel[] = [];
+  const ids: string[] = [];
+  const preloadedState: Record<string, any> = {};
 
   for (let i = 0; i < models.length; i++) {
-    let { getInitialState, ...model } = models[i];
+    let { id, state, getInitialState } = models[i];
     if (typeof getInitialState === 'function') {
+      ids.push(id);
       fn.push(getInitialState(request));
-      indices.push(i);
+    } else {
+      preloadedState[id] = { ...state };
     }
-    modelled.push(model);
   }
 
   Promise.all(fn).then(states => {
     for (let i = 0; i < states.length; i++) {
-      modelled[indices[i]].state = { ...states[i] };
+      preloadedState[ids[i]] = { ...states[i] };
     }
 
-    done(configureStore(modelled, ...middlewares));
+    done(createStoreFromModel(models, preloadedState, ...middlewares));
   });
 }
 // #!endif
