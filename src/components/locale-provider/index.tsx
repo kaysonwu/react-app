@@ -2,7 +2,7 @@ import React from 'react';
 import { ConfigProvider } from 'antd';
 import { IntlProvider } from 'react-intl';
 import { ConfigProviderProps } from 'antd/lib/config-provider';
-import Loadable from './loadable';
+import Loadable from '../loadable/locale';
 
 interface LocaleProviderProps extends Omit<ConfigProviderProps, 'locale'> {
   locale: string;

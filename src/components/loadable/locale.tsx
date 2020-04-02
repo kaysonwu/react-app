@@ -1,8 +1,13 @@
 import React from 'react';
-// #!if browser
+import loadable from '@loadable/component';
 import ErrorBoundary from './boundary';
-// #!endif
-import { LocaleFile } from '@/utils/loadable';
+
+const Locale = loadable.lib(
+  (props: any) => import(`@/locales/${props.path}`),
+  {
+    cacheKey: props => `locales/${props.path}`
+  }
+);
 
 interface Props {
   paths: string[];
@@ -16,9 +21,9 @@ export default ({ paths, children  }: Props) => {
         // #!if browser
         <ErrorBoundary fallback={() => fn(messages)}>
         {/* #!endif */}
-          <LocaleFile path={path}>
-            { ({ default: _ }: any) => fn({ ...messages, ..._ }) }
-          </LocaleFile>
+          <Locale path={path}>
+            { ({ default: m }: any) => fn({ ...messages, ...m }) }
+          </Locale>
         {/* #!if browser */}
         </ErrorBoundary>
         // #!endif
