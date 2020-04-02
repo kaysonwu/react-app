@@ -17,11 +17,13 @@ class ModelManager {
   }
 
   private clearOldState = (state: any) => {
-    if (this.ids.length > 1) {
+    const { ids } = this;
+    if (ids.length > 0) {
       state = { ...state };
-      for (let key of this.ids) {
+      for (let key of ids) {
         delete state[key];
       }
+      this.ids = [];
       return state;
     }
     return state;
@@ -40,14 +42,14 @@ class ModelManager {
    */
   public reducer = (nextState: any, action: Action) => {
     const [id, key] = this.splitActionType(action);
-    const { reducers } = this.get(id, {});
-
+    const { reducers, state } = this.get(id, {});
+  
     nextState = this.clearOldState(nextState);
-
+    
     if (reducers !== undefined && 
       typeof reducers[key] === 'function'
     ) {
-      nextState[id] = reducers[key](nextState[id], action);
+      nextState[id] = reducers[key](nextState[id] || state, action);
     }
 
     return nextState;
@@ -144,10 +146,15 @@ function createStoreFromModel(models: IModel[], preloadedState?: PreloadedState<
 
 // #if browser
 export function configureStore(models: IModel[], ...middlewares: Middleware<any, any, any>[]) {
-  const state = window[PRELOADED_STATE];
+  let state = window[PRELOADED_STATE];
 
   if (state !== undefined) {
     delete window[PRELOADED_STATE];
+  } else {
+    state = models.reduce((res: Record<string, any>, model) => {
+      res[model.id] = { ...model.state };
+      return res;
+    }, {});
   }
   
   return createStoreFromModel(models, state, ...middlewares);
