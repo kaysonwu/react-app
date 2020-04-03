@@ -184,7 +184,7 @@ export function prepareStore
     let { id, state, getInitialState } = models[i];
     if (typeof getInitialState === 'function') {
       ids.push(id);
-      fn.push(getInitialState(request));
+      fn.push(getInitialState(state, request));
     } else {
       preloadedState[id] = { ...state };
     }
