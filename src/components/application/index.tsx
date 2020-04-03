@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Store } from 'redux';
 import { Provider } from 'react-redux';
 import LocaleProvider from '../locale-provider';
-import { getNameFromPath, getLocale } from '@/utils/locale'
+import Model from '../loadable/model';
+import { Store } from '@/utils/model';
+import { getNameFromPath } from '@/utils/loadable'
+import { LANGUAGE_CHANGE } from '@/utils/locale'
 
 export interface ApplicationProps {
   locale: string;
@@ -20,21 +22,30 @@ export default ({ locale, store, location }: ApplicationProps) => {
   
   // #!if browser
   const handleLanguageChange = (e: any) => {
-    setLocale(getLocale());
+    setLocale((e as CustomEvent).detail.locale);
   }
 
-
   useEffect(() => {
+    window.addEventListener(LANGUAGE_CHANGE, handleLanguageChange);
     return () => {
-
+      window.removeEventListener(LANGUAGE_CHANGE, handleLanguageChange)
     }
-  });
+  }, []);
   // #!endif
 
   return (
     <LocaleProvider locale={locale} files={files}>
       <Provider store={store}>
+        {/* #!if browser */}
+        <Model paths={['user']}>
+          {(models: IModel[]) => {
+            store.modelManager.add(...models)
+            return <div>Hello ssr!</div>
+          }}
+        </Model>
+        {/* #!else */}
         <div>Hello ssr!</div>
+        {/* #!endif */}
       </Provider>
     </LocaleProvider>
   );
