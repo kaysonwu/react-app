@@ -14,6 +14,7 @@ class ModelManager {
   constructor(models: IModel[]) {
     this.add(...models);
     this.effect = this.effect.bind(this);
+    this.trigger = this.trigger.bind(this);
   }
 
   private clearOldState = (state: any) => {
@@ -35,6 +36,18 @@ class ModelManager {
 
   private get = (id: string, defaultValue: any = undefined) => {
     return this.has(id) ? this.models[id] : defaultValue;
+  }
+
+  private *trigger(event: string, ...parameters: any[]) {
+    const { models } = this;
+    for (let id in models) {
+      let model = models[id];
+      // @ts-ignore
+      if (typeof model[event] === 'function') {
+        // @ts-ignore
+        yield model[event](...parameters);
+      }
+    }
   }
   
   /**
@@ -65,7 +78,9 @@ class ModelManager {
     if (effects !== undefined && 
       typeof effects[key] === 'function'
     ) {
+      yield this.trigger('effecting', saga, id, key, action);
       yield effects[key](saga, action);
+      yield this.trigger('effected', saga, id, key, action);
     }
   }
 
