@@ -2,6 +2,36 @@
 
 ### 安装
 
+<details>
+<summary>推荐使用 <a href="https://github.com/yarnpkg/yarn" target="_blank">yarn</a> 去管理依赖</summary>
+
+如果你还没有安装 [yarn](https://github.com/yarnpkg/yarn), 请参考 [yarn 安装指南](https://yarnpkg.com/en/docs/install) 或者直接使用以下命令安装：
+
+```
+npm install -g yarn
+```
+</details>
+
+<details>
+<summary>如果你想在服务端渲染代码，还需要全局安装 <a href="https://github.com/Unitech/pm2" target="_blank">pm2</a> 来帮助你管理进程</summary>
+
+```
+yarn global add pm2
+```
+</details>
+
+通过 `git` 下载脚手架代码：
+
+```
+git clone https://github.com/kaysonwu/react-app.git
+```
+
+接下来，安装依赖包：
+
+```
+yarn intall
+```
+
 ### 目录结构
 
 ```
