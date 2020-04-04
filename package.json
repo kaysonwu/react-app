@@ -10,7 +10,8 @@
     "dev:ssr": "yarn dev --target=node && yarn build:server && yarn start",
     "build": "webpack --env=prod --target=web --config=./config/webpack.js",
     "build:ssr": "yarn build --target=node && yarn build:server",
-    "build:server": "",
+    "build:server": "babel -o server/server.js --config-file ./config/babel.node.json ./src/server.tsx",
+    "build:models": "babel -d server/models --config-file ./config/babel.node.json src/models --extensions .ts",
     "build:node": "webpack --env=prod --target=node --config=./config/webpack.js",
     "test": "jest"
   },
