@@ -5,13 +5,13 @@
   "author": "kaysonwu <kayson@huida.cn>",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack-dev-server --mode=development --target=web --config=./config/webpack.js",
-    "build": "webpack --mode=production --target=web --config=./config/webpack.js",
-    "build:server": "webpack --mode=production --target=node --config=./config/webpack.js",
-    "build:node": "babel --out-file server/server.js --config-file ./config/babel.node.json ./src/node.tsx",
-    "build:util": "babel --out-file server/utils/model.js --config-file ./config/babel.node.json ./src/utils/model.ts",
-    "build:ssr": "yarn build && yarn build:server && yarn build:node",
     "start": "node ./server/server.js",
+    "dev": "webpack-dev-server --env=dev --target=web --config=./config/webpack.js",
+    "dev:ssr": "yarn dev --target=node && yarn build:server && yarn start",
+    "build": "webpack --env=prod --target=web --config=./config/webpack.js",
+    "build:ssr": "yarn build --target=node && yarn build:server",
+    "build:server": "",
+    "build:node": "webpack --env=prod --target=node --config=./config/webpack.js",
     "test": "jest"
   },
   "dependencies": {
