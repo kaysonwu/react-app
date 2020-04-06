@@ -1,5 +1,5 @@
 const { resolve, parse } = require('path');
-const { promises: { readFile, writeFile }, existsSync } = require('fs');
+const { promises: { readFile, writeFile }, existsSync } = require('./file');
 const { error, done } = require('./console');
 const { ucfirst } = require('./string');
 
