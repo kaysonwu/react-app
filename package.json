@@ -1,7 +1,7 @@
 {
   "name": "react-app",
   "description": "React web application scaffold",
-  "version": "2.0.0",
+  "version": "0.0.1",
   "author": "kaysonwu <kayson@huida.cn>",
   "license": "MIT",
   "scripts": {
