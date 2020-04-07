@@ -1,6 +1,5 @@
 const { resolve, parse } = require('path');
 const { promises: { readFile, writeFile }, existsSync } = require('./file');
-const { label: { error, success } } = require('./message');
 const { ucfirst } = require('./string');
 
 /**
@@ -15,7 +14,7 @@ async function createFileFromTemplate(template, output, options) {
   const [name, filename] = resolveOutput(output, path, extension);
 
   if (existsSync(filename) && ! force) {
-    return error(`${ucfirst(template)} already exists!`);
+    throw new Error(`"${filename}" already exists!`)
   }
 
   opts.name = ucfirst(name);
@@ -24,8 +23,7 @@ async function createFileFromTemplate(template, output, options) {
     opts
   );
 
-  await writeFile(filename, content);
-  success(`${ucfirst(template)} created successfully.`, 'DONE');
+  return await writeFile(filename, content);
 }
 
 function resolveOutput(filename, path, extension) {
