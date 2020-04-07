@@ -5,13 +5,9 @@
   "author": "kaysonwu <kayson@huida.cn>",
   "license": "MIT",
   "scripts": {
-    "start": "node ./server/server.js",
-    "dev": "webpack-dev-server --env=dev --target=web --config=./config/webpack.js",
-    "dev:ssr": "yarn dev --target=node && yarn build:server && yarn start",
-    "build": "webpack --env=prod --target=web --config=./config/webpack.js",
-    "build:ssr": "yarn build --target=node && yarn build:server",
-    "build:server": "node ./scripts/build-server.js --config-file ./config/babel.node.json src/server.tsx",
     "artisan": "node ./scripts/artisan.js",
+    "build": "webpack --env=prod --target=web --config=./config/webpack.js",
+    "dev": "webpack-dev-server --env=dev --target=web --config=./config/webpack.js",
     "test": "jest"
   },
   "dependencies": {
