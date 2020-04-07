@@ -11,7 +11,7 @@
 
 function Label(id, label, format, ...args) {
   console.log('\033[4' + id + ';30m ' + label + 
-    ' \033[40;3' + id + 'm' + format + '\033[0m', 
+    ' \033[40;3' + id + 'm ' + format + '\033[0m', 
     ...args
   );
 } 
