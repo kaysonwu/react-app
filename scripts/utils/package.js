@@ -1,5 +1,5 @@
-const { existsSync } = require('fs')
 const { resolve } = require('path');
+const { existsSync, promises: { readFile, writeFile } } = require('./file')
 const { exec } = require('./process');
 const message = require('./message');
 
@@ -29,9 +29,7 @@ async function remove(packages, options) {
 
 function getCommand(mirror) {
   // Or use await exec('npm bin -g');
-  if (existsSync(resolve('yarn.lock')) || 
-    ! existsSync(resolve('package-lock.json'))
-  ) {
+  if (hasYarn()) {
     return mirror ? 'tyarn' : 'yarn';
   } 
 
@@ -46,12 +44,17 @@ function parsePackages(packages) {
   if (typeof packages === 'object') {
     let result = '';
     for (let name in packages) {
-      result += `${name}@${packages[name]} `;
+      result += `"${name}@${packages[name]}" `;
     }
     return result.trimEnd();
   }
 
   return packages;
+}
+
+function hasYarn() {
+  return existsSync(resolve('yarn.lock')) || 
+    ! existsSync(resolve('package-lock.json'));
 }
 
 async function runCommand(command, debug) {
@@ -79,4 +82,41 @@ async function runCommand(command, debug) {
   return std;
 }
 
-module.exports = { install, remove };
+async function createScript(scripts) {
+  const filename = resolve('package.json');
+  const pattern = hasYarn() ? /npm/g : false;
+  const package = await readPackageJson(filename);
+
+  for (let name in scripts) {
+    let script = scripts[name];
+    if (! package.scripts[name]) {
+      package.scripts[name] = pattern ? script.replace(pattern, 'yarn') : script;
+    }
+  }
+
+  return await storePackageJson(filename, package);
+}
+
+async function readPackageJson(filename) {
+  const content = await readFile(filename, 'utf-8');
+  return JSON.parse(content);
+}
+
+async function storePackageJson(filename, space = 2, end = '\n') {
+  return await writeFile(filename, JSON.stringify(package, null, space) + end);
+}
+
+async function removeScript(names) {
+  const filename = resolve('package.json');
+  const package = await readPackageJson(filename);
+
+  for (let name of names) {
+    if (package.scripts[name]) {
+      delete package.scripts[name];
+    }
+  }
+
+  return await storePackageJson(filename, package);
+}
+
+module.exports = { install, remove, createScript, removeScript };
