@@ -1,6 +1,6 @@
 const { resolve, parse } = require('path');
 const { promises: { readFile, writeFile }, existsSync } = require('./file');
-const { error, done } = require('./console');
+const { label: { error, success } } = require('./console');
 const { ucfirst } = require('./string');
 
 /**
@@ -25,7 +25,7 @@ async function createFileFromTemplate(template, output, options) {
   );
 
   await writeFile(filename, content);
-  done(`${ucfirst(template)} created successfully.`);
+  success(`${ucfirst(template)} created successfully.`, 'DONE');
 }
 
 function resolveOutput(filename, path, extension) {
