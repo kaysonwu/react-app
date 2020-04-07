@@ -30,9 +30,7 @@
     "serve-static": "^1.13.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
     "@babel/core": "^7.7.0",
-    "@babel/node": "^7.7.0",
     "@babel/plugin-proposal-class-properties": "^7.7.0",
     "@babel/preset-env": "^7.7.0",
     "@babel/preset-react": "^7.7.0",
