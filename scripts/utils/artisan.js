@@ -1,6 +1,6 @@
 const { resolve, parse } = require('path');
 const { promises: { readFile, writeFile }, existsSync } = require('./file');
-const { label: { error, success } } = require('./console');
+const { label: { error, success } } = require('./message');
 const { ucfirst } = require('./string');
 
 /**
