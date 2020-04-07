@@ -102,7 +102,7 @@ async function readPackageJson(filename) {
   return JSON.parse(content);
 }
 
-async function storePackageJson(filename, space = 2, end = '\n') {
+async function storePackageJson(filename, package, space = 2, end = '\n') {
   return await writeFile(filename, JSON.stringify(package, null, space) + end);
 }
 
