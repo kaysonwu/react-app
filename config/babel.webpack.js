@@ -1,18 +1,25 @@
-module.exports = (target) => {
+module.exports = (browser, ssr) => {
+  const plugins = [
+    '@babel/plugin-proposal-class-properties',
+    ['import', {
+      libraryName: 'antd',
+      style: 'css'
+    }]
+  ];
+
+  if (ssr) {
+    plugins.push('@loadable/babel-plugin');
+  }
+
   return {
     presets: [
       '@babel/preset-react',
+      '@babel/preset-typescript',
       ['@babel/preset-env', {
         modules: false,
-        targets: target === 'web' ? { ie: 9 } : { node: true },
+        targets: browser ? { ie: 9 } : { node: true } 
       }]
     ],
-    plugins: [
-      '@loadable/babel-plugin',
-      ['import', {
-        libraryName: 'antd',
-        style: true
-      }]
-    ]
-  }
-};
+    plugins
+  };
+}

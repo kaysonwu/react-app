@@ -1,49 +1,71 @@
 const { resolve, join } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const LoadablePlugin = require('@loadable/webpack-plugin')
+const nodeExternals = require('webpack-node-externals');
+const LoadablePlugin = require('@loadable/webpack-plugin');
 const merge = require('webpack-merge');
-const prod = require('./webpack.prod');
-const dev = require('./webpack.dev');
+const babel = require('./babel.webpack');
 
-// Path constants.
+// Constants.
 const root = resolve(__dirname, '..');
 const src = join(root, 'src');
-const serverPath = join(root, 'server');  // Server build directory
-const clientPath = join(root, 'public');  // Client build directory
+const constants = {
+  web: {
+    // Web build directory
+    path: join(root, 'public'),
+    libraryTarget: 'var'
+  },
+  node: {
+    // Node build directory
+    path: join(root, 'server'),
+    libraryTarget: 'commonjs2',
+    externals: [nodeExternals()]
+  }
+}
 
-module.exports = (env, { mode, target }) => {
-  
-  const isProd = mode === 'production';
-  const isNode = target === 'node';
+const getConfig = (target, ssr) => {
+  const browser = target === 'web';
+  const { path, libraryTarget, externals } = constants[target];
 
-  return merge({
-    mode: 'none',
+  return {
     target,
+    name: target,
+    entry: {
+      app: join(src, `${target}.tsx`),
+    },
     output: {
+      path,
+      libraryTarget,
       publicPath: '/',
-      filename: '[name].js'
+      filename: '[name].js',
     },
     resolve: {
-      extensions: ['.js', '.ts', '.tsx', '.jsx'],
+      extensions: ['.js', '.ts', '.jsx', '.tsx'],
       alias: {
-      '@': src,
-      'config': __dirname
+        '@': src,
+        'config': __dirname
       }
     },
     module: {
       rules: [
         {
-          test: /\.tsx?$/,
+          test: /\.(j|t)sx?$/,
           exclude: /node_modules(\/|\\)(?!react-intl|intl-messageformat|intl-messageformat-parser)/,
           use: [
-            'babel-loader',
-            'ts-loader'
-          ],
-        },
-        {
-          test: /\.jsx?$/,
-          exclude: /node_modules(\/|\\)(?!react-intl|intl-messageformat|intl-messageformat-parser)/,
-          use: 'babel-loader'
+            {
+              loader: 'babel-loader',
+              options: babel(browser, ssr)
+            },
+            {
+              loader: 'webpack-preprocessor-loader',
+              options: {
+                params: { 
+                  ssr,
+                  browser,
+                  NODE_SERVER: false
+                }
+              }
+            }
+          ]
         },
         {
           test: /\.less$/,
@@ -60,36 +82,29 @@ module.exports = (env, { mode, target }) => {
         }
       ]
     },
-    optimization: {
-      minimize: false
-    }
-  }, (isNode ? ({
-    // Node target for server side render.
-    entry: {
-      server: join(src, 'server.tsx'),
-    },
-    output: {
-      path: serverPath,
-   //   libraryTarget: "commonjs2"
-    },
-    plugins: [
-      new LoadablePlugin()
-    ]
-  }) : ({
-    // Web target client side render.
-    entry: {
-      app: join(src, 'index.tsx')
-    },
-    output: {
-      path: clientPath
-    },
-    devServer: {
-      contentBase: clientPath,
-    },
-    plugins: [
+    externals,
+    plugins: (browser && ! ssr ? [
+      // only web render plugins
       new HtmlWebpackPlugin({
         template: join(src, 'index.html')
       })
-    ]
-  })), (isProd ? prod : dev))
-};
+    ] : [
+      new LoadablePlugin({
+        outputAsset: false,
+        filename: `${target}-stats.json`,
+        writeToDisk: { filename: constants.node.path } 
+      })
+    ]),
+    devServer: {
+      contentBase: path,
+    },
+  };  
+}
+
+module.exports = (env, { targets }) => {
+  const config = require(`./webpack.${env}`);
+  if (Array.isArray(targets)) {
+    return targets.map(target => merge(config, getConfig(target, true)));
+  }
+  return merge(config, getConfig(targets));
+}
