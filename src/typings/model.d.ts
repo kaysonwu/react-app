@@ -43,7 +43,7 @@ type Effect<A extends Action = AnyAction> = (
   action: A
 ) => Generator
 
-type EffectEvent<A extends Action =AnyAction> = (
+type EffectEvent<A extends Action = AnyAction> = (
   // Redux saga
   saga: typeof import('redux-saga/effects'),
   // Model id
@@ -84,7 +84,7 @@ interface IModel<S = any, A extends Action = AnyAction> {
   /**
    * Server side render initial state.
    */
-  getInitialState?: (state: S, request: any) => Promise<S>;
+  getInitialState?: (state: S, request: import('http').IncomingMessage) => Promise<S>;
 
   /**
    * Trigger before any model call effect.
