@@ -17,5 +17,5 @@ program
   .option('-e, --extension [extension]', 'Indicate the extension of the model file', '.ts')
   .action(name => {
     createFileFromTemplate('model', name, program.opts())
-      .then(() => success(`Model created successfully.`, 'DONE'));
+      .then(() => success('Model created successfully.', 'DONE'));
   }).parse(process.argv);
