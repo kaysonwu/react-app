@@ -1,3 +1,4 @@
+import { IncomingMessage } from 'http';
 import { createStore, applyMiddleware, Middleware, PreloadedState } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import * as Saga from 'redux-saga/effects';
@@ -8,8 +9,12 @@ const PRELOADED_STATE = '__PRELOADED_STATE__';
 
 class ModelManager {
 
-  private models: Record<string, Omit<IModel, 'id'> & { saga: ReturnType<typeof coverSaga> }> = {};
+  private models: Record<string, Omit<IModel, 'id' | 'getInitialState'> & { saga: ReturnType<typeof coverSaga> }> = {};
   private ids: string[] = [];
+  private listen: Record<string, Record<string, any>> = {
+    effecting: {},
+    effected: {}
+  };
 
   constructor(models: IModel[]) {
     this.add(...models);
@@ -38,15 +43,27 @@ class ModelManager {
     return this.has(id) ? this.models[id] : defaultValue;
   }
 
-  private *trigger(event: string, ...parameters: any[]) {
-    const { models } = this;
-    for (let id in models) {
-      let model = models[id];
-      // @ts-ignore
-      if (typeof model[event] === 'function') {
-        // @ts-ignore
-        yield model[event](...parameters);
+  private addListen = (id: string, model: Record<string, any>) => {
+    for (let name in this.listen) {
+      if (typeof model[name] === 'function') {
+        this.listen[name][id] = model[name];
+        delete model[name];
       }
+    }
+  }
+
+  private removeListen = (id: string) => {
+    for (let name in this.listen) {
+      if (this.listen[name][id] !== undefined) {
+        delete this.listen[name][id];
+      }
+    }
+  }
+
+  private *trigger(event: string, ...parameters: any[]) {
+    const listen = this.listen[event];
+    for (let id in listen) {
+      yield listen[id].call(null, ...parameters);
     }
   }
   
@@ -90,8 +107,9 @@ class ModelManager {
 
   public add = (...models: IModel[]) => {
     for (let i = 0;  i < models.length; i++) {
-      let { id, ...model } = models[i];
+      let { id, getInitialState, ...model } = models[i];
       if (this.models[id] === undefined) {
+        this.addListen(id, model);
         this.models[id] = {
           ...model,
           saga: coverSaga(id)
@@ -105,6 +123,7 @@ class ModelManager {
       let id = ids[i];
       if (this.models[id] !== undefined) {
         delete this.models[id];
+        this.removeListen(id);
         this.ids.push(id);
       }
     }
@@ -174,8 +193,9 @@ export function configureStore(models: IModel[], ...middlewares: Middleware<any,
   
   return createStoreFromModel(models, state, ...middlewares);
 }
-// #!else
+// #!endif
 
+// #!if NODE_SERVER
 export function createStateScript(state: any) {
   return `
     <script type="text/javascript">
@@ -184,33 +204,32 @@ export function createStateScript(state: any) {
   `;
 }
 
-export function prepareStore
-(
+export async function prepareStore (
   models: IModel[], 
-  request: any, 
-  done: (store: Store) => void, 
+  request: IncomingMessage, 
   ...middlewares: Middleware<any, any, any>[]
 ) {
-  const fn: Promise<any>[] = [];
-  const ids: string[] = [];
-  const preloadedState: Record<string, any> = {};
+  const states = await getModelInitialStates(models, request);
+  return createStoreFromModel(models, states, ...middlewares);
+}
 
-  for (let i = 0; i < models.length; i++) {
-    let { id, state, getInitialState } = models[i];
+async function getModelInitialStates(models: IModel[], request: IncomingMessage) {
+  const states: Record<string, any> = {};
+  const ids: string[] = [];
+  const tasks: Promise<any>[] = [];
+
+  for (let { id, getInitialState, state } of models) {
     if (typeof getInitialState === 'function') {
       ids.push(id);
-      fn.push(getInitialState(state, request));
+      tasks.push(getInitialState(state, request));
     } else {
-      preloadedState[id] = { ...state };
+      states[id] = state;
     }
   }
 
-  Promise.all(fn).then(states => {
-    for (let i = 0; i < states.length; i++) {
-      preloadedState[ids[i]] = { ...states[i] };
-    }
-
-    done(createStoreFromModel(models, preloadedState, ...middlewares));
-  });
+  return (await Promise.all(tasks)).reduce(
+    (states, state, i) => states[ids[i]] = state, 
+    states
+  );
 }
 // #!endif
