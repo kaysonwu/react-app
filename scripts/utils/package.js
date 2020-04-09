@@ -16,18 +16,18 @@ async function install(packages, options) {
 }
 
 async function remove(packages, options) {
-  const { mirror, dev, debug } = options;
-  let command = getCommand(mirror);
+  const { debug } = options;
+  let command = getCommand();
 
   packages = parsePackages(packages);
   command += command.includes('npm') ? 
-    ` uninstall --save${dev ? '-dev' : ''} ${packages}` : 
+    ` uninstall ${packages} --save --save-dev` : 
     ` remove ${packages}`;
 
   return await runCommand(command, debug);
 }
 
-function getCommand(mirror) {
+function getCommand(mirror = false) {
   // Or use await exec('npm bin -g');
   if (hasYarn()) {
     return mirror ? 'tyarn' : 'yarn';
