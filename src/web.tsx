@@ -1,7 +1,7 @@
-import React from 'react'
-import { hydrate, render } from 'react-dom'
+import React from 'react';
+import { hydrate, render } from 'react-dom';
 import { BrowserRouter, withRouter, RouteComponentProps } from 'react-router-dom';
-import { loadableReady } from '@loadable/component'
+import { loadableReady } from '@loadable/component';
 import Application, { ApplicationProps } from '@/components/application';
 import Global from '@/models/global';
 import { configureStore } from '@/utils/model';
