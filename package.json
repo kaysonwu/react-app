@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "artisan": "node ./scripts/artisan.js",
-    "build": "webpack --env=prod --target=web --config=./config/webpack.js",
-    "dev": "webpack-dev-server --env=dev --target=web --config=./config/webpack.js",
+    "build": "webpack --config=./config/webpack.js --env=prod --targets=web",
+    "dev": "webpack-dev-server --config=./config/webpack.js --env=dev --targets=web",
     "test": "jest"
   },
   "dependencies": {
