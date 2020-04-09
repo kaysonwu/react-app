@@ -1,4 +1,4 @@
-import { configureStore, prepareStore }  from '../../src/utils/model';
+import { configureStore, prepareStore }  from '@/utils/model';
 
 function sleep(interval: number) {
   return new Promise(resolve => {

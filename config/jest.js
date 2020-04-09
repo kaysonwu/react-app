@@ -1,7 +1,11 @@
-const { resolve } = require('path');
+const { resolve, join } = require('path');
+const rootDir = resolve(__dirname, '..');
 
 module.exports = {
-  rootDir: resolve(__dirname, '..'),
+  rootDir,
+  moduleNameMapper: {
+    '@/(.*)': join(rootDir, 'src', '$1')
+  },
   transform: {
     '\\.(j|t)sx?$': [
       'babel-jest', 
