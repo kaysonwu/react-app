@@ -125,7 +125,7 @@ describe('Test model util', () => {
   });
 
   test('prepareStore has preloaded state', done => {
-    prepareStore([Global, User], '', (store) => {
+    prepareStore([Global, User], {} as any ).then(store => {
       const state = store.getState();
       expect(state).toHaveProperty(`${User.id}.name`);
       expect(state).toHaveProperty(`${Global.id}.menus`);
