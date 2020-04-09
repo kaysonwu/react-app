@@ -49,5 +49,4 @@ program
     createFileFromTemplate('server', server, opts);
   })
   .parse(process.argv);
-
-module.exports = { packages };
+  
