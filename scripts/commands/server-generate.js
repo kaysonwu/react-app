@@ -40,8 +40,8 @@ program
 
     createScript({
       'start': `pm2 ./server/${parse(server).name}.js`,
-      'dev:ssr': 'npm dev --target=node && npm build:server && npm start',
-      'build:ssr': 'npm build --target=node && npm build:server',
+      'dev:ssr': 'npm dev --targets=node && npm build:server && npm start',
+      'build:ssr': 'npm build --targets=node && npm build:server',
       'build:server': `node ./scripts/build-server.js --config-file ./config/babel.node.json ${opts.path}/${serverFile}`,
     });
     
