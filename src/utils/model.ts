@@ -228,7 +228,10 @@ async function getModelInitialStates(models: IModel[], request: IncomingMessage)
   }
 
   return (await Promise.all(tasks)).reduce(
-    (states, state, i) => states[ids[i]] = state, 
+    (states, state, i) => {
+      states[ids[i]] = state;
+      return states;
+    }, 
     states
   );
 }
