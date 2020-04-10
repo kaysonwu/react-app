@@ -37,8 +37,9 @@ export function setLocale(locale: string, reload: boolean = true): void {
 // #!if NODE_SERVER
 // Internal function, For node server only
 export function __getLocale__(headers: IncomingHttpHeaders, fallback: string = 'zh-CN') {
-  return parse(headers.cookie as string)[LANGUAGE_KEY] || 
-    headers["accept-language"]?.split(',')[0] || 
+  const { cookie } = headers;
+  return (cookie && parse(cookie)[LANGUAGE_KEY]) || 
+    headers['accept-language']?.split(',')[0] || 
     fallback;
 }
 // #!endif
