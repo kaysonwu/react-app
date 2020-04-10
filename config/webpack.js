@@ -1,7 +1,6 @@
 const { resolve, join } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
-const LoadablePlugin = require('@loadable/webpack-plugin');
 const merge = require('webpack-merge');
 const babel = require('./babel.webpack');
 
@@ -89,7 +88,7 @@ const getConfig = (target, ssr) => {
         template: join(src, 'index.html')
       })
     ] : [
-      new LoadablePlugin({
+      new (require('@loadable/webpack-plugin'))({
         outputAsset: false,
         filename: `${target}-stats.json`,
         writeToDisk: { filename: constants.node.path } 
@@ -97,7 +96,7 @@ const getConfig = (target, ssr) => {
     ]),
     devServer: {
       contentBase: path,
-    },
+    }
   };  
 }
 
