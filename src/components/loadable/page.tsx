@@ -7,9 +7,16 @@ interface Props {
 }
 
 const Page = loadable<Props>(
-  props => import(/* webpackChunName: "pages/[request]" */`@/pages/${props.path}`),
+  props => import(/* webpackChunkName: "pages/[request]" */`@/pages/${props.path}`),
   {
     cacheKey: props => `pages/${props.path}`
+  }
+);
+
+export const NotFound = loadable(
+  () => import(/* webpackChunkName: "pages/404" */ '@/pages/exception/404'),
+  {
+    cacheKey: () => 'pages/exception-404'
   }
 );
 
