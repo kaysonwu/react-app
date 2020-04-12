@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import LocaleProvider from '../locale-provider';
 import Model from '../loadable/model';
+import Route from './route';
 import { Store } from '@/utils/model';
 import { getNameFromPath } from '@/utils/loadable'
 import { LANGUAGE_CHANGE } from '@/utils/locale'
@@ -40,11 +41,11 @@ export default ({ locale, store, location }: ApplicationProps) => {
         <Model paths={['user']}>
           {(models: IModel[]) => {
             store.modelManager.add(...models)
-            return <div>Hello ssr!</div>
+            return <Route />
           }}
         </Model>
         {/* #!else */}
-        <div>Hello ssr!</div>
+        <Route />
         {/* #!endif */}
       </Provider>
     </LocaleProvider>
