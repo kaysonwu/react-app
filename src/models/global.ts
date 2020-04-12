@@ -1,14 +1,16 @@
+import request from '@/utils/request'
+
+const { get } = request
+
 interface GlobalState {
-  user: IUser | null;
-  menus: IMenu[];
+  user?: IUser;
+  menus?: IMenu[];
   loading: Record<string, boolean>;
 }
 
 const Global: IModel<GlobalState> = {
   id: 'global',
   state: {
-    user: null,
-    menus: [],
     loading: {},
   },
 // #!if !browser  
@@ -21,8 +23,9 @@ const Global: IModel<GlobalState> = {
   },
 // #!endif  
   effects: {
-    *fetchUser({ put }, action) {
-      
+    *fetchUser({ call, put }) {
+      const payload = yield call(get, 'v1/currentUser')
+      yield put({ type: 'saveUser', payload })
     }
   },
   *effecting({ put }, id) {
@@ -33,7 +36,6 @@ const Global: IModel<GlobalState> = {
   },
   reducers: {
     saveUser(state, action) {
-      console.log('saveUser', state, action);
       return {
         ...state,
         user: action.payload
