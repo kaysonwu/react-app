@@ -79,7 +79,10 @@ class ModelManager {
     if (reducers !== undefined && 
       typeof reducers[key] === 'function'
     ) {
-      nextState[id] = reducers[key](nextState[id] || state, action);
+      return {
+        ...nextState,
+        [id]: reducers[key](nextState[id] || state, action)
+      };
     }
 
     return nextState;
