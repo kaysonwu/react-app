@@ -44,6 +44,7 @@ module.exports = {
   devtool: false,
   devServer: {
     open: true,
+    hot: true,
     historyApiFallback: true,
     after: (app) => {
       app.all('*', mock)

@@ -1,3 +1,7 @@
-module.exports = {
-  'GET /v1/getUserInfo': { id: 1, name: 'kayson' }
+const { delays } = require('./_utils_')
+
+const proxies = {
+  'GET /v1/currentUser': { id: 1, name: 'kayson', avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' }
 }
+
+module.exports = delays(proxies, 1500)
