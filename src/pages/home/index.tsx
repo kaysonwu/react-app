@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Page from '@/components/page';
 
 const Home = (props: any) => {
 
@@ -11,10 +12,10 @@ const Home = (props: any) => {
   })
 
   return (
-    <>
+    <Page>
       <div>This is home page!</div>
       <Link to="/user">Go User</Link>
-    </>
+    </Page>
   );
 }
 
