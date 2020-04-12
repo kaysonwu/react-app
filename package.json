@@ -8,6 +8,7 @@
     "artisan": "node ./scripts/artisan.js",
     "build": "webpack --config=./config/webpack.js --env=prod --targets=web",
     "dev": "webpack-dev-server --config=./config/webpack.js --env=dev --targets=web",
+    "lint": "eslint",
     "test": "jest --config=./config/jest.js"
   },
   "dependencies": {
@@ -46,6 +47,7 @@
     "commander": "^4.0.0",
     "css-loader": "^3.0.0",
     "eslint": "^6.0.0",
+    "eslint-plugin-react-hooks": "^3.0.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^25.1.0",
     "less": "^3.0.0",
