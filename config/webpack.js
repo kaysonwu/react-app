@@ -1,4 +1,5 @@
 const { resolve, join } = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const merge = require('webpack-merge');
@@ -69,7 +70,8 @@ const getConfig = (target, ssr) => {
         {
           test: /\.less$/,
           use: [
-            'style-loader',  
+            'style-loader',
+            MiniCssExtractPlugin.loader,
             'css-loader',  
             {
               loader: 'less-loader',
@@ -82,18 +84,21 @@ const getConfig = (target, ssr) => {
       ]
     },
     externals,
-    plugins: (browser && ! ssr ? [
-      // only web render plugins
-      new HtmlWebpackPlugin({
-        template: join(src, 'index.html')
-      })
-    ] : [
-      new (require('@loadable/webpack-plugin'))({
-        outputAsset: false,
-        filename: `${target}-stats.json`,
-        writeToDisk: { filename: constants.node.path } 
-      })
-    ]),
+    plugins: [
+      new MiniCssExtractPlugin({
+        chunkFilename: 'css/id.css',
+      }),
+      (browser && !ssr
+        ? new HtmlWebpackPlugin({ 
+            template: join(src, 'index.html') 
+          })
+        : new (require('@loadable/webpack-plugin'))({
+            outputAsset: false,
+            filename: `${target}-stats.json`,
+            writeToDisk: { filename: constants.node.path } 
+          })
+      )
+    ],
     devServer: {
       contentBase: path,
     }
