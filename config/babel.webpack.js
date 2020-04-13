@@ -3,7 +3,7 @@ module.exports = (browser, ssr) => {
     '@babel/plugin-proposal-class-properties',
     ['import', {
       libraryName: 'antd',
-      style: true
+      style: browser ? true : false
     }]
   ];
 

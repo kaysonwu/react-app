@@ -86,7 +86,7 @@ const getConfig = (target, ssr) => {
     externals,
     plugins: [
       new MiniCssExtractPlugin({
-        chunkFilename: 'css/id.css',
+        chunkFilename: 'css/[id].css',
       }),
       (browser && !ssr
         ? new HtmlWebpackPlugin({ 
