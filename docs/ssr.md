@@ -1,15 +1,30 @@
 ## 服务端渲染
 
-> 参考：[Loadable Components 服务器端渲染指南](https://loadable-components.com/docs/server-side-rendering/)
+与传统单页应用程序 (Single-Page Application) 相比，服务器端渲染 (SSR) 的优势主要在于：
 
-&nbsp;&nbsp;&nbsp;&nbsp;服务端渲染一个很常见的场景是当用户（或搜索引擎爬虫）第一次请求页面时，用它来做初始渲染。当服务器接收到请求后，它把需要的组件渲染成 HTML 字符串，然后把它返回给客户端（这里统指浏览器）。之后，客户端会接手渲染控制权。
+- 更好的 SEO，由于搜索引擎爬虫抓取工具可以直接查看完全渲染的页面。
+- 更快的内容到达时间 (time-to-content)，特别是对于缓慢的网络情况或运行缓慢的设备。
 
-&nbsp;&nbsp;&nbsp;&nbsp;在服务端渲染时，代码被分割后，需要懒加载[@loadable/server](https://www.npmjs.com/package/@loadable/components) 提供了很好的服务端渲染支持，根据指南我们首先安装指定的依赖包：
+### 生成服务端依赖
+
+管理服务端渲染所需的依赖和文件是件麻烦的事情。而在这里，你只需要使用 `artisan` 命令，就可以生成与安装服务端渲染所需的文件及依赖：
 
 ```shell
-yarn add @loadable/server@^5.12.0
-
-yarn add -D @loadable/babel-plugin@^5.12.0 @loadable/webpack-plugin@^5.12.0 
+yarn artisan server:generate
 ```
 
-**注意：** 脚手架默认安装了这些依赖，并设定了配置。如果你不需要服务端渲染，仅需删除上述依赖包即可，无需对 `webpack` 和 `babel` 的配置做任何修改。
+### 清理服务端依赖
+
+不想使用服务端渲染时。那么，针对不必要的服务端渲染依赖以及文件是可以被清理掉的，因为它们永远都不会被使用到。`artisan` 为此提供了反向命令：
+
+```shell
+yarn artisan server:clear
+```
+
+### 构建 & 运行
+
+在 [生成服务端依赖](#生成服务端依赖) 后，会自动生成 **构建** 与 **运行** 服务端渲染代码的脚本命令：
+
+```shell
+yarn build:ssr && yarn start
+```
