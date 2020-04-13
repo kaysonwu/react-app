@@ -1,6 +1,6 @@
-import antd from 'antd/es/locale-provider/zh_CN';
+import antd from 'antd/lib/locale-provider/zh_CN';
 
-const zh_CN : Locale = {
+const zh_CN : ILocale = {
   antd,
   "Home": "首页",
   "User": "用户",
