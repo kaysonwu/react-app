@@ -51,7 +51,7 @@ module.exports = {
 #### 延迟单个
 
 ```js
-const { delay, delays } = require('./_utils_');
+const { delay } = require('./_utils_');
 
 module.exports = {
   'PUT /api/users': delay('操作成功', 1000)
@@ -73,18 +73,36 @@ const proxy = {
 module.exports = delays(proxy);
 ```
 
+### 引入 Mock.js
+
+[Mock.js](http://mockjs.com/) 是常用的辅助生成模拟数据的第三方库，借助它可以提升数据模拟的能力。
+
+```js
+const mockjs = require('mockjs');
+
+module.exports = {
+  'GET /api/tags': mockjs.mock({
+    'list|100': [{ name: '@city', 'value|1-100': 50, 'type|0-2': 1 }]
+  })
+};
+```
+
 ### 联调
 
 当本地开发完毕之后，如果服务器的接口已满足约定，那么，只需要关闭数据模拟或者代理到服务端的真实接口地址即可。
 
 通过使用 `--without-mock` 选项来关闭数据模拟：
 
-```
+```shell
 yarn run dev --without-mock
 ```
 
-通过使用 `--proxy` 选项来启用代理，将请求指向服务端的真实接口地址
+通过更改 [webpack](https://webpack.js.org/) 开发配置文件 `config/webpack.dev.js` 中的 [devServer](https://webpack.js.org/configuration/dev-server/#devserverproxy) 选项，即可启用代理到服务端的真实接口地址上。
 
-```
-yarn run dev --proxy /v1 http://api.domain.com
+```js
+devServer: {
+  proxy: {
+    '/v1': 'http://localhost:3000'
+  }
+}
 ```
