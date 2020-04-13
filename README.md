@@ -4,7 +4,7 @@
 --- | --- | --- | --- | --- | --- |
 Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
 
-&nbsp;&nbsp;&nbsp;&nbsp;它是一个企业级的脚手架，更形似一个框架。通过 [条件编译](docs/conditional-compile.md) 可以实现客户端与服务端之间的无缝渲染切换。更详细的说明，请参阅 [文档](docs/README.md)
+&nbsp;&nbsp;&nbsp;&nbsp;它是一个企业级的脚手架，更形似一个框架。通过 [条件编译](docs/conditional-compile.md) 可以实现客户端与服务端之间的无缝渲染切换。更详细的说明，请参阅 [完整文档](docs/README.md)
 
 ## 特性
 
