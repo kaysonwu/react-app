@@ -105,10 +105,17 @@ const getConfig = (target, ssr) => {
   };  
 }
 
-module.exports = (env, { targets }) => {
-  const config = require(`./webpack.${env}`);
+module.exports = (env, argv) => {
+  const { targets } = argv;
+  let config = require(`./webpack.${env}`);
+
+  if (typeof config === 'function') {
+    config = config(env, argv)
+  }
+
   if (Array.isArray(targets)) {
     return targets.map(target => merge(config, getConfig(target, true)));
   }
+  
   return merge(config, getConfig(targets));
 }
