@@ -16,5 +16,5 @@
 - [声明文件](declaration.md)
 - [数据模拟](mock.md)
 - [自动化测试](test.md)
-- [脚手架日志](log.md)
+- [搭建指南](build-guide.md)
 - [兼容 IE9](IE.md)
