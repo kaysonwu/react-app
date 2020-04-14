@@ -64,7 +64,7 @@ interface IModel<S = any, A extends Action = AnyAction> {
   /**
    * Redux state.
    */
-  state: S;
+  state: S | ((request?: import('http').IncomingMessage) => Promise<S>);
 
   /**
    * Redux reducers.
@@ -80,11 +80,6 @@ interface IModel<S = any, A extends Action = AnyAction> {
    * File name of dependent model.
    */
   dependencies?: string[];
-
-  /**
-   * Server side render initial state.
-   */
-  getInitialState?: (state: S, request: import('http').IncomingMessage) => Promise<S>;
 
   /**
    * Trigger before any model call effect.

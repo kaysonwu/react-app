@@ -1,42 +1,50 @@
 import { IncomingMessage } from 'http';
-import { createStore, applyMiddleware, Middleware, PreloadedState } from 'redux';
+import { createStore, applyMiddleware, Middleware, PreloadedState, Store as ReduxStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import * as Saga from 'redux-saga/effects';
 
 const { take, put, putResolve, takeEvery } = Saga;
-const MODEL_SEPARATOR = '/';
+
 const PRELOADED_STATE = '__PRELOADED_STATE__';
 
-class ModelManager {
+const MODEL_ID_SEPARATOR = '/';
+const MODEL_ADDED = '@@model/ADDED';
+const MODEL_REMOVED = '@@model/REMOVED';
 
-  private models: Record<string, Omit<IModel, 'id' | 'getInitialState'> & { saga: ReturnType<typeof coverSaga> }> = {};
-  private ids: string[] = [];
+interface IModelManager {
+  has: (id: string) => boolean;
+  add: (...models: IModel[]) => number;
+  remove: (...ids: string[]) => number;
+}
+
+class ModelManager implements IModelManager {
+
+  private models: Record<string, Omit<IModel, 'id' | 'state'> & { saga: ReturnType<typeof coverSaga> }> = {};
+  private store: ReduxStore | null = null;
   private listen: Record<string, Record<string, any>> = {
     effecting: {},
     effected: {}
   };
 
-  constructor(models: IModel[]) {
-    this.add(...models);
+  constructor() {
     this.effect = this.effect.bind(this);
     this.trigger = this.trigger.bind(this);
   }
 
-  private clearOldState = (state: any) => {
-    const { ids } = this;
-    if (ids.length > 0) {
-      state = { ...state };
-      for (let key of ids) {
-        delete state[key];
+  private clearOldState = (state: any, ids: string[]) => {
+    const newState = { ...state };
+
+    for (let id of ids) {
+      if (Object.prototype.hasOwnProperty.call(newState, id)) {
+        delete newState[id];
       }
-      this.ids = [];
-      return state;
     }
-    return state;
+
+    return newState;
   }
 
-  private splitActionType = (action: Action) => {
-    return (action.type as string).split(MODEL_SEPARATOR);
+  private splitActionType = (type: string) => {
+    return type.split(MODEL_ID_SEPARATOR);
   }
 
   private get = (id: string, defaultValue: any = undefined) => {
@@ -62,41 +70,78 @@ class ModelManager {
 
   private *trigger(event: string, ...parameters: any[]) {
     const listen = this.listen[event];
+
     for (let id in listen) {
       yield listen[id].call(null, ...parameters);
     }
+  }
+
+  private getStore = () => {
+    if (this.store === null) {
+      throw new Error('Store has not been injected.');
+    }
+
+    return this.store;
+  }
+
+  private preloadState = (state: Record<string, Promise<any>>) => {
+    const states = Object.values(state);
+
+    if (states.length < 1) return;
+
+    const ids = Object.keys(state);
+    Promise.all(states).then(states => {
+      const payload = states.reduce((res, state, i) => {
+        res[ids[i]] = state;
+        return res;
+      }, {});
+
+      this.getStore().dispatch({ type: MODEL_ADDED, payload });
+    });
   }
   
   /**
    * @Internal
    */
-  public reducer = (nextState: any, action: Action) => {
-    const [id, key] = this.splitActionType(action);
-    const { reducers, state } = this.get(id, {});
-  
-    nextState = this.clearOldState(nextState);
-    
-    if (reducers !== undefined && 
-      typeof reducers[key] === 'function'
-    ) {
-      return {
-        ...nextState,
-        [id]: reducers[key](nextState[id] || state, action)
-      };
+  public reducer = (state: any, action: AnyAction) => {
+    const { type, payload } = action;
+
+     // Internal action for state initialization after adding a model.
+    if (type === MODEL_ADDED) {
+      return { ...state, ...payload };
     }
 
-    return nextState;
+    // Internal action for state cleanup after model deletion.
+    if (type === MODEL_REMOVED) {
+      return this.clearOldState(state, payload);
+    }
+   
+    if (type !== MODEL_REMOVED) {
+      const [id, key] = this.splitActionType(type);
+      const { reducers } = this.get(id, {});
+      
+      if (reducers !== undefined 
+        && typeof reducers[key] === 'function'
+      ) {
+        return {
+          ...state,
+          [id]: reducers[key](state[id], action),
+        };
+      }
+    }
+
+    return state;
   }
 
   /**
    * @Internal
    */
   public *effect(action: Action) {
-    const [id, key] = this.splitActionType(action);
+    const [id, key] = this.splitActionType(action.type);
     const { effects, saga } = this.get(id, {});
     
-    if (effects !== undefined && 
-      typeof effects[key] === 'function'
+    if (effects !== undefined 
+      && typeof effects[key] === 'function'
     ) {
       yield this.trigger('effecting', saga, id, key, action);
       yield effects[key](saga, action);
@@ -104,32 +149,57 @@ class ModelManager {
     }
   }
 
+  /**
+   * @Internal
+   */
+  public injectStore = (store: ReduxStore) => {
+    this.store = store;
+  }
+
   public has = (id: string) => {
     return Object.prototype.hasOwnProperty.call(this.models, id);
   }
 
-  public add = (...models: IModel[]) => {
-    for (let i = 0;  i < models.length; i++) {
-      let { id, getInitialState, ...model } = models[i];
-      if (this.models[id] === undefined) {
-        this.addListen(id, model);
-        this.models[id] = {
-          ...model,
-          saga: coverSaga(id)
-        }
+  public add = (...models: ({ state?: any } & Omit<IModel, 'state'>)[]) => {
+    const states: Record<string, Promise<any>> = {};
+    const { length } = models.filter(({ id, state, ...model }) => {
+      if (this.models[id] !== undefined) return false;
+
+      if (typeof state === 'function') {
+        states[id] = state();
+      } else if (state !== undefined) {
+        state[id] = state;
       }
-    }
+
+      this.addListen(id, model);
+      this.models[id] = {
+        ...model,
+        saga: coverSaga(id),
+      };
+
+      return true;
+    });
+
+    this.preloadState(states);
+
+    return length;
   }
 
   public remove = (...ids: string[]) => {
-    for (let i = 0;  i < ids.length; i++) {
-      let id = ids[i];
-      if (this.models[id] !== undefined) {
-        delete this.models[id];
-        this.removeListen(id);
-        this.ids.push(id);
-      }
+    const payload = ids.filter(id => {
+      if (this.models[id] === undefined) return false;
+
+      delete this.models[id];
+      this.removeListen(id);
+  
+      return true;
+    });
+
+    if (payload.length > 0) {
+      this.getStore().dispatch({ type: MODEL_REMOVED, payload });
     }
+
+    return payload.length;
   }
 }
 
@@ -145,55 +215,64 @@ function coverSaga(id: string) {
     take(pattern?: Saga.ActionPattern) {
       if (typeof pattern === 'string') {
         return take(fixActionType(pattern, id));
-      } else if (Array.isArray(pattern)) {
+      }
+      
+      if (Array.isArray(pattern)) {
         return take(pattern.map(t => (typeof t === 'string') ? fixActionType(t, id) : t));
       }
+
       return take(pattern);
-    }
+    },
   };
 }
 
 function fixActionType(type: string, id: string) {
-  if (type.indexOf(MODEL_SEPARATOR) === -1) {
-    return id + MODEL_SEPARATOR + type;
+  if (type.indexOf(MODEL_ID_SEPARATOR) === -1) {
+    return id + MODEL_ID_SEPARATOR + type;
   }
+
   return type;
 }
 
-export type Store = ReturnType<typeof createStoreFromModel>;
+export type Store = ReduxStore & { modelManager: IModelManager };
 
-function createStoreFromModel(models: IModel[], preloadedState?: PreloadedState<any>, ...middlewares: Middleware<any, any, any>[]) {
-  const { reducer, effect, add, has, remove } = new ModelManager(models);
+function createStoreFromModel(
+  models: IModel[], 
+  preloadedState?: PreloadedState<any>, 
+  ...middlewares: Middleware<any, any, any>[]
+) {
+  const { reducer, effect, injectStore, add, has, remove } = new ModelManager();
   const sagaMiddleware = createSagaMiddleware();
-  const store = createStore(reducer, preloadedState, applyMiddleware(sagaMiddleware, ...middlewares));
+  const store = createStore(
+    reducer, 
+    preloadedState || {}, 
+    applyMiddleware(sagaMiddleware, ...middlewares)
+  ) as Store;
+  
+  injectStore(store);
+  add(...(preloadedState ? models.map(({ state, ...model }) => model) : models));
 
   sagaMiddleware.run(function*() {
     yield takeEvery('*', effect);
   });
 
-  return {
-    ...store,
-    modelManager: {
-      add,
-      has,
-      remove
-    }
-  };
+  store.modelManager = { add, has, remove }
+
+  return store;
 }
 
+
 // #if browser
-export function configureStore(models: IModel[], ...middlewares: Middleware<any, any, any>[]) {
-  let state = window[PRELOADED_STATE];
+export function configureStore(
+  models: IModel[], 
+  ...middlewares: Middleware<any, any, any>[]
+) {
+  const state = window[PRELOADED_STATE];
 
   if (state !== undefined) {
     delete window[PRELOADED_STATE];
-  } else {
-    state = models.reduce((res: Record<string, any>, model) => {
-      res[model.id] = { ...model.state };
-      return res;
-    }, {});
-  }
-  
+  } 
+
   return createStoreFromModel(models, state, ...middlewares);
 }
 // #!endif
@@ -212,19 +291,19 @@ export async function prepareStore (
   request: IncomingMessage, 
   ...middlewares: Middleware<any, any, any>[]
 ) {
-  const states = await getModelInitialStates(models, request);
+  const states = await getModelsInitialState(models, request);
   return createStoreFromModel(models, states, ...middlewares);
 }
 
-async function getModelInitialStates(models: IModel[], request: IncomingMessage) {
+async function getModelsInitialState(models: IModel[], request: IncomingMessage) {
   const states: Record<string, any> = {};
   const ids: string[] = [];
   const tasks: Promise<any>[] = [];
 
-  for (let { id, getInitialState, state } of models) {
-    if (typeof getInitialState === 'function') {
+  for (let { id, state } of models) {
+    if (typeof state === 'function') {
       ids.push(id);
-      tasks.push(getInitialState(state, request));
+      tasks.push(state(request));
     } else {
       states[id] = state;
     }
