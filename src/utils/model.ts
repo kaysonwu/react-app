@@ -132,11 +132,16 @@ class ModelManager implements IModelManager {
   }
    
   private preloadState = (state: Record<string, Promise<any>>) => {
-    const states = Object.values(state);
+    const ids: string[] = [];
+    const states: Promise<any>[] = [];
 
-    if (states.length < 1) return;
+    for (let id in state) {
+      ids.push(id);
+      states.push(state[id]);
+    }
 
-    const ids = Object.keys(state);
+    if (ids.length < 1) return;
+
     Promise.all(states).then(states => {
       const payload = states.reduce((res, state, i) => {
         res[ids[i]] = state;
