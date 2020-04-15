@@ -2,7 +2,7 @@
 
 模型是前端分层是前端分层中的腰部力量，承上启下，负责管理数据 (状态)。业界主流的状态管理类库有 [redux](https://github.com/reduxjs/redux)、[mobx](https://github.com/mobxjs/mobx) 等。
 
-模型是基于 [redux](https://github.com/reduxjs/redux) 和 [redux-saga](https://github.com/redux-saga/redux-saga) 最佳实践沉淀而出，与 [Dva Model](https://dvajs.com/guide/concepts.html#models) 基本相似， 一个简单的模型示例如下：
+模型是基于 [redux](https://github.com/reduxjs/redux) 和 [redux-saga](https://github.com/redux-saga/redux-saga) 最佳实践沉淀而出，与 [Dva Model](https://dvajs.com/guide/concepts.html#models) 形似， 一个简单的模型示例如下：
 
 ```ts
 interface GlobalState {
@@ -49,4 +49,54 @@ export default Global;
 通过将 `state` 改造成 [异步函数](https://es6.ruanyifeng.com/#docs/async) 就可以实现客户端与服务端的双端渲染支持
 
 ```ts
+import { get } from '@/utils/request';
+
+interface GlobalState {
+  user: IUser;
+  menus: IMenu[];
+  loading: Record<string, boolean>;
+}
+
+const Global: IModel<GlobalState> = {
+  id: 'global',
+  async state(){
+    const [user, menus] = await Promise.all([
+      get('v1/currentUser') as Promise<IUser>,
+      get('v1/menus') as Promise<IMenu[]>,
+    ]);
+
+    return {
+      user,
+      menus,
+      loading: {},
+    };
+  },
+  ...
+};
+
+export default Global;
 ```
+
+`state` 可接收一个 `request` 对象作为参数，它由 [URL](https://nodejs.org/dist/latest-v12.x/docs/api/url.html#url_legacy_urlobject) 与 [Headers](https://nodejs.org/dist/latest-v12.x/docs/api/http.html#http_message_headers) 对象组合而成，在客户端渲染时，`Headers` 对象仅中包含一个 `cookie` 对象
+
+```ts
+import { post } from '@/utils/request';
+
+export interface UserState {
+  users: any[];
+}
+
+const User: IModel<UserState> = {
+  id: 'user',
+  async state(request) {
+    const users = await (post('/v1/users', request.query) as Promise<any[]>);
+    return {
+      users,
+    };
+  },
+  ...
+};
+
+export default User;
+```
+
