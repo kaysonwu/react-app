@@ -1,6 +1,4 @@
-import request from '@/utils/request';
-
-const { get } = request;
+import { get } from '@/utils/request';
 
 export interface GlobalState {
   user: IUser;
@@ -12,14 +10,14 @@ const Global: IModel<GlobalState> = {
   id: 'global',
   async state(){
     const [user, menus] = await Promise.all([
-      get<any, IUser>('v1/currentUser'),
-      get<any, IMenu[]>('v1/menus')
+      get('v1/currentUser') as Promise<IUser>,
+      get('v1/menus') as Promise<IMenu[]>,
     ]);
 
     return {
       user,
       menus,
-      loading: {}
+      loading: {},
     };
   },
   *effecting({ put }, id) {
@@ -34,8 +32,8 @@ const Global: IModel<GlobalState> = {
         ...state,
         loading: {
           ...state.loading,
-          ...action.payload
-        }
+          ...action.payload,
+        },
       };
     }
   },
