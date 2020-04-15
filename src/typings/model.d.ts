@@ -62,9 +62,9 @@ interface IModel<S = any, A extends Action = AnyAction> {
   id: string;
 
   /**
-   * Redux state.
+   * Model initial state.
    */
-  state: S | ((request?: import('http').IncomingMessage) => Promise<S>);
+  state?: S | ((request: (import('url').UrlWithParsedQuery & { headers: { cookie: Record<string, string>, [key: string]: any } })) => Promise<S>);
 
   /**
    * Redux reducers.
@@ -90,4 +90,8 @@ interface IModel<S = any, A extends Action = AnyAction> {
    * Trigger after any model call effect.
    */
   effected?: EffectEvent<A>
+}
+
+interface ConnectState {
+  global: import('../models/global').GlobalState;  
 }

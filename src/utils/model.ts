@@ -1,20 +1,67 @@
 import { IncomingMessage } from 'http';
-import { createStore, applyMiddleware, Middleware, PreloadedState, Store as ReduxStore } from 'redux';
+import { parse as parseURL } from 'url';
+import { parse } from 'cookie';
+import { createStore, applyMiddleware, Middleware, Store as ReduxStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import * as Saga from 'redux-saga/effects';
 
 const { take, put, putResolve, takeEvery } = Saga;
-
 const PRELOADED_STATE = '__PRELOADED_STATE__';
 
+function makeRequest(url: string, headers: Record<string, any>) {
+  return {
+    ...parseURL(url, true),
+    headers: {
+      ...headers,
+      cookie: parse(headers.cookie || {}),
+    },
+  };
+}
+
+// #!if browser  
 const MODEL_ID_SEPARATOR = '/';
 const MODEL_ADDED = '@@model/ADDED';
 const MODEL_REMOVED = '@@model/REMOVED';
+
+function fixActionType(type: string, id: string) {
+  if (type.indexOf(MODEL_ID_SEPARATOR) === -1) {
+    return id + MODEL_ID_SEPARATOR + type;
+  }
+
+  return type;
+}
+
+function coverSaga(id: string) {
+  return {
+    ...Saga,
+    put<A extends Action>(action: A) {
+      return put({ ...action, type: fixActionType(action.type, id) });
+    }, 
+    putResolve(action: Action) {
+      return putResolve({ ...action, type: fixActionType(action.type, id) });
+    },
+    take(pattern?: Saga.ActionPattern) {
+      if (typeof pattern === 'string') {
+        return take(fixActionType(pattern, id));
+      }
+      
+      if (Array.isArray(pattern)) {
+        return take(pattern.map(t => (typeof t === 'string') ? fixActionType(t, id) : t));
+      }
+
+      return take(pattern);
+    },
+  };
+}
 
 interface IModelManager {
   has: (id: string) => boolean;
   add: (...models: IModel[]) => number;
   remove: (...ids: string[]) => number;
+}
+
+export interface Store extends ReduxStore {
+  modelManager: IModelManager;
 }
 
 class ModelManager implements IModelManager {
@@ -83,7 +130,7 @@ class ModelManager implements IModelManager {
 
     return this.store;
   }
-
+   
   private preloadState = (state: Record<string, Promise<any>>) => {
     const states = Object.values(state);
 
@@ -98,6 +145,13 @@ class ModelManager implements IModelManager {
 
       this.getStore().dispatch({ type: MODEL_ADDED, payload });
     });
+  }
+
+  /**
+   * @Internal
+   */
+  public injectStore = (store: ReduxStore) => {
+    this.store = store;
   }
   
   /**
@@ -149,24 +203,18 @@ class ModelManager implements IModelManager {
     }
   }
 
-  /**
-   * @Internal
-   */
-  public injectStore = (store: ReduxStore) => {
-    this.store = store;
-  }
-
   public has = (id: string) => {
     return Object.prototype.hasOwnProperty.call(this.models, id);
   }
 
-  public add = (...models: ({ state?: any } & Omit<IModel, 'state'>)[]) => {
+  public add = (...models: IModel[]) => {  
     const states: Record<string, Promise<any>> = {};
+    const request = makeRequest(location.href, { cookie: document.cookie });
     const { length } = models.filter(({ id, state, ...model }) => {
       if (this.models[id] !== undefined) return false;
 
       if (typeof state === 'function') {
-        states[id] = state();
+        states[id] = state(request);
       } else if (state !== undefined) {
         state[id] = state;
       }
@@ -203,54 +251,33 @@ class ModelManager implements IModelManager {
   }
 }
 
-function coverSaga(id: string) {
-  return {
-    ...Saga,
-    put<A extends Action>(action: A) {
-      return put({ ...action, type: fixActionType(action.type, id) });
-    }, 
-    putResolve(action: Action) {
-      return putResolve({ ...action, type: fixActionType(action.type, id) });
-    },
-    take(pattern?: Saga.ActionPattern) {
-      if (typeof pattern === 'string') {
-        return take(fixActionType(pattern, id));
-      }
-      
-      if (Array.isArray(pattern)) {
-        return take(pattern.map(t => (typeof t === 'string') ? fixActionType(t, id) : t));
-      }
-
-      return take(pattern);
-    },
-  };
-}
-
-function fixActionType(type: string, id: string) {
-  if (type.indexOf(MODEL_ID_SEPARATOR) === -1) {
-    return id + MODEL_ID_SEPARATOR + type;
-  }
-
-  return type;
-}
-
-export type Store = ReduxStore & { modelManager: IModelManager };
-
-function createStoreFromModel(
+export function configureStore(
   models: IModel[], 
-  preloadedState?: PreloadedState<any>, 
   ...middlewares: Middleware<any, any, any>[]
 ) {
+  let items = models;
+  let state = window[PRELOADED_STATE];
+
+  if (state !== undefined) {
+    delete window[PRELOADED_STATE];
+    items = items.map(({ state, ...model }) => model);
+  } else {
+    state = models.reduce((state, model) => {
+      state[model.id] = {};
+      return state;
+    }, {} as Record<string, any>);
+  }
+
   const { reducer, effect, injectStore, add, has, remove } = new ModelManager();
   const sagaMiddleware = createSagaMiddleware();
   const store = createStore(
     reducer, 
-    preloadedState || {}, 
+    state, 
     applyMiddleware(sagaMiddleware, ...middlewares)
   ) as Store;
-  
+
   injectStore(store);
-  add(...(preloadedState ? models.map(({ state, ...model }) => model) : models));
+  add(...items);
 
   sagaMiddleware.run(function*() {
     yield takeEvery('*', effect);
@@ -259,21 +286,6 @@ function createStoreFromModel(
   store.modelManager = { add, has, remove }
 
   return store;
-}
-
-
-// #if browser
-export function configureStore(
-  models: IModel[], 
-  ...middlewares: Middleware<any, any, any>[]
-) {
-  const state = window[PRELOADED_STATE];
-
-  if (state !== undefined) {
-    delete window[PRELOADED_STATE];
-  } 
-
-  return createStoreFromModel(models, state, ...middlewares);
 }
 // #!endif
 
@@ -292,18 +304,19 @@ export async function prepareStore (
   ...middlewares: Middleware<any, any, any>[]
 ) {
   const states = await getModelsInitialState(models, request);
-  return createStoreFromModel(models, states, ...middlewares);
+  return createStore((state) => state, states, applyMiddleware(...middlewares));
 }
 
 async function getModelsInitialState(models: IModel[], request: IncomingMessage) {
-  const states: Record<string, any> = {};
   const ids: string[] = [];
   const tasks: Promise<any>[] = [];
+  const states: Record<string, any> = {};
+  const req = makeRequest(request.url as string, request.headers);
 
   for (let { id, state } of models) {
     if (typeof state === 'function') {
       ids.push(id);
-      tasks.push(state(request));
+      tasks.push(state(req));
     } else {
       states[id] = state;
     }
