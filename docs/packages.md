@@ -6,6 +6,7 @@
 ---|---|---|---
 [@ant-design/icons](https://www.npmjs.com/package/@ant-design/icons) | Ant Design 图标库 | ✔️ | 与 antd 版本保持一致
 [@loadable/componen](https://www.npmjs.com/package/@loadable/componen) | React 代码拆分库 | ✔️ | 5.x 是最新版本
+[@loadable/server](https://www.npmjs.com/package/@loadable/server) | 为 @loadable/componen 提供 `chunk` 提取器 | ✔️ | 与 @loadable/componen 版本保持一致
 [antd](https://www.npmjs.com/package/antd) | UI 框架 | ✔️ | 4.0.0 起已经取消对 IE < 11 的支持
 [axios](https://www.npmjs.com/package/axios) | HTTP 客户端，适用于浏览器与 node.js | ✔️
 [classnames](https://www.npmjs.com/package/classnames) | 用于有条件地将 className 连接在一起 | ✔️ | 2.x 是最新版本
@@ -18,20 +19,26 @@
 [react-router-dom](https://www.npmjs.com/package/react-router-dom) | React 路由组件库 | ✔️ | 5.x 是最新版, `5.1.0` 为了与声明文件保持一致
 [redux](https://www.npmjs.com/package/redux) | JavaScript 状态容器，提供可预测化的状态管理 | ✔️ | 4.x 是最新版本
 [redux-saga](https://www.npmjs.com/package/redux-saga) | Redux 中间件，用于异步状态管理 | ✔️ | 1.x 是最新版本
+[serve-static](https://www.npmjs.com/package/serve-static) | HTTP 中间件，用于静态文件服务 | ✔️ | 1.x 是最新版本
 [@babel/core](https://www.npmjs.com/package/@babel/core) | babel 核心库 | ❌ | 7.x 是最新版, `7.4.0` 起支持 `core-js@3`
 [@babel/plugin-proposal-class-properties](https://www.npmjs.com/package/@babel/plugin-proposal-class-properties) | babel 插件，用于编译 Class 属性 | ❌ | 与 babel 核心库保持一致
 [@babel/preset-env](https://www.npmjs.com/package/@babel/preset-env) | babel 的环境预设 | ❌ | 与 babel 核心库保持一致
 [@babel/preset-react](https://www.npmjs.com/package/@babel/preset-react) | babel 的 react 预设 | ❌ | 与 babel 核心库保持一致
 [@babel/preset-typescript](https://www.npmjs.com/package/@babel/preset-typescript) | babel 的 typescript 预设 | ❌ | 与 babel 核心库保持一致
-[@types/classnames](https://www.npmjs.com/package/@types/classnames) | classnames 库的 typescript 声明文件 | ❌ | 与库保持一致
-[@types/cookie](https://www.npmjs.com/package/@types/cookie) | cookie 库的 typescript 声明文件 | ❌ | 与库保持一致
-[@types/jest](https://www.npmjs.com/package/@types/jest) | jest 库的 typescript 声明文件 | ❌ | 与库保持一致
+[@loadable/babel-plugin](https://www.npmjs.com/package/@loadable/babel-plugin) | babel 插件，用于编译 @loadable/componen 函数 | ❌ | 与 @loadable/componen 库保持一致
+[@loadable/webpack-plugin](https://www.npmjs.com/package/@loadable/babel-plugin) | webpack 插件，用于生成 [统计信息](https://webpack.js.org/api/stats/) 文件给 @loadable/server 使用 | ❌ | 与 @loadable/componen 库保持一致
+[@types/classnames](https://www.npmjs.com/package/@types/classnames) | classnames 包的 typescript 声明文件 | ❌ | 与库保持一致
+[@types/cookie](https://www.npmjs.com/package/@types/cookie) | cookie 包的 typescript 声明文件 | ❌ | 与库保持一致
+[@types/jest](https://www.npmjs.com/package/@types/jest) | jest 包的 typescript 声明文件 | ❌ | 与库保持一致
+[@types/loadable__component](https://www.npmjs.com/package/@types/loadable__component) | @loadable/component 包的 typescript 声明文件 | ❌ | 与库保持一致
+[@types/loadable__server](https://www.npmjs.com/package/@types/loadable__server) | @loadable/server 包的 typescript 声明文件 | ❌ | 与库保持一致
 [@types/node](https://www.npmjs.com/package/@types/node) | node.js 的 typescript 声明文件 | ❌ | 与库保持一致
-[@types/qs](https://www.npmjs.com/package/@types/qs) | qs 库的 typescript 声明文件 | ❌ | 与库保持一致
+[@types/qs](https://www.npmjs.com/package/@types/qs) | qs 包的 typescript 声明文件 | ❌ | 与库保持一致
 [@types/react](https://www.npmjs.com/package/@types/react) | react 包的 typescript 声明文件 | ❌ | 与包版本保持一致
 [@types/react-dom](https://www.npmjs.com/package/@types/react-dom) | react-dom 包的 typescript 声明文件 | ❌ | 与包版本保持一致
 [@types/react-redux](https://www.npmjs.com/package/@types/react-redux) | react-redux 包的 typescript 声明文件 | ❌ | 与包版本保持一致
 [@types/react-router-dom](https://www.npmjs.com/package/@types/react-router-dom) | react-router-dom 包的 typescript 声明文件 | ❌ | 与包版本保持一致
+[@types/serve-static](https://www.npmjs.com/package/@types/serve-static) | serve-static 包的 typescript 声明文件 | ❌ | 与包版本保持一致
 [@typescript-eslint/eslint-plugin](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin) | eslint 插件，用于规范 typescript 代码 | ❌ | 2.x 是最新版本
 [@typescript-eslint/parser](https://www.npmjs.com/package/@typescript-eslint/parser) | eslint 解析器，用于将 typescript 代码解析成 ESTree | ❌ | 2.x 是最新版本
 [babel-jest](https://www.npmjs.com/package/babel-loader) | jest 代码转换插件，用于编译 Javascript 文件 | ❌  | 与 jest 版本保持一致
