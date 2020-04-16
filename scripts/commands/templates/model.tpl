@@ -3,19 +3,17 @@ interface [name]State {
 
 const [name]: IModel<[name]State> = {
   id: '[name]',
-  state: {
+[preload]
+  async state(request) {
+    // Do something here
+    return {
 
+    };
   },
-[ssr]
-  // #!if !browser
-  async getInitialState() {
-    return { } as [name]State;
-  },
-  // #!endif
-[/ssr]
+[/preload]
   reducers: {
 
-  }
+  },
 };
 
 export default [name];
