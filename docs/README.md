@@ -15,7 +15,7 @@
 - [条件编译](conditional-compile.md)
 - [声明文件](declaration.md)
 - [数据模拟](mock.md)
-- [自动化测试](test.md)
+- [自动化测试](testing.md)
 - [搭建指南](build-guide.md)
 - [扩展包使用情况](packages.md)
 - [兼容 IE9](IE.md)
