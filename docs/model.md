@@ -46,7 +46,38 @@ export default Global;
 
 ### 服务端渲染
 
-通过将 `state` 改造成 [异步函数](https://es6.ruanyifeng.com/#docs/async) 就可以实现客户端与服务端的双端渲染支持
+使用工匠命令，可以从模板中创建一个模型：
+
+```
+yarn artisan make:model user --preload
+```
+
+通过指定 `--preload` 选项，将生成 `state` [异步函数](https://es6.ruanyifeng.com/#docs/async) 语法，这样就可以实现客户端与服务端的双端渲染支持
+
+```ts
+import { post } from '@/utils/request';
+
+export interface UserState {
++  users: any[];
+}
+
+const User: IModel<UserState> = {
+  id: 'user',
+  async state(request) {
++    const users = await (post('/v1/users', request.query) as Promise<any[]>);
+    return {
++      users,
+    };
+  },
+  ...
+};
+
+export default User;
+```
+
+`state` 函数接收一个 `request` 对象作为参数，它由 [URL](https://nodejs.org/dist/latest-v12.x/docs/api/url.html#url_legacy_urlobject) 与 [Headers](https://nodejs.org/dist/latest-v12.x/docs/api/http.html#http_message_headers) 对象组合而成，在客户端渲染时，`Headers` 对象仅中包含一个 `cookie` 对象。
+
+现在，来改造下之前的 `Global` 模型吧，让它也支持服务端渲染：
 
 ```ts
 import { get } from '@/utils/request';
@@ -76,27 +107,3 @@ const Global: IModel<GlobalState> = {
 
 export default Global;
 ```
-
-`state` 可接收一个 `request` 对象作为参数，它由 [URL](https://nodejs.org/dist/latest-v12.x/docs/api/url.html#url_legacy_urlobject) 与 [Headers](https://nodejs.org/dist/latest-v12.x/docs/api/http.html#http_message_headers) 对象组合而成，在客户端渲染时，`Headers` 对象仅中包含一个 `cookie` 对象
-
-```ts
-import { post } from '@/utils/request';
-
-export interface UserState {
-  users: any[];
-}
-
-const User: IModel<UserState> = {
-  id: 'user',
-  async state(request) {
-    const users = await (post('/v1/users', request.query) as Promise<any[]>);
-    return {
-      users,
-    };
-  },
-  ...
-};
-
-export default User;
-```
-
