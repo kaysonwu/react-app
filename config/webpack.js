@@ -1,7 +1,6 @@
 const { resolve, join } = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
 const merge = require('webpack-merge');
 const babel = require('./babel.webpack');
 
@@ -12,19 +11,18 @@ const constants = {
   web: {
     // Web build directory
     path: join(root, 'public'),
-    libraryTarget: 'var'
+    libraryTarget: 'var',
   },
   node: {
     // Node build directory
     path: join(root, 'server'),
     libraryTarget: 'commonjs2',
-    externals: [nodeExternals()]
-  }
-}
+  },
+};
 
 const getConfig = (target, ssr) => {
   const browser = target === 'web';
-  const { path, libraryTarget, externals } = constants[target];
+  const { path, libraryTarget } = constants[target];
 
   return {
     target,
@@ -42,8 +40,8 @@ const getConfig = (target, ssr) => {
       extensions: ['.js', '.ts', '.jsx', '.tsx'],
       alias: {
         '@': src,
-        'config': __dirname
-      }
+        'config': __dirname,
+      },
     },
     module: {
       rules: [
@@ -53,7 +51,7 @@ const getConfig = (target, ssr) => {
           use: [
             {
               loader: 'babel-loader',
-              options: babel(browser, ssr)
+              options: babel(browser, ssr),
             },
             {
               loader: 'webpack-preprocessor-loader',
@@ -61,11 +59,11 @@ const getConfig = (target, ssr) => {
                 params: { 
                   ssr,
                   browser,
-                  NODE_SERVER: false
-                }
-              }
-            }
-          ]
+                  NODE_SERVER: false,
+                },
+              },
+            },
+          ],
         },
         {
           test: /\.less$/,
@@ -76,32 +74,32 @@ const getConfig = (target, ssr) => {
             {
               loader: 'less-loader',
               options: {
-                javascriptEnabled: true  
-              }
-            }
-          ]
-        }
-      ]
+                javascriptEnabled: true,
+              },
+            },
+          ],
+        },
+      ],
     },
-    externals,
+    externals: browser ? undefined : [(require('webpack-node-externals'))()],
     plugins: [
       new MiniCssExtractPlugin({
         chunkFilename: 'css/[id].css',
       }),
       (browser && !ssr
         ? new HtmlWebpackPlugin({ 
-            template: join(src, 'index.html') 
+            template: join(src, 'index.html'),
           })
         : new (require('@loadable/webpack-plugin'))({
             outputAsset: false,
             filename: `${target}-stats.json`,
-            writeToDisk: { filename: constants.node.path } 
+            writeToDisk: { filename: constants.node.path }, 
           })
-      )
+      ),
     ],
     devServer: {
       contentBase: path,
-    }
+    },
   };  
 }
 
@@ -110,7 +108,7 @@ module.exports = (env, argv) => {
   let config = require(`./webpack.${env}`);
 
   if (typeof config === 'function') {
-    config = config(env, argv)
+    config = config(env, argv);
   }
 
   if (Array.isArray(targets)) {

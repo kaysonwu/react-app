@@ -31,9 +31,11 @@ program
         '@loadable/babel-plugin', 
         '@loadable/webpack-plugin', 
         '@types/loadable__server', 
-        '@types/serve-static'
+        '@types/serve-static',
+        'terser',
+        'webpack-node-externals',
       ], { debug: true }),
-      removeScript(['start', 'dev:ssr', 'build:ssr', 'build:server'])
+      removeScript(['start', 'dev:ssr', 'build:ssr', 'build:server']),
     ]).then(() => {
       success('Server files have been cleaned up', 'DONE');
     });

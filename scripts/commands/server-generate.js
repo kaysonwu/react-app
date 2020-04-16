@@ -14,8 +14,10 @@ const packages = {
     '@loadable/babel-plugin': '^5.12.0',
     '@loadable/webpack-plugin': '^5.12.0',
     '@types/loadable__server': '^5.12.0',
-    '@types/serve-static': '^1.13.0', 
-  }
+    '@types/serve-static': '^1.13.0',
+    'terser': '^4.5.0',
+    'webpack-node-externals': '^1.7.2',
+  },
 };
 
 process.on('unhandledRejection', err => {
