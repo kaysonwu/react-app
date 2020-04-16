@@ -32,7 +32,7 @@ const server = createServer((req, res) => {
           <Application 
             store={store} 
             locale={__getLocale__(req.headers)} 
-            location={hasLocaleFile(page) ? { pathname } : undefined } 
+            page={hasLocaleFile(page) ? page : undefined}
           />
         </StaticRouter>
       </ChunkExtractorManager>

@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
+import { Store as ReduxStore } from 'redux';
 import { Provider } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import LocaleProvider from '../locale-provider';
 import Model from '../loadable/model';
 import Route from './route';
@@ -9,20 +11,17 @@ import { LANGUAGE_CHANGE } from '@/utils/locale'
 
 export interface ApplicationProps {
   locale: string;
-  store: Store;
-  location?: { pathname: string; }
+  store: Store | ReduxStore;
+  page?: string;
 }
 
-export default ({ locale, store, location }: ApplicationProps) => {
-  
+export default ({ locale, store, page }: ApplicationProps) => {
   // #!if browser
-  let setLocale: any;
+  let setLocale: Dispatch<SetStateAction<string>>;
   [locale, setLocale] = useState(locale);
-  // #!endif
-  const files = location ? [locale, `${locale}/${getNameFromPath(location.pathname)}`] : undefined;
-  
-  // #!if browser
-  const handleLanguageChange = (e: any) => {
+  page = getNameFromPath(useLocation().pathname);
+
+  const handleLanguageChange = (e: Event) => {
     setLocale((e as CustomEvent).detail.locale);
   }
 
@@ -35,12 +34,12 @@ export default ({ locale, store, location }: ApplicationProps) => {
   // #!endif
 
   return (
-    <LocaleProvider locale={locale} files={files}>
+    <LocaleProvider locale={locale} files={page ? [locale, `${locale}/${page}`] : undefined}>
       <Provider store={store}>
         {/* #!if browser */}
-        <Model paths={['user']}>
+        <Model paths={[page]}>
           {(models: IModel[]) => {
-            store.modelManager.add(...models)
+            (store as Store).modelManager.add(...models)
             return <Route />
           }}
         </Model>
