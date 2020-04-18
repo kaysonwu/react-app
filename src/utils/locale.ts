@@ -1,11 +1,10 @@
 import { serialize, parse } from 'cookie';
 import { IncomingHttpHeaders } from 'http';
 
-// The util functions here are only for browser.
-// When adding support for node function, please use conditional compilation command.
-
-export const LANGUAGE_CHANGE = 'languageChange';
 const LANGUAGE_KEY = 'locale';
+
+// #if WEB
+export const LANGUAGE_CHANGE = 'languageChange';
 
 export function getLocale(fallback: string = 'zh-CN') {
   // navigator.language minimum support IE11.
@@ -33,8 +32,9 @@ export function setLocale(locale: string, reload: boolean = true): void {
     window.dispatchEvent(new CustomEvent(LANGUAGE_CHANGE, { detail: { locale } }));
   }
 }
+// #endif
 
-// #!if NODE_SERVER
+// #if NODE_SERVER
 // Internal function, For node server only
 export function __getLocale__(headers: IncomingHttpHeaders, fallback: string = 'zh-CN') {
   const { cookie } = headers;
@@ -42,4 +42,4 @@ export function __getLocale__(headers: IncomingHttpHeaders, fallback: string = '
     headers['accept-language']?.split(',')[0] || 
     fallback;
 }
-// #!endif
+// #endif

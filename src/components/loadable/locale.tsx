@@ -18,15 +18,15 @@ export default ({ paths, children  }: Props) => {
   return paths.reduceRight((fn, path) => {
     return (messages: ILocale) => {
       return (
-        // #!if browser
+        /* #if WEB */
         <ErrorBoundary fallback={() => fn(messages)}>
-        {/* #!endif */}
+        {/* #endif */}
           <Locale path={path}>
             { ({ default: m }: any) => fn({ ...messages, ...m }) }
           </Locale>
-        {/* #!if browser */}
+        {/* #if WEB */}
         </ErrorBoundary>
-        // #!endif
+        /* #endif */
       );
     }
   }, children)({}) as JSX.Element;

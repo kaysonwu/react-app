@@ -18,7 +18,7 @@ function makeRequest(url: string, headers: Record<string, any>) {
   };
 }
 
-// #!if browser  
+// #if WEB  
 const MODEL_ID_SEPARATOR = '/';
 const MODEL_ADDED = '@@model/ADDED';
 const MODEL_REMOVED = '@@model/REMOVED';
@@ -292,9 +292,9 @@ export function configureStore(
 
   return store;
 }
-// #!endif
+// #endif
 
-// #!if NODE_SERVER
+// #if NODE_SERVER
 export function createStateScript(state: any) {
   return `
     <script type="text/javascript">
@@ -335,4 +335,4 @@ async function getModelsInitialState(models: IModel[], request: IncomingMessage)
     states
   );
 }
-// #!endif
+// #endif

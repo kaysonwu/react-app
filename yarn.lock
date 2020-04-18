@@ -2110,6 +2110,11 @@ babel-plugin-jest-hoist@^25.2.6:
   dependencies:
     "@types/babel__traverse" "^7.0.6"
 
+babel-plugin-preprocessor@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/babel-plugin-preprocessor/-/babel-plugin-preprocessor-0.0.1.tgz#b6723dc2beb68ab51214ea2a8acd619edd69268f"
+  integrity sha512-IfGKg1VeUI6BOxl7CjWz3p+B3OGsEN7e1p0Jsdl1py4p8oM+ALb4/hz3RYCWWHyHlmJYzLmVN9LBVYFUMFvKdA==
+
 babel-preset-current-node-syntax@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/babel-preset-current-node-syntax/-/babel-preset-current-node-syntax-0.1.2.tgz#fb4a4c51fe38ca60fede1dc74ab35eb843cb41d6"
@@ -9189,11 +9194,6 @@ webpack-merge@^4.1.0:
   integrity sha512-TUE1UGoTX2Cd42j3krGYqObZbOD+xF7u28WB7tfUordytSjbWTIjK/8V0amkBfTYN4/pB/GIDlJZZ657BGG19g==
   dependencies:
     lodash "^4.17.15"
-
-webpack-preprocessor-loader@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/webpack-preprocessor-loader/-/webpack-preprocessor-loader-1.1.2.tgz#f018b092bedd7eed8480fd8557d6f4ae9ef3574a"
-  integrity sha512-YR9UksXYYr0WOEfMTxU0NhKdnfu0BzRvLIxQfkjzyCgyPyeXqv69Nm2JtCykD83cB6Hukr4EtpgztmfMPukpIw==
 
 webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1:
   version "1.4.3"

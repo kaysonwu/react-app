@@ -1,5 +1,7 @@
 import { join } from 'path';
+// #if NODE_SERVER
 import { existsSync } from 'fs';
+// #endif
 
 export function getNameFromPath(path: string) {
   if (! path || path === '/') {
@@ -8,7 +10,7 @@ export function getNameFromPath(path: string) {
   return path.replace(/^\/+/, '').replace('/', '-');
 }
 
-// #!if NODE_SERVER
+// #if NODE_SERVER
 export function loadModel(names: string[], path: string) {
   const models: IModel[] = [];
   for (let name of names) {
@@ -27,4 +29,4 @@ export function loadModel(names: string[], path: string) {
 export function hasLocaleFile(name: string, path: string = join(__dirname, 'locales')) {
   return existsSync(join(path, `${name}.js`));
 }
-// #!endif
+// #endif

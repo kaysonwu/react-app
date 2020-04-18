@@ -2,7 +2,6 @@ const { resolve, join } = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
-const babel = require('./babel.webpack');
 
 // Constants.
 const root = resolve(__dirname, '..');
@@ -20,7 +19,7 @@ const constants = {
   },
 };
 
-const getConfig = (target, ssr) => {
+const getConfig = (target, SSR) => {
   const browser = target === 'web';
   const { path, libraryTarget } = constants[target];
 
@@ -51,16 +50,8 @@ const getConfig = (target, ssr) => {
           use: [
             {
               loader: 'babel-loader',
-              options: babel(browser, ssr),
-            },
-            {
-              loader: 'webpack-preprocessor-loader',
               options: {
-                params: { 
-                  ssr,
-                  browser,
-                  NODE_SERVER: false,
-                },
+                caller: { target, SSR },
               },
             },
           ],
@@ -86,7 +77,7 @@ const getConfig = (target, ssr) => {
       new MiniCssExtractPlugin({
         chunkFilename: 'css/[id].css',
       }),
-      (browser && !ssr
+      (browser && !SSR
         ? new HtmlWebpackPlugin({ 
             template: join(src, 'index.html'),
           })

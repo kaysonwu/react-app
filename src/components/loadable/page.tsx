@@ -20,7 +20,7 @@ export const NotFound = loadable(
   }
 );
 
-// #!if browser
+// #if WEB
 // @ts-ignore
 export default ({ path, children }: any) => {
   return (
@@ -29,7 +29,7 @@ export default ({ path, children }: any) => {
     </ErrorBoundary>
   );
 }
-// #!else
+// #else
 // @ts-ignore
 export default Page;
-// #!endif
+// #endif
