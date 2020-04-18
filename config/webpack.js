@@ -36,11 +36,7 @@ const getConfig = (target, SSR) => {
       filename: '[name].js',
     },
     resolve: {
-      extensions: ['.js', '.ts', '.jsx', '.tsx'],
-      alias: {
-        '@': src,
-        'config': __dirname,
-      },
+      extensions: ['.js', '.ts', '.jsx', '.tsx']
     },
     module: {
       rules: [
