@@ -2,10 +2,13 @@ import { IncomingMessage } from 'http';
 import { parse as parseURL } from 'url';
 import { parse } from 'cookie';
 import { createStore, applyMiddleware, Middleware, Store as ReduxStore } from 'redux';
+// #if WEB
 import createSagaMiddleware from 'redux-saga';
 import * as Saga from 'redux-saga/effects';
 
 const { take, put, putResolve, takeEvery } = Saga;
+// #endif
+
 const PRELOADED_STATE = '__PRELOADED_STATE__';
 
 function makeRequest(url: string, headers: Record<string, any>) {
