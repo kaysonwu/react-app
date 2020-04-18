@@ -6,18 +6,14 @@ import { Link, useLocation } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import Header from './header';
 import Footer from './footer';
-import menus from 'config/menus';
 import './index.less';
 
 const { Content } = Layout;
 
-const Page = ({ user, dispatch, children, ...props }: any) => {
+const Page = ({ user, menus, dispatch, children, ...props }: any) => {
 
   useEffect(() => {
-    if (!user) {
-      dispatch({ type: 'global/fetchUser' });
-    }
-    
+
   }, [])
 
   return (
@@ -37,6 +33,6 @@ const Page = ({ user, dispatch, children, ...props }: any) => {
   )
 }
 
-export default connect((state: any) => ({
-  user: state.global.user
-}))(Page)
+export default connect(
+  ({ global }: ConnectState) => ({ user: global.user, menus: global.menus })
+)(Page);
