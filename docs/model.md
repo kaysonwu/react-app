@@ -1,8 +1,8 @@
 ## 模型数据流
 
-模型是前端分层是前端分层中的腰部力量，承上启下，负责管理数据 (状态)。业界主流的状态管理类库有 [redux](https://github.com/reduxjs/redux)、[mobx](https://github.com/mobxjs/mobx) 等。
+模型是前端分层中的腰部力量，承上启下，负责管理数据 (状态)。业界主流的状态管理类库有 [redux](https://github.com/reduxjs/redux)、[mobx](https://github.com/mobxjs/mobx) 等。
 
-模型是基于 [redux](https://github.com/reduxjs/redux) 和 [redux-saga](https://github.com/redux-saga/redux-saga) 最佳实践沉淀而出，与 [Dva Model](https://dvajs.com/guide/concepts.html#models) 形似， 一个简单的模型示例如下：
+脚手架的模型是基于 [redux](https://github.com/reduxjs/redux) 和 [redux-saga](https://github.com/redux-saga/redux-saga) 最佳实践沉淀而出，与 [Dva Model](https://dvajs.com/guide/concepts.html#models) 形似， 一个简单的模型示例如下：
 
 ```ts
 interface GlobalState {
