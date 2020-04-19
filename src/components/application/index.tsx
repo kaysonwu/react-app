@@ -3,7 +3,9 @@ import { Store as ReduxStore } from 'redux';
 import { Provider } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import LocaleProvider from '../locale-provider';
+// #if WEB
 import Model from '../loadable/model';
+// #endif
 import Route from './route';
 import { Store } from '@/utils/model';
 import { getNameFromPath } from '@/utils/loadable'
@@ -16,7 +18,7 @@ export interface ApplicationProps {
 }
 
 export default ({ locale, store, page }: ApplicationProps) => {
-  // #!if browser
+  // #if WEB
   let setLocale: Dispatch<SetStateAction<string>>;
   [locale, setLocale] = useState(locale);
   page = getNameFromPath(useLocation().pathname);
@@ -31,21 +33,21 @@ export default ({ locale, store, page }: ApplicationProps) => {
       window.removeEventListener(LANGUAGE_CHANGE, handleLanguageChange)
     }
   }, []);
-  // #!endif
+  // #endif
 
   return (
     <LocaleProvider locale={locale} files={page ? [locale, `${locale}/${page}`] : undefined}>
       <Provider store={store}>
-        {/* #!if browser */}
+        {/* #if WEB */}
         <Model paths={[page]}>
           {(models: IModel[]) => {
             (store as Store).modelManager.add(...models)
             return <Route />
           }}
         </Model>
-        {/* #!else */}
+        {/* #else */}
         <Route />
-        {/* #!endif */}
+        {/* #endif */}
       </Provider>
     </LocaleProvider>
   );
