@@ -12,7 +12,7 @@
 function Label(id, label, format, ...args) {
   console.log('\033[4' + id + ';30m ' + label + 
     ' \033[40;3' + id + 'm ' + format + '\033[0m', 
-    ...args
+    ...args,
   );
 } 
 
@@ -20,15 +20,39 @@ function message(id, label, format, ...args) {
   console.log('\033[3' + id + 'm' + label + ' \033[0m' + format, ...args);
 }
 
-module.exports = {
-  error: (format, ...args) => message(1, 'error', format, ...args),
-  success: (format, ...args) => message(2, 'success', format, ...args),
-  warning: (format, ...args) => message(3, 'warning', format, ...args),
-  info: (format, ...args) => message(4, 'info', format, ...args),
-  label: {
-    error: (format, label, ...args) => Label(1, label || 'ERROR', format, ...args),
-    success: (format, label, ...args) => Label(2, label || 'SUCCESS', format, ...args),
-    warning: (format, label, ...args) => Label(3, label || 'WARN', format, ...args),
-    info: (format, label, ...args) => Label(4, label || 'INFO', format, ...args),
+function normalize(format) {
+  if (format && (format instanceof Error)) {
+    return format.stack.replace(/\s*error:?\s*/i, '');
   }
+
+  return format;
+}
+
+module.exports = {
+  error(format, tag, ...args) {
+    return message(1, tag || 'error', normalize(format), ...args);
+  },
+  success(format, tag, ...args) {
+    return message(2, tag || 'success', format, ...args);
+  },
+  warning(format, tag, ...args) {
+    return message(3, tag || 'warning', format, ...args);
+  },
+  info(format, tag, ...args) {
+    return message(4, tag || 'info', format, ...args);
+  },
+  label: {
+    error(format, label, ...args) {
+      return Label(1, label || 'ERROR', normalize(format), ...args);
+    },
+    success(format, label, ...args) {
+      return Label(2, label || 'SUCCESS', format, ...args);
+    },
+    warning(format, label, ...args) {
+      return Label(3, label || 'WARN', format, ...args);
+    },
+    info(format, label, ...args) {
+      return Label(4, label || 'INFO', format, ...args);
+    },
+  },
 };

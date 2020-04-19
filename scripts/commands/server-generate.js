@@ -21,7 +21,7 @@ const packages = {
 };
 
 process.on('unhandledRejection', err => {
-  error(err.message);
+  error(err);
 });
 
 program

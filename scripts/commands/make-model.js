@@ -5,7 +5,7 @@ const { createFileFromTemplate } = require('../utils/artisan');
 const { label: { success, error }  } = require('../utils/message');
 
 process.on('unhandledRejection', err => {
-  error(err.message);
+  error(err);
 });  
 
 program

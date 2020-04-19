@@ -7,7 +7,7 @@ const { remove, removeScript } = require('../utils/package');
 const { promises: { unlink } } = require('../utils/file');
 
 process.on('unhandledRejection', err => {
-  error(err.message);
+  error(err);
 });
 
 program
