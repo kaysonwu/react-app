@@ -3,50 +3,49 @@ const { promises: { readFile } } = require('./file');
 /**
  * Compile data using the given template file.
  * 
- * @param {string} filename Template file path.
- * @param {string} data     Data to compile.
+ * @param {string} filename   Data file path.
+ * @param {string} template   Template file path.
  */
-async function compileTemplate(filename, data) {
-  const pattern = /<template>([\s\S]*?)<\/template>/ig
-  const labels = [['head', '</head>'], ['body', '</body>'], ['footer', '</html>']];
-
+async function compileTemplate(filename, template) {
   const content = await readFile(filename, 'utf-8');
-  let matches;
+  const data = await readFile(template, 'utf-8');
+
+  return matchTemplates(content).reduce(
+    (c, m) => c.replace(m[0], replaceTemplate(data, m[1])), 
+    content,
+  );
+}
+
+function matchTemplates(content) {
+  const matches = [];
+  const pattern = /<template>([\s\S]*?)<\/template>/ig;
+  let match;
+
+  while((match = pattern.exec(content)) !== null) {
+    matches.push(match);  
+  }
+
+  return matches;
+}
+
+function replaceTemplate(data, template) {
+  const pattern = /<(head|body|footer)(?:\s+id=('|")(\w+)\2)?>([\s\S]*?)<\/\1>/ig;
+  let match;
+
+  while ((match = pattern.exec(template)) !== null) {
+    let [, label, , id, child] = match;
+    
+    if (id) {
+      label = new RegExp(`( id=('|")${id}\\2[^>]*>)`, 'i');
+      child = `$1${child}`;
+    } else {
+      label = label === 'footer' ? '</html>' : `</${label}>`;
+      child += label;
+    }
+
+    data = data.replace(label, child);
+  }
   
-  while((matches = pattern.exec(data)) !== null) {
-    data = data.replace(matches[0], replaceTemplate(content, matches[1], labels));
-  }
-
-  return data;
-}
-
-function replaceTemplate(data, template, labels) {
-  for (let label of labels) {
-    [data, template] = replaceLabel(data, template, label);
-  }
-  return replaceIdLabel(data, template);
-}
-
-function replaceLabel(data, template, label) {
-  const [from, to] = Array.isArray(label) ? label : [label, `</${label}>`];
-  const pattern = new RegExp(`<${from}>([\\s\\S]*?)</${from}>`, 'ig');
-  let matches;
-
-  while ((matches = pattern.exec(template)) !== null) {
-    data = data.replace(to, matches[1] + to);
-  }
-
-  return [data, template.replace(pattern, '')];
-}
-
-function replaceIdLabel(data, template) {
-  const pattern = /<([a-z0-9]+)[^>]*? id=('|")(\w+)\2[^>]*?>([\s\S]*?)<\/\1>/ig;
-  let matches;
-
-  while ((matches = pattern.exec(template)) !== null) {
-    data = data.replace(new RegExp(`( id=('|")${matches[3]}\\2[^>]*?>)`, 'i'), `$1${matches[4]}`);
-  }
-
   return data;
 }
 
