@@ -8,9 +8,9 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import { ApplicationProps } from './node';
-import { createStateScript, prepareStore } from './utils/model';
-import { getNameFromPath, loadModel, hasLocaleFile } from './utils/loadable';
-import { __getLocale__ } from './utils/locale';
+import { createStateScript, prepareStore } from '@/utils/model';
+import { getNameFromPath, loadModel, hasLocaleFile } from '@/utils/loadable';
+import { __getLocale__ } from '@/utils/locale';
 
 const nodeExtractor = new ChunkExtractor({ statsFile: join(__dirname, 'node-stats.json') });
 const webExtractor = new ChunkExtractor({ statsFile: resolve(__dirname, 'web-stats.json'), entrypoints: ['app'] });
