@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const { parse } = require('path');
+const { relative, parse } = require('path');
 const { createFileFromTemplate } = require('../utils/artisan');
 const { install, createScript } = require('../utils/package');
 const { error } = require('../utils/message');
@@ -35,20 +35,21 @@ program
   .option('--server [name]', 'Node server filename', 'server')
   .action(() => {
     const { mirror, latest, entry, server, ...opts } = program.opts();
-    const serverFile = server.includes('.') ? server : server + opts.extension;
-
+  
     install((latest ? Object.keys(packages.prod) : packages.prod), { mirror, debug: true });
     install((latest ? Object.keys(packages.dev) : packages.dev), { mirror, debug: true, dev: true });
 
-    createScript({
-      'start': `pm2 ./server/${parse(server).name}.js`,
-      'dev:ssr': 'npm dev --targets=node && npm build:server && npm start',
-      'build:ssr': 'npm build --targets=node && npm build:server',
-      'build:server': `node ./scripts/build-server.js --config-file ./config/babel.node.json ${opts.path}/${serverFile}`,
-    });
-    
     createFileFromTemplate('node', entry, opts);
-    createFileFromTemplate('server', server, opts);
+    createFileFromTemplate('server', server, opts).then(file => {
+      const filename = relative(process.cwd(), file).replace(/\\/g, '/');
+
+      createScript({
+        'start': `pm2 ./server/${parse(file).name}.js`,
+        'dev:ssr': 'npm dev --targets=node && npm build:server && npm start',
+        'build:ssr': 'npm build --targets=node && npm build:server',
+        'build:server': `node ./scripts/build-server.js ${filename} src/models`,
+      });
+    });
   })
   .parse(process.argv);
   

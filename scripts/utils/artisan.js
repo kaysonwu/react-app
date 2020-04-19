@@ -23,7 +23,8 @@ async function createFileFromTemplate(template, output, options) {
     opts
   );
 
-  return await writeFile(filename, content);
+  await writeFile(filename, content);
+  return filename;
 }
 
 function resolveOutput(filename, path, extension) {
