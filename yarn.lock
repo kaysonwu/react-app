@@ -2121,10 +2121,10 @@ babel-plugin-module-resolver@^4.0.0:
     reselect "^4.0.0"
     resolve "^1.13.1"
 
-babel-plugin-preprocessor@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/babel-plugin-preprocessor/-/babel-plugin-preprocessor-0.0.1.tgz#b6723dc2beb68ab51214ea2a8acd619edd69268f"
-  integrity sha512-IfGKg1VeUI6BOxl7CjWz3p+B3OGsEN7e1p0Jsdl1py4p8oM+ALb4/hz3RYCWWHyHlmJYzLmVN9LBVYFUMFvKdA==
+babel-plugin-preprocessor@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/babel-plugin-preprocessor/-/babel-plugin-preprocessor-0.0.3.tgz#f3ba1238c1113b55441dd0ad771bec3e422e93d9"
+  integrity sha512-9Am4CKCssLIghGWZyD49HrSX0U+nl1jmUKW5XnLOvKCGMQSue7LtEz7mYAInzqCd9j3XXGtKeGGi9XFp3ph0hg==
 
 babel-preset-current-node-syntax@^0.1.2:
   version "0.1.2"
