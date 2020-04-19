@@ -105,5 +105,5 @@ module.exports = (env, argv) => {
     return targets.map(target => merge(config, getConfig(target, true)));
   }
   
-  return merge(config, getConfig(targets));
+  return merge(config, getConfig(targets, false));
 }
