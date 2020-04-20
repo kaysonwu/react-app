@@ -1,4 +1,4 @@
-const { delays } = require('./_utils_');
+import { delays } from 'serve-mock/utils';
 
 const proxies = {
   'GET /v1/currentUser': {
@@ -32,4 +32,4 @@ const proxies = {
   ],
 };
 
-module.exports = delays(proxies, 1500)
+export default delays(proxies, 100, 1500);
