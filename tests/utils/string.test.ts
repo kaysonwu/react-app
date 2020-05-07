@@ -1,4 +1,4 @@
-import { lowerFirst, upperFirst, upperWords, studly, camel } from '@/utils/string';
+import { lowerFirst, upperFirst, upperWords, studly, camel, snake, kebab } from '@/utils/string';
 
 describe('Test locale util', () => {
   test('test lowerFirst', () => {
@@ -25,5 +25,14 @@ describe('Test locale util', () => {
     expect(camel('user_name')).toEqual('userName');
     expect(camel('created-at')).toEqual('createdAt');
     expect(camel('updated at')).toEqual('updatedAt');
+  });
+
+  test('test snake', () => {
+    expect(snake('User Name')).toEqual('user_name');
+    expect(snake('User Name', '__')).toEqual('user__name');
+  });
+
+  test('test kebab', () => {
+    expect(kebab('User Name')).toEqual('user-name');
   });
 });

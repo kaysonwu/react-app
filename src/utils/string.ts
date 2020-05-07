@@ -33,6 +33,23 @@ export function studly(value: string) {
 }
 
 /**
+ * Convert a string to snake case.
+ */
+export function snake(value: string, delimiter: string = '_') {
+  return value.replace(
+    /(\s+|^)([A-Z])/g,
+    (_, space, first) => (space ? delimiter : '') + first.toLowerCase(),
+  );
+} 
+
+/**
+ * Convert a string to kebab case.
+ */
+export function kebab(value: string) {
+  return snake(value, '-');
+}
+
+/**
  * Convert a value to camel case.
  */
 export function camel(value: string) {
