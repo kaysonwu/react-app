@@ -1,0 +1,35 @@
+@import '~antd/lib/input/style/mixin.less';
+
+@form-item-prefix-cls: ~'@{ant-prefix}-form-item';
+
+.item-size(@height; @font-size; @padding-vertical; @padding-horizontal) {
+  height: @height;
+
+  &-label {
+    padding: @padding-vertical 0 @padding-vertical @padding-horizontal;
+
+    & > label {
+      font-size: @font-size; 
+    }
+  }
+
+  .@{ant-prefix} {
+    &-mentions,
+    &-select-auto-complete {
+      font-size: @font-size;
+    }
+
+    &-rate {
+      font-size: @font-size + 6;
+      margin-top: -(@padding-vertical + 4);
+    }
+  }
+}
+
+.item-status(@color) {
+  border-color: @color;
+
+  &.@{form-item-prefix-cls}-focused {
+    .active(@color);
+  }
+}

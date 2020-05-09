@@ -1,0 +1,98 @@
+@import '~antd/lib/style/themes/default.less';
+@import './mixin.less';
+
+@prefix: ~'@{ant-prefix}-form';
+
+.@{prefix} {
+  &-item {
+    .item-size(@height-base, @font-size-base, @input-padding-vertical-base, @input-padding-horizontal-base);
+    padding: 0;
+    border-radius: @border-radius-base;
+    border: @border-width-base @border-style-base @border-color-base;
+    background-color: @component-background;
+    transition: all 0.3s;
+    position: relative;
+
+    &-focused {
+      .active(@primary-5);
+    }
+
+    &-has-error {
+      .item-status(@error-color);
+    }
+
+    &-has-warning {
+      .item-status(@warning-color);
+    }
+
+    &-with-help {
+      margin-bottom: @form-item-margin-bottom;
+    }
+
+    & &-label {
+      & > label {
+        height: auto;
+        color: @text-color;
+      }
+
+      & + .@{ant-prefix}-form-item-control .@{ant-prefix} {
+        &-input,
+        &-input-number,
+        &-input-number-input,
+        &-picker,
+        &-mentions,
+        &-mentions > textarea, 
+        &-mentions-measure,
+        &-cascader-picker-label,
+        &-select-single:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector {
+          padding-left: 0;
+        }
+
+        &-select-selection-search {
+          left: 0;
+        }
+      }
+    }
+
+    .@{ant-prefix} {
+      &-input,
+      &-input-group-addon,
+      &-input-number,
+      &-picker,
+      &-cascader-picker,
+      &-mentions,
+      &-select-single:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector {
+        outline: none;
+        border-color: transparent !important;
+        background-color: transparent !important;
+        top: -@border-width-base;
+      }
+
+      &-input:focus,
+      &-input-number-focused,
+      &-picker-focused,
+      &-mentions-focused,
+      &-cascader-picker:focus .@{ant-prefix}-cascader-input,
+      &-select-focused.@{ant-prefix}-select-single:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector {
+        box-shadow: none;
+      }
+
+      &-mentions > textarea {
+        background-color: transparent;
+      }
+
+      &-input-number:only-child,
+      &-picker:only-child {
+        width: 100%;
+      }
+    }
+  }
+
+  &-small &-item {
+    .item-size(@height-sm, @font-size-sm, @input-padding-vertical-sm, @input-padding-horizontal-sm);
+  }
+
+  &-large &-item {
+    .item-size(@height-lg, @font-size-lg, @input-padding-vertical-lg, @input-padding-horizontal-lg);
+  }
+}
