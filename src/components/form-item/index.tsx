@@ -1,5 +1,5 @@
 import React, { FocusEvent, useState, useContext } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
 import Item, { FormItemProps } from 'antd/lib/form/FormItem';
 import { ConfigContext } from 'antd/lib/config-provider';
 import { studly } from '@/utils/string';
@@ -32,7 +32,7 @@ function FormItem(props: FormItemProps) {
   }
  
   if (!label && name) {
-    label = <FormattedMessage id={studly(name as string)} />
+    label = useIntl().formatMessage({ id: studly(name as string) });
   }
 
   return (
