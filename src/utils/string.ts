@@ -25,9 +25,13 @@ export function upperWords(value: string) {
 /**
  * Convert a value to studly caps case.
  */
-export function studly(value: string) {
+export function studly(value: string | string[]) {
+  if (Array.isArray(value)) {
+    return value.reduce((str, val) => (str + upperFirst(val)), '');
+  }
+
   return value.replace(
-    /(?:[ \t\r\n\f\v-_]+|^)([a-z])/g, 
+    /(?:[-_\t\r\n\f\v ]+|^)([a-z])/g, 
     (_, first) => first.toUpperCase(),
   );
 }
@@ -52,6 +56,6 @@ export function kebab(value: string) {
 /**
  * Convert a value to camel case.
  */
-export function camel(value: string) {
+export function camel(value: string | string[]) {
   return lowerFirst(studly(value));
 }

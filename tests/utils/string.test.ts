@@ -19,6 +19,7 @@ describe('Test locale util', () => {
   test('test studly', () => {
     expect(studly('user_name')).toEqual('UserName');
     expect(studly('created-at')).toEqual('CreatedAt');
+    expect(studly(['level', 'name'])).toEqual('LevelName');
   });
 
   test('test camel', () => {
