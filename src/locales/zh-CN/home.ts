@@ -1,3 +1,3 @@
 export default {
-  "Home Page": "这是首页"
+  'Start your imagination here!': '从这里开始你的想象！'
 };
