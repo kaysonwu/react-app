@@ -49,9 +49,9 @@ type EffectEvent<A extends Action = AnyAction> = (
   // Model id
   id: string,
   // Effect name
-  effect: string,
+  effect?: string,
   // Effect action
-  action: A
+  action?: A
 ) => Generator
 
 interface IModel<S = any, A extends Action = AnyAction> {
@@ -94,4 +94,5 @@ interface IModel<S = any, A extends Action = AnyAction> {
 
 interface ConnectState {
   global: import('../models/global').GlobalState;  
+  user?: import('../models/user').UserState;  
 }

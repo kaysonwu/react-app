@@ -1,9 +1,9 @@
 import { get } from '@/utils/request';
 
 export interface GlobalState {
-  user: IUser;
-  menus: IMenu[];
-  loading: Record<string, boolean>;
+  user?: IUser;
+  menus?: IMenu[];
+  loading?: Record<string, boolean>;
 }
 
 const Global: IModel<GlobalState> = {
@@ -14,11 +14,7 @@ const Global: IModel<GlobalState> = {
       get('v1/menus') as Promise<IMenu[]>,
     ]);
 
-    return {
-      user,
-      menus,
-      loading: {},
-    };
+    return { user, menus };
   },
   *effecting({ put }, id) {
     yield put({ type: 'saveLoading', payload: { [id]: true } });
