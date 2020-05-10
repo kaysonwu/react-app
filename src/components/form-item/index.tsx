@@ -1,4 +1,5 @@
 import React, { FocusEvent, useState, useContext } from 'react';
+import classNames from 'classnames';
 import { useIntl } from 'react-intl';
 import Item, { FormItemProps } from 'antd/lib/form/FormItem';
 import { ConfigContext } from 'antd/lib/config-provider';
@@ -19,12 +20,17 @@ function isInput(el: HTMLElement) {
   return false;
 }
 
-function FormItem(props: FormItemProps) {
+function FormItem(props: { bordered: boolean } & FormItemProps) {
   const [focused, setFocused] = useState(false);
   const { getPrefixCls } = useContext(ConfigContext);
-  const cls = focused ? getPrefixCls('form-item-focused') : undefined;
-  let { name, label } = props;
-  
+  let { name, label, bordered = true } = props;
+
+  const prefix = getPrefixCls('form-item');
+  const cls = classNames({
+    [`${prefix}-bordered`]: bordered,
+    [`${prefix}-focused`]: focused,
+  });
+
   if (typeof name === 'string'
     && ~name.indexOf('.')
   ) {
