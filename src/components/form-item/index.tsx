@@ -20,7 +20,11 @@ function isInput(el: HTMLElement) {
   return false;
 }
 
-function FormItem(props: { bordered: boolean } & FormItemProps) {
+interface Props extends FormItemProps {
+  bordered?: boolean;
+}
+
+function FormItem(props: Props) {
   const [focused, setFocused] = useState(false);
   const { getPrefixCls } = useContext(ConfigContext);
   let { name, label, bordered = true } = props;
