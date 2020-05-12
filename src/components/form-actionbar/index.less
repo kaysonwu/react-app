@@ -1,0 +1,32 @@
+@import '~antd/lib/style/themes/default.less';
+@import '../style/mixins/layout.less';
+
+@prefix: ~'@{ant-prefix}-form-actionbar';
+
+.@{prefix} {
+  .space-between(@padding-sm);
+
+  & .@{ant-prefix} {
+    &-dropdown-button-loading {
+      &:not([disabled]) {
+        pointer-events: none;
+      }
+
+      &::before {
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        bottom: -1px;
+        left: -1px;
+        z-index: 1;
+        display: block;
+        background: @component-background;
+        border-radius: inherit;
+        opacity: 0.35;
+        transition: opacity 0.2s;
+        content: '';
+        pointer-events: none;
+      }
+    }
+  }
+}
