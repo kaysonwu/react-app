@@ -20,3 +20,15 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
 - 🌟 [数据模拟](docs/mock.md)
 - 🐛 [自动化测试](docs/testing.md)
 - 📌 [最低可支持 IE9](docs/IE.md)
+
+## TODO
+
+- [ ] 动态主题
+- [ ] 测试代码
+- [ ] IE9 兼容性
+  - [ ] 各种模块的 polyfill 记录
+  - [ ] 让 antd 4.x 支持 IE9 需要编写一个兼容性 css
+- [ ] 文档
+  - [ ] 代码分离 - 有待优化或者应该放置到 搭建指南 里面去
+  - [ ] 自动化测试
+  - [ ] 搭建指南
