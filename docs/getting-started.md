@@ -40,13 +40,9 @@ yarn intall
 yarn artisan make:page home
 ```
 
-```tsx
-```
+### 请求服务端数据
 
-### 使用模型
-
-通过 [模型](model.md) 将数据转换为状态统一管理
-
+脚手架的数据管理统一交付给了模型，更详细的说明请阅读 [模型数据流](model.md)
 
 ### 目录结构
 
@@ -112,6 +108,7 @@ yarn artisan make:page home
 │   ├── locales                         // 国际化语言存放目录
 │   │   └── zh-CN                       
 │   │       ├── home.ts                 // home 页面 zh-CN 语言
+│   │       ├── user.ts                 // user 页面 zh-CN 语言
 │   │       └── index.ts                // 公共 zh-CN  语言
 │   │   
 │   ├── models                          // 数据模型目录
@@ -123,10 +120,8 @@ yarn artisan make:page home
 │   │   ├── exception                   //   异常页面
 │   │   │   └── 404.tsx                
 │   │   ├── user                        // User 示例页面
-│   │   │   ├── index.less
 │   │   │   └── index.tsx
 │   │   └── home                        // Home 示例页面
-│   │       ├── index.less
 │   │       └── index.tsx
 │   │
 │   ├── typings                         // Typescript 全局声明文件
@@ -140,11 +135,13 @@ yarn artisan make:page home
 │   │   ├── menu.ts                     //   菜单
 │   │   ├── model.ts                    //   模型
 │   │   ├── request.ts                  //   HTTP 客户端
+│   │   ├── string.ts                   //   字符串辅助函数
 │   │   └── util.ts                     //   辅助函数
 │   ├── indedx.html                     // HTML 模板 
 │   └── web.tsx                         // 客户端入口
 │ 
 ├── tests                               // 测试目录
+├── .eslintrc.js                        // eslint 配置文件
 ├── .gitignore
 ├── babel.config.js                     // Babel 全局配置
 ├── package.json
