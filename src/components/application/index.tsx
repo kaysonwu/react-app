@@ -17,7 +17,7 @@ export interface ApplicationProps {
   page?: string;
 }
 
-export default ({ locale, store, page }: ApplicationProps) => {
+function  Application({ locale, store, page }: ApplicationProps) {
   // #if WEB
   let setLocale: Dispatch<SetStateAction<string>>;
   [locale, setLocale] = useState(locale);
@@ -52,3 +52,5 @@ export default ({ locale, store, page }: ApplicationProps) => {
     </LocaleProvider>
   );
 }
+
+export default Application;
