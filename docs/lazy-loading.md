@@ -16,24 +16,24 @@
 
 #### 公共文件
 
-模型的公共文件是 `src/models/global.ts` 它是直接通过 `import` 引用在了客户端入口文件 `src/index.tsx` 中，这意味着你可以直接通过重命名来更改约定，如果你想要在服务端渲染也生效你更改的名字，请修改 `src/node.tsx` 中传递给 `requireModels()` 函数的 `names` 参数的变量 `names`，例如：
+模型的公共文件是 `src/models/global.ts` 它是直接通过 `import` 引用在了客户端入口文件 `src/index.tsx` 中，这意味着你可以直接通过重命名来更改约定，如果你想要在服务端渲染也生效你更改的名字，请修改 `src/node.tsx` 中传递给 `loadModel()` 函数的 `names` 参数的变量 `names`，例如：
 
 ```javascript
 // before
-const names = ['global', getNameFromPath(pathname as string)];
+loadModel(['global', getNameFromPath(pathname)]
 
 // after
-const names = ['{custom}', getNameFromPath(pathname as string)];
+loadModel(['{custom}', getNameFromPath(pathname)]
 ```
 
 语言文件的公共文件是 `{locale}/index.ts` 它遵循了 [webpack](https://webpack.js.org/) 中的 [resolve.mainFiles](https://webpack.js.org/configuration/resolve/#resolvemainfiles) 配置，默认只传递语言文件目录，所以会自动定位到 `index.ts`，如果你想更改这个约定，请修改 `src/components/application/index.tsx` 中传递给 `LocaleProvider` 组件的 `files` 属性的变量 `files`，例如：
 
 ```javascript
 // before
-const files = location ? [locale, `${locale}/${getNameFromPath(location.pathname)}`] : undefined;
+const files = page ? [locale, `${locale}/${page}`] : undefined;
 
 // after
-const files = location ? [`${locale}/{custom}`, `${locale}/${getNameFromPath(location.pathname)}`] : [`${locale}/{custom}`];
+const files = page ? [`${locale}/{custom}`, `${locale}/${page}`] : [`${locale}/{custom}`];
 ```
 
 #### 页面文件
@@ -56,3 +56,21 @@ export function getNameFromPath(path: string) {
 / | base.ts | {locale}/base.ts
 /post | post.ts | {locale}/post.ts
 /post/comment | post.comment.ts | {locale}/post.comment.ts
+
+
+### 模型的依赖
+
+当一个模型依赖于另外一个模型时候也可以实现按需加载，只需要在模型中设置 `dependencies` 属性即可，例如：
+
+```ts
+export interface UserState {
+  users: IUser[];
+  user?: IUser;
+}
+
+const User: IModel<UserState> = {
+  id: 'user',
+  dependencies: ['userLevel'],
+  ...,
+}
+```
