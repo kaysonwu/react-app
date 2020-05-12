@@ -3,6 +3,7 @@ import { post, put, get, del } from '@/utils/request';
 export interface UserState {
   users: IUser[];
   user?: IUser;
+  formVisible?: boolean;
 }
 
 const User: IModel<UserState> = {
@@ -18,16 +19,25 @@ const User: IModel<UserState> = {
     *create({ call, put }, action) {
       yield call(post, '/v1/users', action.payload);
       yield put({ type: 'query' });
+
+      if (!action.formVisible) {
+        yield put({ type: 'setFormVisible', formVisible: false });
+      }
     },
     *update(saga, action) {
       yield saga.call(put, `/v1/users/${action.id}`, action.payload);
       yield saga.put({ type: 'query' });
+
+      if (!action.formVisible) {
+        yield saga.put({ type: 'setFormVisible', formVisible: false });
+      }
     },
     *query({ call, put }, action) {
       const users = yield call(get, '/v1/users', action.payload);
       yield put({ type: 'saveUsers', users });
     },
     *show({ call, put }, action) {
+      yield put({ type: 'setFormVisible', formVisible: true });
       const user = yield call(get, `/v1/users/${action.payload}`);
       yield put({ type: 'saveUser', user });
     },
@@ -47,6 +57,12 @@ const User: IModel<UserState> = {
       return {
         ...state,
         user,
+      };
+    },
+    setFormVisible(state, { visible }) {
+      return {
+        ...state,
+        formVisible: visible,
       };
     },
   },

@@ -6,6 +6,18 @@ export interface GlobalState {
   loading?: Record<string, boolean>;
 }
 
+function getLoadingKey(id: string, effect?: string) {
+  switch (effect) {
+    case 'show':
+      return `${id}Forming`;
+    case 'create':  
+    case 'update':
+      return `${id}FormSubmitting`;
+  }  
+
+  return id;
+}
+
 const Global: IModel<GlobalState> = {
   id: 'global',
   async state(){
@@ -16,11 +28,13 @@ const Global: IModel<GlobalState> = {
 
     return { user, menus };
   },
-  *effecting({ put }, id) {
-    yield put({ type: 'saveLoading', payload: { [id]: true } });
+  *effecting({ put }, id, effect) {
+    const key = getLoadingKey(id, effect);
+    yield put({ type: 'saveLoading', payload: { [key]: true } });
   },
-  *effected({ put }, id) {
-    yield put({ type: 'saveLoading', payload: { [id]: false } });
+  *effected({ put }, id, effect) {
+    const key = getLoadingKey(id, effect);
+    yield put({ type: 'saveLoading', payload: { [key]: false } });
   },
   reducers: {
     saveLoading(state, action) {
