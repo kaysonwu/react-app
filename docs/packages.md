@@ -1,6 +1,6 @@
 ## 扩展包使用情况
 
-扩展包使用情况更新于 2020 年 4 月
+扩展包使用情况更新于 2020 年 5 月
 
 包名 | 用途 | 生产 | 版本选择
 ---|---|---|---
@@ -13,6 +13,8 @@
 [cookie](https://www.npmjs.com/package/cookie) | 用于解析与序列化 Cookie 字符串 | ✔️ | 0.x 是最新版本
 [qs](https://www.npmjs.com/package/qs) | 用于解析与序列化查询字符串 | ✔️ | 6.x 是最新版本
 [react](https://www.npmjs.com/package/react) | React 核心库，用于构建用户界面 | ✔️ | 16.8.0 起开始支持 Hook 组件
+[react-dnd](https://www.npmjs.com/package/react-dnd) | React 拖放库 | ✔️ | 10.x 是最新版
+[react-dnd-html5-backend](https://www.npmjs.com/package/react-dnd-html5-backend) | react-dnd 的 backend 插件 | ✔️ | 版本与 react-dnd 保持一致
 [react-dom](https://www.npmjs.com/package/react-dom) | 为 React 应用提供 DOM 方法 | ✔️ | 16.8.0 起开始支持 Hook 组件
 [react-intl](https://www.npmjs.com/package/react-intl) | 国际化 React 应用 | ✔️ | 4.x 是最新版, `4.0.0` 起 `FormattedHTMLMessage` ＆ `intl.formatHTMLMessage` 已删除，因为 `FormattedMessage` 现在完全支持嵌入式 HTML 标签
 [react-redux](https://www.npmjs.com/package/react-redux) | Redux 官方为 React 应用提供的状态管理工具箱 | ✔️ | 7.x 是最新版本
@@ -27,6 +29,7 @@
 [@babel/preset-typescript](https://www.npmjs.com/package/@babel/preset-typescript) | babel 的 typescript 预设 | ❌ | 与 babel 核心库保持一致
 [@loadable/babel-plugin](https://www.npmjs.com/package/@loadable/babel-plugin) | babel 插件，用于编译 @loadable/componen 函数 | ❌ | 与 @loadable/componen 库保持一致
 [@loadable/webpack-plugin](https://www.npmjs.com/package/@loadable/babel-plugin) | webpack 插件，用于生成 [统计信息](https://webpack.js.org/api/stats/) 文件给 @loadable/server 使用 | ❌ | 与 @loadable/componen 库保持一致
+[@babel/register](https://www.npmjs.com/package/@babel/register) | babel 插件，用于模块编译，例如让 mock 文件支持 typescript | ❌ | 与 babel 核心库保持一致
 [@types/classnames](https://www.npmjs.com/package/@types/classnames) | classnames 包的 typescript 声明文件 | ❌ | 与库保持一致
 [@types/cookie](https://www.npmjs.com/package/@types/cookie) | cookie 包的 typescript 声明文件 | ❌ | 与库保持一致
 [@types/jest](https://www.npmjs.com/package/@types/jest) | jest 包的 typescript 声明文件 | ❌ | 与库保持一致
@@ -44,6 +47,8 @@
 [babel-jest](https://www.npmjs.com/package/babel-loader) | jest 代码转换插件，用于编译 Javascript 文件 | ❌  | 与 jest 版本保持一致
 [babel-loader](https://www.npmjs.com/package/babel-loader) | webpack loader，用于编译 javascript 文件 | ❌  | 8.x 是最新版, `8.0.0` 起支持 babel7
 [babel-plugin-import](https://www.npmjs.com/package/babel-plugin-import) | babel 插件，用于 antd 的按需导入 | ❌  | 1.x 是最新版, `1.9.0` 起支持 babel7
+[babel-plugin-module-resolver](https://www.npmjs.com/package/babel-plugin-module-resolver) | babel 插件，模块解析器。相当于 webpack 配置中的 resolve | ❌  | 4.x 是最新版
+[babel-plugin-preprocessor](https://www.npmjs.com/package/babel-plugin-preprocessor) | babel 插件，用于解析预编译指令 | ❌  | 0.x 是最新版, `0.0.3` 起支持 JSX 注释
 [clean-webpack-plugin](https://www.npmjs.com/package/clean-webpack-plugin) | webpack 插件，用于在构建之前删除旧的构建文件 | ❌  | 3.x 是最新版
 [commander](https://www.npmjs.com/package/commander) | Nodejs 命令行框架 | ❌  | 4.x 是最新版
 [css-loader](https://www.npmjs.com/package/css-loader) |  webpack loader 用于解释 @import 和 url() 语法 | ❌ | 3.x 是最新版
@@ -59,8 +64,9 @@
 [less](https://www.npmjs.com/package/less) |  CSS 预处理语言 | ❌ | less-loader 4.1.0 起支持 less >= v3.0.0
 [less-loader](https://www.npmjs.com/package/less-loader) | webpack loader 编译 `less` 到 `css` | ❌ | 5.0.0 起已经取消对 < webpack4.x 和 < node 6 的支持
 [mini-css-extract-plugin](https://www.npmjs.com/package/mini-css-extract-plugin) | webpack 插件用于将 CSS 提取到单独的文件中 | ❌ | 0.x 是最新版本
+[serve-mock](https://www.npmjs.com/package/serve-mock) | 用于 mock 服务的 HTTP 中间件 | ❌ | 0.x 是最新版，0.2 起支持路径参数
 [style-loader](https://www.npmjs.com/package/style-loader) | webpack loader 用于将 CSS 注入 DOM | ❌ | 1.x 是最新版
-[terser](https://www.npmjs.com/package/terser) | Javascript 解析器、缩小器、压缩器和美化器工具箱 **build:server** 命令依赖于它 | ❌ | 4.x 是最新版
+
 [typescript](https://www.npmjs.com/package/typescript) | Javascript 超集 | ❌ | 3.x 是最新版, `3.5.0` 起支持 `Omit`
 [webpack](https://www.npmjs.com/package/webpack) | 模块打包器 | ❌ | 4.x 是最新版 
 [webpack-cli](https://www.npmjs.com/package/cli) | webpack 命令行核心库 | ❌ | 3.x 是最新版，`webpack >= 4.x` 必装的依赖包
