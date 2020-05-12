@@ -16,7 +16,7 @@ function makeRequest(url: string, headers: Record<string, any>) {
     ...parseURL(url, true),
     headers: {
       ...headers,
-      cookie: parse(headers.cookie || {}),
+      cookie: parse(String(headers.cookie)),
     },
   };
 }
