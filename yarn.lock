@@ -6698,6 +6698,11 @@ path-to-regexp@^1.7.0:
   dependencies:
     isarray "0.0.1"
 
+path-to-regexp@^6.0.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-6.1.0.tgz#0b18f88b7a0ce0bfae6a25990c909ab86f512427"
+  integrity sha512-h9DqehX3zZZDCEm+xbfU0ZmwCGFCAAraPJWMXJ4+v32NjZJilVg3k1TcKsRgIb8IQ/izZSaydDc1OhJCZvs2Dw==
+
 path-type@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-2.0.0.tgz#f012ccb8415b7096fc2daa1054c3d72389594c73"
@@ -8071,10 +8076,12 @@ serve-index@^1.9.1:
     mime-types "~2.1.17"
     parseurl "~1.3.2"
 
-serve-mock@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/serve-mock/-/serve-mock-0.0.1.tgz#1d6511d02d4b4162a221c75c7dbdae1d8c470ff6"
-  integrity sha512-Kt4rDsDgask9nxglcciKog1In7s/z7mB8162I4c0dy/iVY8tozInSV8EONFwzxet9Ngvd7Pr6JNudj1bNIltpw==
+serve-mock@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/serve-mock/-/serve-mock-0.0.2.tgz#6d356987719031b36559cc6968ad85c98e0d6401"
+  integrity sha512-nE2gyUV2m+qDklbYPhu61g1gL3y1UfpfwABLUB4F5NUWTDMa/oe7oeD7jBtlaM4XIB7apI5gEbIE155idEbegQ==
+  dependencies:
+    path-to-regexp "^6.0.0"
 
 serve-static@1.14.1:
   version "1.14.1"
