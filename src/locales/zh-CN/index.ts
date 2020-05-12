@@ -53,6 +53,7 @@ const zh_CN : ILocale = {
   },
   'Submit': '提交',
   'Cancel': '取消',
+  'Submit And Continue': '提交并继续',
   'New': '新建',
   'Import': '导入',
   'Export': '导出',
