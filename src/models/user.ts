@@ -15,22 +15,25 @@ const User: IModel<UserState> = {
     };
   },
   effects: {
-    *create({ call }, action) {
+    *create({ call, put }, action) {
       yield call(post, '/v1/users', action.payload);
+      yield put({ type: 'query' });
     },
-    *update({ call }, action) {
-      yield call(put, `/v1/users/${action.id}`, action.payload);
+    *update(saga, action) {
+      yield saga.call(put, `/v1/users/${action.id}`, action.payload);
+      yield saga.put({ type: 'query' });
     },
     *query({ call, put }, action) {
-      const users = call(get, '/v1/users', action.payload);
+      const users = yield call(get, '/v1/users', action.payload);
       yield put({ type: 'saveUsers', users });
     },
     *show({ call, put }, action) {
       const user = yield call(get, `/v1/users/${action.payload}`);
       yield put({ type: 'saveUser', user });
     },
-    *delete({ call }, action) {
+    *delete({ call, put }, action) {
       yield call(del, `/v1/users/${action.payload}`);
+      yield put({ type: 'query' });
     },
   },
   reducers: {
