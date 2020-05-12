@@ -2,7 +2,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { Popover, Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import { ConfigConsumer, ConfigConsumerProps } from 'antd/lib/config-provider/context';
+import { ConfigConsumer } from 'antd/lib/config-provider/context';
 import { SettingOutlined } from '@ant-design/icons';
 import IconButton from '../icon-button';
 import ColumnGroup, { DragItem } from './group';
@@ -78,7 +78,7 @@ export default ({ columns, onChange }: ColumnSettingProps) => {
 
   return (
     <ConfigConsumer>
-      {({ getPrefixCls }: ConfigConsumerProps) => {
+      {({ getPrefixCls }) => {
         const prefixCls = getPrefixCls('column-select');
         const listCls = `${prefixCls}-list`;
 
