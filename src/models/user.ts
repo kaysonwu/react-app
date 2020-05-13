@@ -21,7 +21,7 @@ const User: IModel<UserState> = {
       yield put({ type: 'query' });
 
       if (!action.formVisible) {
-        yield put({ type: 'setFormVisible', formVisible: false });
+        yield put({ type: 'setFormVisible', visible: false });
       }
     },
     *update(saga, action) {
@@ -29,7 +29,7 @@ const User: IModel<UserState> = {
       yield saga.put({ type: 'query' });
 
       if (!action.formVisible) {
-        yield saga.put({ type: 'setFormVisible', formVisible: false });
+        yield saga.put({ type: 'setFormVisible', visible: false });
       }
     },
     *query({ call, put }, action) {
@@ -37,7 +37,7 @@ const User: IModel<UserState> = {
       yield put({ type: 'saveUsers', users });
     },
     *show({ call, put }, action) {
-      yield put({ type: 'setFormVisible', formVisible: true });
+      yield put({ type: 'setFormVisible', visible: true });
       const user = yield call(get, `/v1/users/${action.payload}`);
       yield put({ type: 'saveUser', user });
     },
