@@ -22,8 +22,8 @@ const Global: IModel<GlobalState> = {
   id: 'global',
   async state(){
     const [user, menus] = await Promise.all([
-      get('v1/currentUser') as Promise<IUser>,
-      get('v1/menus') as Promise<IMenu[]>,
+      get('/v1/currentUser') as Promise<IUser>,
+      get('/v1/menus') as Promise<IMenu[]>,
     ]);
 
     return { user, menus };
