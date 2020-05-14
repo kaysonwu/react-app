@@ -27,5 +27,5 @@ export function getNameFromPath(path: string) {
     return 'home';
   }
   
-  return path.replace(/^\/+/, '').replace('/', '-');
+  return path.replace(/^\/+/, '').replace(/\//g, '-');
 }
