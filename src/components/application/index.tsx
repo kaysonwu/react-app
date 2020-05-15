@@ -17,20 +17,20 @@ export interface ApplicationProps {
   page?: string;
 }
 
-function  Application({ locale, store, page }: ApplicationProps) {
+function Application({ locale, store, page }: ApplicationProps) {
   // #if WEB
   let setLocale: Dispatch<SetStateAction<string>>;
   [locale, setLocale] = useState(locale);
   page = getNameFromPath(useLocation().pathname);
 
-  const handleLanguageChange = (e: Event) => {
+  function onLanguageChange(e: Event) {
     setLocale((e as CustomEvent).detail.locale);
   }
 
   useEffect(() => {
-    window.addEventListener(LANGUAGE_CHANGE, handleLanguageChange);
+    window.addEventListener(LANGUAGE_CHANGE, onLanguageChange);
     return () => {
-      window.removeEventListener(LANGUAGE_CHANGE, handleLanguageChange)
+      window.removeEventListener(LANGUAGE_CHANGE, onLanguageChange)
     }
   }, []);
   // #endif
