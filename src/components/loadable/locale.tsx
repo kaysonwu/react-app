@@ -1,33 +1,25 @@
 import React from 'react';
 import loadable from '@loadable/component';
-import ErrorBoundary from './boundary';
+import { onLoadError } from '@/utils/loadable';
 
-const Locale = loadable.lib(
-  (props: any) => import(/* webpackChunkName: "locales/[request]" */`@/locales/${props.path}`),
+const Module = loadable.lib(
+  (props: any) => import(/* webpackChunkName: "locales/[request]" */`@/locales/${props.path}`).catch(onLoadError),
   {
     cacheKey: props => `locales/${props.path}`
   }
 );
 
-interface Props {
+interface LocaleProps {
   paths: string[];
   children: (messages: ILocale) => React.ReactNode;
 }
 
-export default ({ paths, children  }: Props) => {
-  return paths.reduceRight((fn, path) => {
-    return (messages: ILocale) => {
-      return (
-        /* #if WEB */
-        <ErrorBoundary fallback={() => fn(messages)}>
-        {/* #endif */}
-          <Locale path={path}>
-            { ({ default: m }: any) => fn({ ...messages, ...m }) }
-          </Locale>
-        {/* #if WEB */}
-        </ErrorBoundary>
-        /* #endif */
-      );
-    }
-  }, children)({}) as JSX.Element;
+export default function Locale(props: LocaleProps) {
+  return props.paths.reduceRight((children, path) => {
+    return (messages: ILocale) => (
+      <Module path={path}>
+        {(module?: { default: ILocale }) => children((module ? { ...messages, ...module.default } : messages))}
+      </Module>
+    );
+  }, props.children)({}) as JSX.Element;
 }

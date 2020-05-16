@@ -1,35 +1,40 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import loadable from '@loadable/component';
-import ErrorBoundary from './boundary';
+import { onLoadError } from '@/utils/loadable';
 
-const Model = loadable.lib(
-  (props: any) => import(/* webpackChunkName: "models/[request]" */`@/models/${props.path}`), 
+const Module = loadable.lib(
+  (props: any) => import(/* webpackChunkName: "models/[request]" */`@/models/${props.path}`).catch(onLoadError), 
   { cacheKey: props => `models/${props.path}` }
 );
 
-interface Props {
+type ModelChildren = (models: IModel[]) => ReactNode;
+
+interface ModelProps {
   paths: string[];
-  children: (models: IModel[]) => React.ReactNode;
+  children: ModelChildren;
 }
 
-const reducer = (children: Function, path: string) => {
-  return (models: IModel[]) => {
+function reduce(children: ModelChildren, path: string) {
+  return function(models: IModel[]) {
     return (
-      <ErrorBoundary fallback={() => children(models)}>
-        <Model path={path}>
-          {({ default: model }: any) => {
-            const { dependencies } = model as IModel;
+      <Module path={path}>
+        {(module?: { default: IModel }) => {
+          if (module) {
+            const { dependencies } = module.default;
+            models.push(module.default);
+
             if (dependencies) {
-              return dependencies.reduceRight(reducer, children)([...models, model]);
+              return dependencies.reduceRight(reduce, children)(models);
             }
-            return children([...models, model]);
-          }}
-        </Model>
-      </ErrorBoundary>
+          }
+
+          return children(models);
+        }}
+      </Module>
     );
   }
 }
 
-export default ({ paths, children }: Props) => {
-  return paths.reduceRight(reducer, children)([]) as JSX.Element;
+export default function Model({ paths, children }: ModelProps) {
+  return paths.reduceRight(reduce, children)([]) as JSX.Element;
 }
