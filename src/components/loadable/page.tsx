@@ -6,7 +6,5 @@ interface PageProps {
 
 export default loadable<PageProps>(
   props => import(/* webpackChunkName: "pages/[request]" */`@/pages/${props.path}`),
-  {
-    cacheKey: props => `pages/${props.path}`
-  }
+  { cacheKey: props => `pages/${props.path}` },
 );

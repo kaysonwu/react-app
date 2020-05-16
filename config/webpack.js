@@ -60,7 +60,7 @@ const getConfig = (target, SSR) => {
           use: [
             'style-loader',
             MiniCssExtractPlugin.loader,
-            'css-loader',  
+            'css-loader',
             {
               loader: 'less-loader',
               options: {
@@ -77,24 +77,25 @@ const getConfig = (target, SSR) => {
         chunkFilename: 'css/[id].css',
       }),
       (browser && !SSR
-        ? new HtmlWebpackPlugin({ 
-            template: join(src, 'index.html'),
-          })
+        ? new HtmlWebpackPlugin({
+          template: join(src, 'index.html'),
+        })
         : new (require('@loadable/webpack-plugin'))({
-            outputAsset: false,
-            filename: `${target}-stats.json`,
-            writeToDisk: { filename: constants.node.path }, 
-          })
+          outputAsset: false,
+          filename: `${target}-stats.json`,
+          writeToDisk: { filename: constants.node.path },
+        })
       ),
     ],
     devServer: {
       contentBase: path,
     },
-  };  
-}
+  };
+};
 
 module.exports = (env, argv) => {
   const { targets } = argv;
+  // eslint-disable-next-line import/no-dynamic-require
   let config = require(`./webpack.${env}`);
 
   if (typeof config === 'function') {
@@ -104,6 +105,6 @@ module.exports = (env, argv) => {
   if (Array.isArray(targets)) {
     return targets.map(target => merge(config, getConfig(target, true)));
   }
-  
+
   return merge(config, getConfig(targets, false));
-}
+};
