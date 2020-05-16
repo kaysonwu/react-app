@@ -1,6 +1,6 @@
 import React from 'react';
-import { ConfigProvider } from 'antd';
 import { IntlProvider } from 'react-intl';
+import { ConfigProvider } from 'antd';
 import { ConfigProviderProps } from 'antd/lib/config-provider';
 import Loadable from '../loadable/locale';
 
@@ -10,13 +10,13 @@ interface LocaleProviderProps extends Omit<ConfigProviderProps, 'locale' | 'form
   files?: string[]; 
 }
 
-const LocaleProvider = ({ locale, files, children, ...props }: LocaleProviderProps) => {
+function LocaleProvider({ locale, files, children, ...props }: LocaleProviderProps) {
   return (
     <Loadable paths={files || [locale]}>
-      {({ antd, validateMessages, ...messages }: ILocale) => {
+      {({ antd, validateMessages, ...messages }) => {
         const intl = <IntlProvider locale={locale} messages={messages}>{children}</IntlProvider>
 
-        if (!antd || !validateMessages) {
+        if (!antd) {
           return intl;
         }
 
