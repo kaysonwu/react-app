@@ -1,36 +1,35 @@
-import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
-import { Store as ReduxStore } from 'redux';
-import { Provider } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import React from 'react';
 import LocaleProvider from '../locale-provider';
-// #if WEB
-import Model from '../loadable/model';
-// #endif
-import Route from './route';
+import { Provider } from 'react-redux';
 import { Store } from '@/utils/model';
+// #if WEB
+import { useLocation } from 'react-router-dom';
 import { getNameFromPath } from '@/utils/loadable'
 import { LANGUAGE_CHANGE } from '@/utils/locale'
+import Model from '../loadable/model';
+// #endif
+import Router from './router';
 
 export interface ApplicationProps {
   locale: string;
-  store: Store | ReduxStore;
+  store: Store;
   page?: string;
 }
 
 function Application({ locale, store, page }: ApplicationProps) {
   // #if WEB
-  let setLocale: Dispatch<SetStateAction<string>>;
-  [locale, setLocale] = useState(locale);
+  let setLocale: React.Dispatch<React.SetStateAction<string>>;
+  [locale, setLocale] = React.useState(locale);
   page = getNameFromPath(useLocation().pathname);
 
   function onLanguageChange(e: Event) {
     setLocale((e as CustomEvent).detail.locale);
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     window.addEventListener(LANGUAGE_CHANGE, onLanguageChange);
     return () => {
-      window.removeEventListener(LANGUAGE_CHANGE, onLanguageChange)
+      window.removeEventListener(LANGUAGE_CHANGE, onLanguageChange);
     }
   }, []);
   // #endif
@@ -40,13 +39,13 @@ function Application({ locale, store, page }: ApplicationProps) {
       <Provider store={store}>
         {/* #if WEB */}
         <Model paths={[page]}>
-          {(models: IModel[]) => {
-            (store as Store).modelManager.add(...models)
-            return <Route />
+          {models => {
+            store.modelManager.add(...models);
+            return <Router />;
           }}
         </Model>
         {/* #else */}
-        <Route />
+        <Router />
         {/* #endif */}
       </Provider>
     </LocaleProvider>
