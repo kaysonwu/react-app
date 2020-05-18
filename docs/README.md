@@ -19,3 +19,5 @@
 - [搭建指南](build-guide.md)
 - [扩展包使用情况](packages.md)
 - [兼容 IE9](IE.md)
+- [Javascript 风格指南](javascript.md)
+- [CSS 风格指南](css.md)
