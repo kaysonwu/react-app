@@ -143,6 +143,7 @@ yarn artisan make:page home
 ├── tests                               // 测试目录
 ├── .eslintrc.js                        // eslint 配置文件
 ├── .gitignore
+├── .stylelintrc.js                     // stylelint 配置文件
 ├── babel.config.js                     // Babel 全局配置
 ├── package.json
 ├── README.md                           // 自述文档

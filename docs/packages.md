@@ -52,7 +52,7 @@
 [clean-webpack-plugin](https://www.npmjs.com/package/clean-webpack-plugin) | webpack 插件，用于在构建之前删除旧的构建文件 | ❌  | 3.x 是最新版
 [commander](https://www.npmjs.com/package/commander) | Nodejs 命令行框架 | ❌  | 4.x 是最新版
 [css-loader](https://www.npmjs.com/package/css-loader) |  webpack loader 用于解释 @import 和 url() 语法 | ❌ | 3.x 是最新版
-[eslint](https://www.npmjs.com/package/eslint) | Javascript 代码检查 | ❌ | 6.x 是最新版
+[eslint](https://www.npmjs.com/package/eslint) | Javascript 代码审查工具 | ❌ | 6.x 是最新版
 [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb) | eslint 社区配置，由 爱彼迎 提供  | ❌ | 18.x 是最新版
 [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import) | eslint 插件，用于规范 ES6 模块的导入和导出 | ❌ | eslint-config-airbnb 同伴依赖
 [eslint-plugin-jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y) | eslint 插件，用于规范 JSX 元素上的可访问性规则 | ❌ | eslint-config-airbnb 同伴依赖
@@ -66,7 +66,10 @@
 [mini-css-extract-plugin](https://www.npmjs.com/package/mini-css-extract-plugin) | webpack 插件用于将 CSS 提取到单独的文件中 | ❌ | 0.x 是最新版本
 [serve-mock](https://www.npmjs.com/package/serve-mock) | 用于 mock 服务的 HTTP 中间件 | ❌ | 0.x 是最新版，0.2 起支持路径参数
 [style-loader](https://www.npmjs.com/package/style-loader) | webpack loader 用于将 CSS 注入 DOM | ❌ | 1.x 是最新版
-
+[stylelint](https://www.npmjs.com/package/stylelint) | css 代码审查工具 | ❌ | 13.x 是最新版
+[stylelint-config-rational-order](https://www.npmjs.com/package/stylelint-config-rational-order) | `stylelint-orde` 推荐配置 | ❌ | 0.x 是最新版
+[stylelint-config-standard](https://www.npmjs.com/package/stylelint-config-standard) | `stylelint` 推荐配置 | ❌ | 20.x 是最新版
+[stylelint-order](https://www.npmjs.com/package/stylelint-order) | `stylelint` 插件，用于约定 css 属性编写的顺序 | ❌ | 4.x 是最新版
 [typescript](https://www.npmjs.com/package/typescript) | Javascript 超集 | ❌ | 3.x 是最新版, `3.5.0` 起支持 `Omit`
 [webpack](https://www.npmjs.com/package/webpack) | 模块打包器 | ❌ | 4.x 是最新版 
 [webpack-cli](https://www.npmjs.com/package/cli) | webpack 命令行核心库 | ❌ | 3.x 是最新版，`webpack >= 4.x` 必装的依赖包
