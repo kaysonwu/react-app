@@ -26,7 +26,13 @@ module.exports = {
   ],
   rules: {
     'global-require': 'off',
+    'no-restricted-syntax': 'off',
     'arrow-parens': ['error', 'as-needed'],
+    'generator-star-spacing': ['error', {
+      before: false,
+      after: true,
+      method: 'before',
+    }],
     'object-curly-newline': ['error', {
       ObjectPattern: { multiline: true },
     }],
@@ -37,12 +43,13 @@ module.exports = {
       ignore: ['^@/*', '^\.+/*'],
     }],
     'import/extensions': 'off',
+    'import/no-extraneous-dependencies': ['error', { 
+      devDependencies: true,
+    }],
+    'jsx-a11y/click-events-have-key-events': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/jsx-filename-extension': ['error', { 
       extensions: ['.tsx'],
-    }],
-    'import/no-extraneous-dependencies': ['error', { 
-      devDependencies: true,
     }],
   },
   overrides: [
@@ -56,13 +63,15 @@ module.exports = {
         'react/prop-types': 'off',
         'react/function-component-definition': ['error', { 
           namedComponents: 'arrow-function', 
-          unnamedComponents: 'arrow-function' 
+          unnamedComponents: 'arrow-function', 
         }],
         '@typescript-eslint/prefer-includes': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/prefer-optional-chain': 'error',
         '@typescript-eslint/no-extra-parens': ['error', 'all', {
-          ignoreJSX: 'multi-line',
+          ignoreJSX: 'all',
+          nestedBinaryExpressions: false,
+          enforceForArrowConditionals: false,
         }],
       },
     },
