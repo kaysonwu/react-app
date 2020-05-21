@@ -1,90 +1,113 @@
-import React from 'react';
-import { Layout, Spin, Avatar } from 'antd';
-import { GlobalOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined, PoweroffOutlined } from '@ant-design/icons';
-import { SelectParam } from 'antd/lib/menu';
+import React, { FC, CSSProperties, MouseEventHandler, useMemo } from 'react';
 import classNames from 'classnames';
-import DropdownMenu from '../dropdown-menu';
-import { setLocale } from '@/utils/locale';
-import { renderMenus } from '@/utils/menu';
-import { connect } from 'react-redux';
+import { Layout, Spin, Avatar } from 'antd';
+import {
+  GlobalOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  SettingOutlined,
+  PoweroffOutlined,
+} from '@ant-design/icons';
+import { SelectParam } from 'antd/lib/menu';
+import { getLocale, setLocale } from '@/utils/locale';
+import DropdownMenu, { MenuItem } from '../dropdown-menu';
+import Logo from './logo';
+import Menu from './menu';
 
 const languages: MenuItem[] = [
   {
     key: 'zh-CN',
-    children: '简体中文',
+    title: '简体中文',
   },
   {
     key: 'en',
-    children: "English"
-  }
+    title: 'English',
+  },
 ];
-
 const userMenus: MenuItem[] = [
   {
     key: 'settings',
-    children: (
-      <>
-        <SettingOutlined />
-        <span>个人设置</span>
-      </>
-    ),
+    icon: <SettingOutlined />,
+    title: 'Account Settings',
   },
   {
     key: 'logout',
-    children: (
-      <>
-        <PoweroffOutlined />
-        <span>退出登录</span>
-      </>
-    )
-  }
+    icon: <PoweroffOutlined />,
+    title: 'Logout',
+  },
 ];
 
 interface PageHeaderProps {
-  user?: IUser;
+  logo?: string;
   menus?: IMenu[];
+  depth?: number;
+  user?: IUser;
   theme?: 'light' | 'dark';
+  collapsed?: boolean;
+  prefixCls?: string;
+  style?: CSSProperties;
+  onClickLogo?: MouseEventHandler;
+  onCollapse?: MouseEventHandler;
 }
 
-const Header = ({ user, menus, theme, ...props }: PageHeaderProps) => {
+const Header: FC<PageHeaderProps> = props => {
+  const {
+    logo,
+    menus,
+    depth,
+    user,
+    theme,
+    collapsed,
+    prefixCls: rootPrefixCls = '',
+    style,
+    onClickLogo,
+    onCollapse,
+  } = props;
+  const language = useMemo(() => getLocale(), []);
 
-  const handleChangeLocale = ({ key }: SelectParam) => {
-    // setLocale(key);
-  };
-
-  const cls = classNames({
-    'header-dark': theme === 'dark'
+  // Style
+  const prefixCls = `${rootPrefixCls}-head`;
+  const cls = classNames(prefixCls, {
+    [`${prefixCls}-dark`]: theme === 'dark',
+    [`${prefixCls}-light`]: theme === 'light',
   });
 
+  function changeLocale({ key }: SelectParam) {
+    setLocale(key);
+  }
+
   return (
-    <Layout.Header className={cls}>
+    <Layout.Header className={cls} style={style}>
+      {logo && <Logo key="logo" src={logo} onClick={onClickLogo} />}
       {menus ? (
-        <>
-          <div className="logo" />
-          <div className="header-menu">
-            {renderMenus(menus, { mode: 'horizontal', theme })}
-          </div>
-        </>
+        <Menu key="menu" dataSource={menus} depth={depth} mode="horizontal" theme={theme} />
       ) : (
-        <div className="header-left">
-          <MenuFoldOutlined />
+        <div className={`${prefixCls}-left`}>
+          <span role="button" tabIndex={-1} className={`${prefixCls}-menu-trigger`} onClick={onCollapse}>
+            {collapsed ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
+          </span>
         </div>
       )}
-      <div className="actionbar">
+      <div className={`${prefixCls}-actionbar`}>
         {user ? (
-          <DropdownMenu key="user" dataSource={userMenus}>
-            <span className="actionbar-action">
+          <DropdownMenu key="user" items={userMenus}>
+            <span className={`${prefixCls}-actionbar-action`}>
               <Avatar src={user.avatar} alt={user.name} />
               <span className="nickname">{user.name}</span>
             </span>
           </DropdownMenu>
         ) : (
-          <span className="actionbar-action">
+          <span className={`${prefixCls}-actionbar-action`}>
             <Spin />
-          </span>  
+          </span>
         )}
-        <DropdownMenu key="language" dataSource={languages} onSelect={handleChangeLocale}>
-          <span className="actionbar-action">
+        <DropdownMenu
+          key="language"
+          items={languages}
+          defaultSelectedKeys={[language]}
+          onSelect={changeLocale}
+        >
+          <span className={`${prefixCls}-actionbar-action`}>
             <GlobalOutlined />
           </span>
         </DropdownMenu>
@@ -93,4 +116,4 @@ const Header = ({ user, menus, theme, ...props }: PageHeaderProps) => {
   );
 };
 
-export default Header
+export default Header;
