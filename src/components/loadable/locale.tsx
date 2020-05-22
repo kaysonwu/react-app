@@ -5,7 +5,7 @@ import { onLoadError } from '@/utils/loadable';
 type ModuleType = { default: Locale };
 
 const Module = loadable.lib(
-  (props: unknown) => import(/* webpackChunkName: "locales/[request]" */`@/locales/${props.path}`).catch(onLoadError),
+  props => import(/* webpackChunkName: "locales/[request]" */`@/locales/${(props as { path: string }).path}`).catch(onLoadError),
   { cacheKey: props => `locales/${props.path}` },
 );
 
