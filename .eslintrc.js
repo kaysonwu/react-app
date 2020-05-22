@@ -36,6 +36,7 @@ module.exports = {
     'object-curly-newline': ['error', {
       ObjectPattern: { multiline: true },
     }],
+    'quote-props': ['error', 'consistent'],
     'import/no-unresolved': ['error', {
       commonjs: false,
       // 忽略模块别名以解除 import/no-unresolved 误报，当然还可以使用 import/resolver
