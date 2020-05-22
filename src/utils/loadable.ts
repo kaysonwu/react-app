@@ -5,15 +5,18 @@ import { existsSync } from 'fs';
 export function loadModel(names: string[], path: string) {
   const models: IModel[] = [];
 
-  for (let name of names) {
+  for (const name of names) {
     try {
-      let filename = join(path, `${name}.js`);
-      let model = require(filename).default as IModel;
+      const filename = join(path, `${name}.js`);
+      // eslint-disable-next-line import/no-dynamic-require
+      const model = require(filename).default as IModel;
       models.push(model);
       if (model.dependencies) {
         models.push(...loadModel(model.dependencies, path));
       }
-    } catch {}
+    } catch (e) {
+      // continue regardless of error
+    }
   }
 
   return models.filter((model, i) => !models.splice(i + 1).some(m => m.id === model.id));
@@ -25,16 +28,17 @@ export function hasLocaleFile(name: string, path: string = join(__dirname, 'loca
 // #endif
 
 // #if WEB
-export function onLoadError(error: Error) {}
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export function onLoadError() {}
 // #endif
 
 export function getNameFromPath(path: string) {
   if (!path || path === '/') {
     return 'home';
   }
-  
+
   // TODO 复数转单数，目前是仅去除结尾的 s
   return path.replace(/^\/|s$/g, '')
-    .replace(/\/\d+\//, '/')   // a/:id/b => a/b
+    .replace(/\/\d+\//, '/') // a/:id/b => a/b
     .replace(/\//g, '-'); // a/b => a-b
 }

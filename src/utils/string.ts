@@ -15,23 +15,23 @@ export function upperFirst(value: string) {
 /**
  * Uppercase the first character of each word in a string.
  */
-export function upperWords(value: string) {  
+export function upperWords(value: string) {
   return value.replace(
-    /([ \t\r\n\f\v]+|^)([a-z])/g, 
+    /([ \t\r\n\f\v]+|^)([a-z])/g,
     (_, space, first) => space + first.toUpperCase(),
   );
-} 
+}
 
 /**
  * Convert a value to studly caps case.
  */
 export function studly(value: string | string[]) {
   if (Array.isArray(value)) {
-    return value.reduce((str, val) => (str + upperFirst(val)), '');
+    return value.reduce((str, val) => str + upperFirst(val), '');
   }
 
   return value.replace(
-    /(?:[-_\t\r\n\f\v ]+|^)([a-z])/g, 
+    /(?:[-_\t\r\n\f\v ]+|^)([a-z])/g,
     (_, first) => first.toUpperCase(),
   );
 }
@@ -39,12 +39,12 @@ export function studly(value: string | string[]) {
 /**
  * Convert a string to snake case.
  */
-export function snake(value: string, delimiter: string = '_') {
+export function snake(value: string, delimiter = '_') {
   return value.replace(
     /(\s+|^)([A-Z])/g,
     (_, space, first) => (space ? delimiter : '') + first.toLowerCase(),
   );
-} 
+}
 
 /**
  * Convert a string to kebab case.
