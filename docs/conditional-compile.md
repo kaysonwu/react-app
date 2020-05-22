@@ -20,12 +20,12 @@ const Locale = loadable.lib(
 
 interface Props {
   paths: string[];
-  children: (messages: ILocale) => React.ReactNode;
+  children: (messages: Locale) => React.ReactNode;
 }
 
 export default ({ paths, children  }: Props) => {
   return paths.reduceRight((fn, path) => {
-    return (messages: ILocale) => {
+    return (messages: Locale) => {
       return (
         /* #if WEB */
         <ErrorBoundary fallback={() => fn(messages)}>

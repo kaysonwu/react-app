@@ -2,20 +2,20 @@ import React from 'react';
 import loadable from '@loadable/component';
 import { onLoadError } from '@/utils/loadable';
 
-type ModuleType = { default: ILocale };
+type ModuleType = { default: Locale };
 
 const Module = loadable.lib(
-  (props: any) => import(/* webpackChunkName: "locales/[request]" */`@/locales/${props.path}`).catch(onLoadError),
+  (props: unknown) => import(/* webpackChunkName: "locales/[request]" */`@/locales/${props.path}`).catch(onLoadError),
   { cacheKey: props => `locales/${props.path}` },
 );
 
 interface LocaleProps {
   paths: string[];
-  children: (messages: ILocale) => React.ReactNode;
+  children: (messages: Locale) => React.ReactNode;
 }
 
 function reduce(children: Function, path: string) {
-  return (messages: ILocale) => (
+  return (messages: Locale) => (
     <Module path={path}>
       {(module?: ModuleType) => children(module ? { ...messages, ...module.default } : messages)}
     </Module>
