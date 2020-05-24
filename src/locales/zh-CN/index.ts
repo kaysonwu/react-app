@@ -77,6 +77,9 @@ const zhCN: Locale = {
   'User': '用户',
   'User Level': '用户等级',
   'User Manage': '用户管理',
+
+  // Toolbar
+  'Tools': '工具箱',
 };
 
 export default zhCN;
