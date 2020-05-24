@@ -1,0 +1,65 @@
+@import '~antd/lib/style/themes/default.less';
+
+@prefix: ~'@{ant-prefix}-toolbar';
+
+.@{prefix} {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: @padding-lg;
+
+  &-group {
+    display: flex;
+    flex: 1 1 0%;
+    align-items: center;
+
+    > * + * {
+      margin-left: @padding-sm;
+    }
+  }
+
+  &-overflowed {
+    &-indicator {
+      margin-left: @padding-sm;
+    }
+
+    &-menu {
+      .@{ant-prefix}-dropdown-menu-item {
+        position: relative;
+
+        > [role="button"] {
+          &::before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            content: '';
+          }
+        }
+      }
+    }
+  }
+
+  &-row {
+    flex: 100%;
+    margin-bottom: @padding-lg;
+  }
+}
+
+@media (max-width: @screen-md) {
+  .@{prefix} {
+    &-row {
+      margin-bottom: @padding-md;
+    }
+  }
+}
+
+@media (max-width: @screen-sm) {
+  .@{prefix} {
+    &-row {
+      margin-bottom: @padding-sm;
+    }
+  }
+}
