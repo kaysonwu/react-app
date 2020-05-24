@@ -28,6 +28,7 @@ module.exports = {
     'global-require': 'off',
     'no-restricted-syntax': 'off',
     'arrow-parens': ['error', 'as-needed'],
+    'no-shadow': 'off',
     'generator-star-spacing': ['error', {
       before: false,
       after: true,
