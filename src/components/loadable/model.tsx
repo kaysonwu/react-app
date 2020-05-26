@@ -3,6 +3,7 @@ import loadable from '@loadable/component';
 import { onLoadError } from '@/utils/loadable';
 
 const Module = loadable.lib(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (props: any) => import(/* webpackChunkName: "models/[request]" */`@/models/${props.path}`).catch(onLoadError),
   { cacheKey: props => `models/${props.path}` },
 );
