@@ -56,17 +56,22 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*.ts', '*.tsx'],
-      extends: [
-        'plugin:@typescript-eslint/eslint-recommended',
-        'plugin:@typescript-eslint/recommended',
-      ],
+      files: ['*.tsx'],
       rules: {
         'react/prop-types': 'off',
         'react/function-component-definition': ['error', { 
           namedComponents: 'arrow-function', 
           unnamedComponents: 'arrow-function', 
         }],
+      },
+    },
+    {
+      files: ['*.ts', '*.tsx'],
+      extends: [
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+      ],
+      rules: {
         '@typescript-eslint/prefer-includes': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/prefer-optional-chain': 'error',
