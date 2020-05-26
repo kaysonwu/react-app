@@ -1,0 +1,39 @@
+@import '~antd/lib/style/themes/default.less';
+
+@prefix: ~'@{ant-prefix}-page-header';
+
+.@{prefix} {
+  &-content {
+    display: flex;
+    flex-wrap: wrap;
+
+    &-left {
+      flex: 1 1 0%;
+
+      > .@{ant-prefix}-typography + .@{ant-prefix}-typography {
+        margin-top: @padding-sm;
+      }
+    }
+
+    &-links {
+      margin-top: @padding-md;
+    }
+
+    &-extra {
+      display: flex;
+      align-items: center;
+      margin-left: @padding-lg;
+    }
+  }
+}
+
+@media (max-width: @screen-md) {
+  .@{prefix} {
+    &-content {
+      &-extra {
+        flex: 100%;
+        margin: @padding-lg 0 0;
+      }
+    }
+  }
+}
