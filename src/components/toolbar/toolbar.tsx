@@ -57,17 +57,20 @@ const Toolbar: FC<ToolbarProps> = (
 
   function renderItems(items: ItemsType) {
     return items.map(item => {
-      const { key, children } = item as ItemGroupType;
+      const { children } = item as ItemGroupType;
 
-      if (children) {
-        return (
-          <div key={key} className={`${prefixCls}-group`}>
-            {renderItems(children)}
-          </div>
-        );
+      if (!children) {
+        return renderItem(item);
       }
 
-      return renderItem(item);
+      const { key, align = 'left' } = item as ItemGroupType;
+      const className = `${prefixCls}-group ${prefixCls}-group-align-${align}`;
+
+      return (
+        <div key={key} className={className}>
+          {renderItems(children)}
+        </div>
+      );
     });
   }
 

@@ -20,6 +20,7 @@ export interface ItemType {
 }
 
 export interface ItemGroupType extends Omit<ItemType, 'component'> {
+  align?: 'left' | 'center' | 'right';
   children: ItemType[];
 }
 
