@@ -1,23 +1,34 @@
-import React, { useRef, CSSProperties, ReactNode } from 'react';
+import React, { ComponentType, CSSProperties, ReactNode, FC, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import classNames from 'classnames';
 
 export interface DragItem {
   type: string;
   index: number;
-  extra?: any;
+  extra?: unknown;
 }
 
 interface ItemProps extends DragItem {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component?: string | ComponentType<any>;
   children?: ReactNode;
   className?: string;
   style?: CSSProperties;
   onDrop?: (from: DragItem, to: DragItem) => void;
 }
 
-export default ({ className, style, children, onDrop, ...item }: ItemProps) => {
+const Drag: FC<ItemProps> = (
+  {
+    component: Component = 'div',
+    className,
+    style,
+    children,
+    onDrop,
+    ...item
+  },
+) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [{ upward }, drop] = useDrop({ 
+  const [{ upward }, drop] = useDrop({
     accept: item.type,
     collect(monitor) {
       const { index: dragIndex } = monitor.getItem() || {};
@@ -35,8 +46,8 @@ export default ({ className, style, children, onDrop, ...item }: ItemProps) => {
     },
   });
 
-  const [{ isDragging }, drag] = useDrag({ 
-    item: item,
+  const [{ isDragging }, drag] = useDrag({
+    item,
     collect(monitor) {
       return {
         isDragging: monitor.isDragging(),
@@ -47,10 +58,20 @@ export default ({ className, style, children, onDrop, ...item }: ItemProps) => {
   const cls = classNames(className, {
     'drop-over-upward': upward,
     'drop-over-downward': upward === false,
-    'dragging': isDragging
+    'dragging': isDragging,
   });
 
   drag(drop(ref));
 
-  return <div ref={ref} className={cls} style={style}>{children}</div>;
-}
+  return (
+    <Component
+      ref={ref}
+      className={cls}
+      style={style}
+    >
+      {children}
+    </Component>
+  );
+};
+
+export default Drag;
