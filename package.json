@@ -21,6 +21,7 @@
     "cookie": "^0.3.0",
     "is-mobile": "^2.2.0",
     "qs": "^6.9.0",
+    "rc-resize-observer": "^0.2.0",
     "rc-table": "~7.5.3",
     "react": "^16.8.0",
     "react-dnd": "^10.0.0",
