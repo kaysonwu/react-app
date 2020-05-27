@@ -14,7 +14,7 @@ const element = (
   </BrowserRouter>
 );
 
-// #!if ssr
+// #!if SSR
 loadableReady(() => {
   hydrate(element, container);
 });

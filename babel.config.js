@@ -1,7 +1,8 @@
+/* eslint-disable no-case-declarations */
 module.exports = ({ caller }) => {
   const name = caller(c => c && c.name);
   const env = { modules: 'commonjs', targets: { node: true } };
-  const plugins = []; 
+  const plugins = [];
 
   switch (name) {
     case 'babel-loader': // For webpack
@@ -27,6 +28,8 @@ module.exports = ({ caller }) => {
     case 'node-server':
       plugins.unshift(['preprocessor', { symbols: { NODE_SERVER: true } }]);
       break;
+    default:
+      break;
   }
 
   return {
@@ -46,4 +49,4 @@ module.exports = ({ caller }) => {
       }],
     ],
   };
-}
+};
