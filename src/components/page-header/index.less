@@ -17,6 +17,19 @@
 
     &-links {
       margin-top: @padding-md;
+
+      > .@{ant-prefix} {
+        &-btn-link {
+          &:first-child {
+            padding-left: 0;
+          }
+
+          > .@{iconfont-css-prefix} {
+            font-size: 24px;
+            vertical-align: middle;
+          }
+        }
+      }
     }
 
     &-extra {
