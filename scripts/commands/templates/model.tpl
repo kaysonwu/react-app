@@ -1,7 +1,7 @@
 interface [name]State {
 }
 
-const [name]: IModel<[name]State> = {
+const [name]: Model<[name]State> = {
   id: '[name]',
 [preload]
   async state(request) {

@@ -11,7 +11,7 @@ interface GlobalState {
   loading: Record<string, boolean>;
 }
 
-const Global: IModel<GlobalState> = {
+const Global: Model<GlobalState> = {
   id: 'global',
   state: {
     user: null,
@@ -37,7 +37,7 @@ const Global: IModel<GlobalState> = {
 export default Global;
 ```
 
-模型对象都要实现 `IModel` 接口，其中包含以下几个必要属性：
+模型对象都要实现 `Model` 接口，其中包含以下几个必要属性：
 
 - `id`：模型的唯一识别符，值只能是字符串。`dispatch`
 - `state`：模型的初始状态，值可以是对象或异步函数
@@ -61,7 +61,7 @@ export interface UserState {
 +  users: any[];
 }
 
-const User: IModel<UserState> = {
+const User: Model<UserState> = {
   id: 'user',
   async state(request) {
 +    const users = await (post('/v1/users', request.query) as Promise<any[]>);
@@ -88,7 +88,7 @@ interface GlobalState {
   loading: Record<string, boolean>;
 }
 
-const Global: IModel<GlobalState> = {
+const Global: Model<GlobalState> = {
   id: 'global',
   async state(){
     const [user, menus] = await Promise.all([

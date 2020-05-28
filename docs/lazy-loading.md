@@ -68,7 +68,7 @@ export interface UserState {
   user?: IUser;
 }
 
-const User: IModel<UserState> = {
+const User: Model<UserState> = {
   id: 'user',
   dependencies: ['userLevel'],
   ...,
