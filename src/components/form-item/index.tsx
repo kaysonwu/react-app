@@ -1,4 +1,4 @@
-import React, { FocusEvent, useState, useContext } from 'react';
+import React, { FC, useState, useContext } from 'react';
 import classNames from 'classnames';
 import { useIntl } from 'react-intl';
 import Item, { FormItemProps } from 'antd/lib/form/FormItem';
@@ -10,7 +10,7 @@ function isInput(el: HTMLElement) {
   const { tagName } = el;
 
   if (tagName === 'INPUT') {
-    return ~['text', 'password'].indexOf((el as HTMLInputElement).type);
+    return ['text', 'password'].includes((el as HTMLInputElement).type);
   }
 
   if (tagName === 'TEXTAREA') {
@@ -24,38 +24,39 @@ interface Props extends FormItemProps {
   bordered?: boolean;
 }
 
-function FormItem(props: Props) {
+const FormItem: FC<Props> = ({ bordered = true, className: customizeClassName, ...props }) => {
+  const intl = useIntl();
   const [focused, setFocused] = useState(false);
   const { getPrefixCls } = useContext(ConfigContext);
-  let { name, label, bordered = true } = props;
+  let { name, label } = props;
 
   const prefix = getPrefixCls('form-item');
-  const cls = classNames({
+  const className = classNames(customizeClassName, {
     [`${prefix}-bordered`]: bordered,
     [`${prefix}-focused`]: focused,
   });
 
   if (typeof name === 'string'
-    && ~name.indexOf('.')
+    && name.includes('.')
   ) {
     name = name.split('.');
   }
- 
+
   if (!label && name) {
-    label = useIntl().formatMessage({ id: studly(name as string) });
+    label = intl.formatMessage({ id: studly(name as string) });
   }
 
   return (
-    <Item 
-      {...props} 
-      name={name} 
+    <Item
+      {...props}
+      name={name}
       label={label}
-      className={cls}
+      className={className}
       // @ts-ignore
-      onFocus={(e: FocusEvent) => isInput(e.target) && setFocused(true)}
+      onFocus={e => isInput(e.target) && setFocused(true)}
       onBlur={() => setFocused(false)}
     />
   );
-}
+};
 
 export default FormItem;

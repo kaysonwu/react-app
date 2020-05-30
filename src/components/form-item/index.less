@@ -6,12 +6,13 @@
 .@{prefix} {
   &-item-bordered {
     .item-size(@height-base, @font-size-base, @input-padding-vertical-base, @input-padding-horizontal-base);
-    padding: 0;
-    border-radius: @border-radius-base;
-    border: @border-width-base @border-style-base @border-color-base;
-    background-color: @component-background;
-    transition: all 0.3s;
+
     position: relative;
+    padding: 0;
+    background-color: @component-background;
+    border: @border-width-base @border-style-base @border-color-base;
+    border-radius: @border-radius-base;
+    transition: all 0.3s;
 
     &.@{prefix}-item {
       &-focused {
@@ -21,7 +22,7 @@
       &-has-error {
         .item-status(@error-color);
       }
-  
+
       &-has-warning {
         .item-status(@warning-color);
       }
@@ -31,19 +32,19 @@
       }
     }
 
-    & .@{prefix}-item-label {
-      & > label {
+    .@{prefix}-item-label {
+      > label {
         height: auto;
         color: @text-color;
       }
 
-      & + .@{ant-prefix}-form-item-control .@{ant-prefix} {
+      + .@{ant-prefix}-form-item-control .@{ant-prefix} {
         &-input,
         &-input-number,
         &-input-number-input,
         &-picker,
         &-mentions,
-        &-mentions > textarea, 
+        &-mentions > textarea,
         &-mentions-measure,
         &-cascader-picker-label,
         &-select-selector {
@@ -64,10 +65,10 @@
       &-cascader-picker,
       &-mentions,
       &-select-selector {
-        outline: none;
-        border-color: transparent !important;
-        background-color: transparent !important;
         top: -@border-width-base;
+        background-color: transparent !important;
+        border-color: transparent !important;
+        outline: none;
       }
 
       &-input:focus,
@@ -76,7 +77,7 @@
       &-mentions-focused,
       &-cascader-picker:focus .@{ant-prefix}-cascader-input,
       &-select-focused .@{ant-prefix}-select-selector {
-        box-shadow: none;
+        box-shadow: none !important;
       }
 
       &-mentions > textarea {
@@ -96,5 +97,18 @@
 
   &-large &-item-bordered {
     .item-size(@height-lg, @font-size-lg, @input-padding-vertical-lg, @input-padding-horizontal-lg);
+  }
+}
+
+@media (max-width: @screen-sm) {
+  .@{prefix} {
+    & &-item {
+      .@{prefix}-item {
+        &-label,
+        &-control {
+          flex: 1 1 0;
+        }
+      }
+    }
   }
 }
