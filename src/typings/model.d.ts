@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * An *action* is a plain object that represents an intention to change the
  * state. Actions are the only way to get data into the store. Any data,
@@ -12,7 +13,7 @@
  * Other than `type`, the structure of an action object is really up to you.
  * If you're interested, check out Flux Standard Action for recommendations on
  * how actions should be constructed.
- * 
+ *
  *
  * @template T the type of the action's `type` tag.
  */
@@ -54,7 +55,7 @@ type EffectEvent<A extends Action = AnyAction> = (
   action?: A
 ) => Generator
 
-interface IModel<S = any, A extends Action = AnyAction> {
+interface Model<S = any, A extends Action = AnyAction> {
 
   /**
    * Model id.
@@ -64,12 +65,12 @@ interface IModel<S = any, A extends Action = AnyAction> {
   /**
    * Model initial state.
    */
-  state?: S | ((request: (import('url').UrlWithParsedQuery & { headers: { cookie: Record<string, string>, [key: string]: any } })) => Promise<S>);
+  state?: S | ((request: import('url').UrlWithParsedQuery & { headers: import('http').IncomingHttpHeaders }) => Promise<S>);
 
   /**
    * Redux reducers.
    */
-  reducers: Record<string, Reducer<S, A>>,
+  reducers: Record<string, Reducer<S, A>>;
 
   /**
    * Redux saga effects.
@@ -89,10 +90,17 @@ interface IModel<S = any, A extends Action = AnyAction> {
   /**
    * Trigger after any model call effect.
    */
-  effected?: EffectEvent<A>
+  effected?: EffectEvent<A>;
 }
 
+type LoadingState = {
+  showing?: boolean;
+  submitting?: boolean;
+  deleting?: boolean;
+  loading?: boolean;
+};
+
 interface ConnectState {
-  global: import('../models/global').GlobalState;  
-  user?: import('../models/user').UserState;  
+  global: Required<import('../models/global').GlobalState>;
+  user?: import('../models/user').UserState;
 }

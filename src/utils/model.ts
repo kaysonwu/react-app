@@ -1,27 +1,24 @@
-import { IncomingMessage } from 'http';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { IncomingMessage, IncomingHttpHeaders } from 'http';
 import { parse as parseURL } from 'url';
-import { parse } from 'cookie';
 import { createStore, applyMiddleware, Middleware, Store as ReduxStore } from 'redux';
 // #if WEB
 import createSagaMiddleware from 'redux-saga';
-import * as Saga from 'redux-saga/effects';
+import * as saga from 'redux-saga/effects';
 
-const { take, put, putResolve, takeEvery } = Saga;
+const { take, put, select, putResolve, takeEvery } = saga;
 // #endif
 
 const PRELOADED_STATE = '__PRELOADED_STATE__';
 
-function makeRequest(url: string, headers: Record<string, any>) {
+function makeRequest(url: string, headers: IncomingHttpHeaders) {
   return {
     ...parseURL(url, true),
-    headers: {
-      ...headers,
-      cookie: parse(String(headers.cookie)),
-    },
+    headers,
   };
 }
 
-// #if WEB  
+// #if WEB
 const MODEL_ID_SEPARATOR = '/';
 const MODEL_STATE_LOADING = '@@model/STATE_LOADING';
 const MODEL_STATE_LOADED = '@@model/STATE_LOADED';
@@ -37,20 +34,23 @@ function fixActionType(type: string, id: string) {
 
 function coverSaga(id: string) {
   return {
-    ...Saga,
+    ...saga,
+    select(selector: (state: unknown, ...args: unknown[]) => unknown, ...args: unknown[]) {
+      return select(state => selector(state[id], ...args));
+    },
     put<A extends Action>(action: A) {
       return put({ ...action, type: fixActionType(action.type, id) });
-    }, 
+    },
     putResolve(action: Action) {
       return putResolve({ ...action, type: fixActionType(action.type, id) });
     },
-    take(pattern?: Saga.ActionPattern) {
+    take(pattern?: saga.ActionPattern) {
       if (typeof pattern === 'string') {
         return take(fixActionType(pattern, id));
       }
-      
+
       if (Array.isArray(pattern)) {
-        return take(pattern.map(t => (typeof t === 'string') ? fixActionType(t, id) : t));
+        return take(pattern.map(t => (typeof t === 'string' ? fixActionType(t, id) : t)));
       }
 
       return take(pattern);
@@ -58,22 +58,24 @@ function coverSaga(id: string) {
   };
 }
 
-interface IModelManager {
+interface ModelManager {
   has: (id: string) => boolean;
-  add: (...models: IModel[]) => number;
+  add: (...models: Model[]) => number;
   remove: (...ids: string[]) => number;
 }
 
 export interface Store extends ReduxStore {
-  modelManager: IModelManager;
+  modelManager: ModelManager;
 }
 
-class ModelManager implements IModelManager {
-  private models: Record<string, Omit<IModel, 'id' | 'state'> & { saga: ReturnType<typeof coverSaga> }> = {};
+class InternalModelManager implements ModelManager {
+  private models: Record<string, Omit<Model, 'id' | 'state'> & { saga: ReturnType<typeof coverSaga> }> = {};
+
   private store: ReduxStore | null = null;
+
   private listen: Record<string, Record<string, any>> = {
     effecting: {},
-    effected: {}
+    effected: {},
   };
 
   constructor() {
@@ -84,58 +86,55 @@ class ModelManager implements IModelManager {
   private mergeState = (oldState: Record<string, any>, newState: Record<string, any>) => {
     const state: Record<string, any> = { ...oldState };
 
-    for (let id in newState) {
-      state[id] = {
-        ...state[id],
-        ...newState[id],
-      };
-    }
+    Object.keys(newState).forEach(id => {
+      state[id] = { ...state[id], ...newState[id] };
+    });
 
     return state;
   }
 
   private clearOldState = (state: Record<string, any>, ids: string[]) => {
-    const newState = { ...state };
+    const newState: Record<string, any> = {};
 
-    for (let id of ids) {
-      if (Object.prototype.hasOwnProperty.call(newState, id)) {
-        delete newState[id];
-      }
-    }
+    Object.keys(state)
+      .filter(id => !ids.includes(id))
+      .forEach(id => {
+        newState[id] = state[id];
+      });
 
     return newState;
   }
 
-  private splitActionType = (type: string) => {
-    return type.split(MODEL_ID_SEPARATOR);
-  }
+  private splitActionType = (type: string) => type.split(MODEL_ID_SEPARATOR);
 
-  private get = (id: string, defaultValue: any = undefined) => {
-    return this.has(id) ? this.models[id] : defaultValue;
-  }
+  private get = (id: string, defaultValue: any = undefined) => (
+    this.has(id) ? this.models[id] : defaultValue
+  );
 
   private addListen = (id: string, model: Record<string, any>) => {
-    for (let name in this.listen) {
-      if (typeof model[name] === 'function') {
+    Object.keys(this.listen)
+      .filter(name => typeof model[name] === 'function')
+      .forEach(name => {
         this.listen[name][id] = model[name];
+        // eslint-disable-next-line no-param-reassign
         delete model[name];
-      }
-    }
+      });
   }
 
   private removeListen = (id: string) => {
-    for (let name in this.listen) {
-      if (this.listen[name][id] !== undefined) {
-        delete this.listen[name][id];
-      }
-    }
+    Object.keys(this.listen)
+      .filter(name => this.listen[name][id])
+      .forEach(name => delete this.listen[name][id]);
   }
 
-  private *trigger(event: string, ...parameters: any[]) {
+  private *trigger(event: string, ...parameters: unknown[]) {
     const listen = this.listen[event];
 
-    for (let id in listen) {
-      yield listen[id].call(null, this.models[id].saga, ...parameters);
+    // eslint-disable-next-line no-restricted-syntax
+    for (const id in listen) {
+      if (Object.prototype.hasOwnProperty.call(listen, id)) {
+        yield listen[id].call(null, this.models[id].saga, ...parameters);
+      }
     }
   }
 
@@ -146,26 +145,25 @@ class ModelManager implements IModelManager {
 
     return this.store;
   }
-   
+
   private preloadState = (states: Record<string, any>) => {
-    const request = makeRequest(location.href, { cookie: document.cookie });
+    const request = makeRequest(window.location.href, { cookie: document.cookie });
     const store = this.getStore();
     const payload: Record<string, any> = {};
     let i = 0;
 
-    for (let id in states) {
-      let state = states[id];
-      
+    Object.keys(states).forEach(id => {
+      const state = states[id];
       if (typeof state === 'function') {
         store.dispatch({ type: MODEL_STATE_LOADING, id });
         state(request).then((state: any) => {
           store.dispatch({ type: MODEL_STATE_LOADED, id, payload: { [id]: state } });
         });
       } else if (state !== undefined) {
-        i = i + 1;
+        i += 1;
         payload[id] = state;
       }
-    }
+    });
 
     if (i > 0) {
       store.dispatch({ type: MODEL_STATE_LOADED, payload });
@@ -178,7 +176,7 @@ class ModelManager implements IModelManager {
   public injectStore = (store: ReduxStore) => {
     this.store = store;
   }
-  
+
   /**
    * @Internal
    */
@@ -194,11 +192,11 @@ class ModelManager implements IModelManager {
     if (type === MODEL_REMOVED) {
       return this.clearOldState(state, payload);
     }
-   
+
     const [id, key] = this.splitActionType(type);
     const { reducers } = this.get(id, {});
-    
-    if (reducers !== undefined 
+
+    if (reducers !== undefined
       && typeof reducers[key] === 'function'
     ) {
       return {
@@ -206,7 +204,7 @@ class ModelManager implements IModelManager {
         [id]: reducers[key](state[id], action),
       };
     }
-  
+
     return state;
   }
 
@@ -215,32 +213,28 @@ class ModelManager implements IModelManager {
    */
   public *effect(action: AnyAction) {
     const { type, id: i } = action;
-   
+
     if (type === MODEL_STATE_LOADING) {
-      return yield this.trigger('effecting', i);
-    }
+      yield this.trigger('effecting', i);
+    } else if (type === MODEL_STATE_LOADED && i) {
+      yield this.trigger('effected', i);
+    } else {
+      const [id, key] = this.splitActionType(type);
+      const { effects, saga } = this.get(id, {});
 
-    if (type === MODEL_STATE_LOADED && i) {
-      return yield this.trigger('effected', i);
-    }
-
-    const [id, key] = this.splitActionType(type);
-    const { effects, saga } = this.get(id, {});
-
-    if (effects !== undefined 
-      && typeof effects[key] === 'function'
-    ) {
-      yield this.trigger('effecting', id, key, action);
-      yield effects[key](saga, action);
-      yield this.trigger('effected', id, key, action);
+      if (effects !== undefined
+        && typeof effects[key] === 'function'
+      ) {
+        yield this.trigger('effecting', id, key, action);
+        yield effects[key](saga, action);
+        yield this.trigger('effected', id, key, action);
+      }
     }
   }
 
-  public has = (id: string) => {
-    return Object.prototype.hasOwnProperty.call(this.models, id);
-  }
+  public has = (id: string) => Object.prototype.hasOwnProperty.call(this.models, id);
 
-  public add = (...models: IModel[]) => {  
+  public add = (...models: Model[]) => {
     const states: Record<string, any> = {};
     const { length } = models.filter(m => {
       const { id } = m;
@@ -253,7 +247,7 @@ class ModelManager implements IModelManager {
 
       states[id] = state;
       model.saga = coverSaga(id);
-   
+
       this.addListen(id, model);
       this.models[id] = model;
 
@@ -263,7 +257,7 @@ class ModelManager implements IModelManager {
     if (length > 0) {
       this.preloadState(states);
     }
-  
+
     return length;
   }
 
@@ -275,7 +269,7 @@ class ModelManager implements IModelManager {
 
       delete this.models[id];
       this.removeListen(id);
-  
+
       return true;
     });
 
@@ -288,38 +282,40 @@ class ModelManager implements IModelManager {
 }
 
 export function configureStore(
-  models: IModel[], 
-  ...middlewares: Middleware<any, any, any>[]
+  models: Model[],
+  ...middlewares: Middleware[]
 ) {
   let items = models;
   let state = window[PRELOADED_STATE];
 
   if (state !== undefined) {
     delete window[PRELOADED_STATE];
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     items = items.map(({ state, ...model }) => model);
   } else {
-    state = models.reduce((state, model) => {
+    state = {};
+    models.forEach(model => {
       state[model.id] = {};
-      return state;
-    }, {} as Record<string, any>);
+    });
   }
 
-  const { reducer, effect, injectStore, add, has, remove } = new ModelManager();
+  const { reducer, effect, injectStore, add, has, remove } = new InternalModelManager();
   const sagaMiddleware = createSagaMiddleware();
   const store = createStore(
-    reducer, 
-    state, 
-    applyMiddleware(sagaMiddleware, ...middlewares)
+    reducer,
+    state,
+    applyMiddleware(sagaMiddleware, ...middlewares),
   ) as Store;
 
-  sagaMiddleware.run(function*() {
+  // eslint-disable-next-line func-names
+  sagaMiddleware.run(function* () {
     yield takeEvery('*', effect);
   });
 
   injectStore(store);
   add(...items);
 
-  store.modelManager = { add, has, remove }
+  store.modelManager = { add, has, remove };
 
   return store;
 }
@@ -334,36 +330,34 @@ export function createStateScript(state: any) {
   `;
 }
 
-export async function prepareStore (
-  models: IModel[], 
-  request: IncomingMessage, 
-  ...middlewares: Middleware<any, any, any>[]
-) {
-  const states = await getModelsInitialState(models, request);
-  return createStore((state) => state, states, applyMiddleware(...middlewares));
-}
-
-async function getModelsInitialState(models: IModel[], request: IncomingMessage) {
+async function getModelsInitialState(models: Model[], request: IncomingMessage) {
   const ids: string[] = [];
   const tasks: Promise<any>[] = [];
   const states: Record<string, any> = {};
   const req = makeRequest(request.url as string, request.headers);
 
-  for (let { id, state } of models) {
+  models.forEach(({ id, state }) => {
     if (typeof state === 'function') {
       ids.push(id);
       tasks.push(state(req));
     } else {
       states[id] = state;
     }
-  }
+  });
 
-  return (await Promise.all(tasks)).reduce(
-    (states, state, i) => {
-      states[ids[i]] = state;
-      return states;
-    }, 
-    states
-  );
+  (await Promise.all(tasks)).forEach((state, i) => {
+    states[ids[i]] = state;
+  });
+
+  return states;
+}
+
+export async function prepareStore(
+  models: Model[],
+  request: IncomingMessage,
+  ...middlewares: Middleware[]
+) {
+  const state = await getModelsInitialState(models, request);
+  return createStore(state => state!, state, applyMiddleware(...middlewares));
 }
 // #endif

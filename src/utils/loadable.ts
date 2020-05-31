@@ -3,13 +3,13 @@ import { join } from 'path';
 import { existsSync } from 'fs';
 
 export function loadModel(names: string[], path: string) {
-  const models: IModel[] = [];
+  const models: Model[] = [];
 
   for (const name of names) {
     try {
       const filename = join(path, `${name}.js`);
       // eslint-disable-next-line import/no-dynamic-require
-      const model = require(filename).default as IModel;
+      const model = require(filename).default as Model;
       models.push(model);
       if (model.dependencies) {
         models.push(...loadModel(model.dependencies, path));

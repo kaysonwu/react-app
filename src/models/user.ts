@@ -6,10 +6,10 @@ export interface UserState {
   formVisible?: boolean;
 }
 
-const User: IModel<UserState> = {
+const User: Model<UserState> = {
   id: 'user',
   async state(request) {
-    const users = await (get('/v1/users', request.query) as Promise<any[]>);
+    const users = await get('/v1/users', request.query);
 
     return {
       users,

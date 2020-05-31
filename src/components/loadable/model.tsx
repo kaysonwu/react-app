@@ -8,7 +8,7 @@ const Module = loadable.lib(
   { cacheKey: props => `models/${props.path}` },
 );
 
-type ModelChildren = (models: IModel[]) => ReactNode;
+type ModelChildren = (models: Model[]) => ReactNode;
 
 interface ModelProps {
   paths: string[];
@@ -16,9 +16,9 @@ interface ModelProps {
 }
 
 function reduce(children: ModelChildren, path: string) {
-  return (models: IModel[]) => (
+  return (models: Model[]) => (
     <Module path={path}>
-      {(module?: { default: IModel }) => {
+      {(module?: { default: Model }) => {
         if (module) {
           const { dependencies } = module.default;
           models.push(module.default);
