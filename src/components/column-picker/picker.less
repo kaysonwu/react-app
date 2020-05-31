@@ -1,0 +1,92 @@
+@import '~antd/lib/style/themes/default.less';
+
+@prefix: ~'@{ant-prefix}-column-picker';
+@outline-style: dotted;
+
+.@{prefix} {
+  display: flex;
+
+  &-item {
+    margin-bottom: @padding-xs;
+
+    &-option {
+      float: right;
+      visibility: hidden;
+      cursor: pointer;
+
+      > .@{iconfont-css-prefix}-pushpin {
+        font-size: @font-size-lg;
+
+        &:first-of-type {
+          transform: rotate(-90deg);
+        }
+      }
+
+      > span + span {
+        margin-left: @padding-xs;
+      }
+    }
+
+    &-children {
+      display: block;
+      padding-left: @checkbox-size;
+    }
+
+    &:hover & {
+      &-option {
+        visibility: visible;
+      }
+    }
+  }
+
+  &-vertical {
+    flex-direction: column;
+
+    .@{prefix}-item {
+      &.drop-over-upward {
+        padding-top: @outline-width;
+        border-top: @outline-width @outline-style @outline-color;
+      }
+
+      &.drop-over-downward {
+        padding-bottom: @outline-width;
+        border-bottom: @outline-width @outline-style @outline-color;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &-horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .@{prefix}-item {
+      margin-right: @padding-xs;
+
+      &.drop-over-upward {
+        padding-left: @outline-width;
+        border-left: @outline-width @outline-style @outline-color;
+      }
+
+      &.drop-over-downward {
+        padding-right: @outline-width;
+        border-right: @outline-width @outline-style @outline-color;
+      }
+    }
+  }
+}
+
+@media (max-width: @screen-md-min) {
+  .@{prefix} {
+    &-item {
+      margin-bottom: @padding-xss;
+    }
+
+    &-horizontal &-item {
+      margin-right: @padding-xss;
+    }
+  }
+}

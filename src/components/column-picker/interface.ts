@@ -5,8 +5,8 @@ export { Key, FixedType };
 
 export interface ColumnType {
   key: Key;
-  selected: boolean | null;
-  defaultSelected?: boolean;
+  visible: boolean | null;
+  defaultVisible?: boolean;
   title?: ReactNode;
   fixed?: FixedType;
   children?: ColumnType[];

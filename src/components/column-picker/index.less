@@ -1,0 +1,43 @@
+@import '~antd/lib/style/themes/default.less';
+
+@prefix: ~'@{ant-prefix}-column-tool';
+@picker-prefix: ~'@{ant-prefix}-column-picker';
+
+.@{prefix} {
+  &-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    > .@{ant-prefix}-btn-link {
+      padding: 0;
+    }
+  }
+
+  &-group {
+    display: flex;
+    flex-direction: column;
+
+    &-title {
+      margin-bottom: @padding-xs;
+      color: @text-color-secondary;
+      font-size: @font-size-sm;
+    }
+
+    .@{picker-prefix} + &-title {
+      margin-top: @padding-xs;
+    }
+  }
+}
+
+@media (max-width: @screen-md-min) {
+  .@{prefix}-group {
+    &-title {
+      margin-bottom: @padding-xss;
+    }
+
+    .@{picker-prefix} + &-title {
+      margin-top: @padding-xss;
+    }
+  }
+}

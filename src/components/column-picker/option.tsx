@@ -1,20 +1,22 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, FC } from 'react';
 import { Tooltip } from 'antd';
 import { PushpinOutlined, StopOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
 import { FixedType } from './interface';
 
-interface OptionProps {
-  value: any;
+export interface OptionProps {
+  value: unknown;
   fixed?: FixedType;
   className?: string;
   style?: CSSProperties;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onFixed?: (value: any, to: FixedType) => void;
 }
 
-export default ({ value, fixed, className, style, onFixed }: OptionProps) => {
+const Option: FC<OptionProps> = ({ value, fixed, className, style, onFixed }) => {
   const intl = useIntl();
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+
+  function onClick(e: React.MouseEvent<HTMLElement>) {
     e.stopPropagation();
 
     if (onFixed) {
@@ -27,19 +29,21 @@ export default ({ value, fixed, className, style, onFixed }: OptionProps) => {
     <span className={className} style={style}>
       {(!fixed || fixed !== 'left') && (
         <Tooltip title={intl.formatMessage({ id: 'Pin Left' })}>
-          <PushpinOutlined data-fixed="left" onClick={handleClick} />
+          <PushpinOutlined data-fixed="left" onClick={onClick} />
         </Tooltip>
       )}
       {fixed && (
         <Tooltip title={intl.formatMessage({ id: 'Unpin' })}>
-          <StopOutlined onClick={handleClick} />
+          <StopOutlined onClick={onClick} />
         </Tooltip>
       )}
       {(!fixed || fixed !== 'right') && (
         <Tooltip title={intl.formatMessage({ id: 'Pin Right' })}>
-          <PushpinOutlined data-fixed="right" onClick={handleClick} />
+          <PushpinOutlined data-fixed="right" onClick={onClick} />
         </Tooltip>
       )}
     </span>
   );
-}
+};
+
+export default Option;
