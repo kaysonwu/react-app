@@ -41,8 +41,8 @@ export function studly(value: string | string[]) {
  */
 export function snake(value: string, delimiter = '_') {
   return value.replace(
-    /(\s+|^)([A-Z])/g,
-    (_, space, first) => (space ? delimiter : '') + first.toLowerCase(),
+    /(?:\s+)?([A-Z])/g,
+    (_, first, offset) => (offset ? delimiter : '') + first.toLowerCase(),
   );
 }
 

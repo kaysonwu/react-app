@@ -31,6 +31,7 @@ describe('Test locale util', () => {
   test('test snake', () => {
     expect(snake('User Name')).toEqual('user_name');
     expect(snake('User Name', '__')).toEqual('user__name');
+    expect(snake('userName')).toEqual('user_name');
   });
 
   test('test kebab', () => {
