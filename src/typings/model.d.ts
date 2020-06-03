@@ -70,7 +70,7 @@ interface Model<S = any, A extends Action = AnyAction> {
   /**
    * Redux reducers.
    */
-  reducers: Record<string, Reducer<S, A>>;
+  reducers?: Record<string, Reducer<S, A>>;
 
   /**
    * Redux saga effects.
