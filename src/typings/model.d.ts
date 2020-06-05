@@ -40,13 +40,13 @@ type Reducer<S = any, A extends Action = AnyAction> = (
 ) => S
 
 type Effect<A extends Action = AnyAction> = (
-  saga: typeof import('redux-saga/effects'),
+  saga: import('@/utils/model').Saga,
   action: A
 ) => Generator
 
 type EffectEvent<A extends Action = AnyAction> = (
   // Redux saga
-  saga: typeof import('redux-saga/effects'),
+  saga: import('@/utils/model').Saga,
   // Model id
   id: string,
   // Effect name

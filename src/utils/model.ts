@@ -32,9 +32,10 @@ function fixActionType(type: string, id: string) {
   return type;
 }
 
-function coverSaga(id: string) {
+function coverSaga(id: string, has: (type: string) => boolean) {
   return {
     ...saga,
+    has,
     select(selector: (state: unknown, ...args: unknown[]) => unknown, ...args: unknown[]) {
       return select(state => selector(state[id], ...args));
     },
@@ -68,8 +69,10 @@ export interface Store extends ReduxStore {
   modelManager: ModelManager;
 }
 
+export type Saga = ReturnType<typeof coverSaga>;
+
 class InternalModelManager implements ModelManager {
-  private models: Record<string, Omit<Model, 'id' | 'state'> & { saga: ReturnType<typeof coverSaga> }> = {};
+  private models: Record<string, Omit<Model, 'id' | 'state'> & { saga: Saga }> = {};
 
   private store: ReduxStore | null = null;
 
@@ -232,6 +235,20 @@ class InternalModelManager implements ModelManager {
     }
   }
 
+  public hasAction = (type: string) => {
+    const [id, key] = this.splitActionType(type);
+    const { reducers, effects } = this.get(id, {});
+
+    if (reducers !== undefined
+      && typeof reducers[key] === 'function'
+    ) {
+      return true;
+    }
+
+    return effects !== undefined
+      && typeof effects[key] === 'function';
+  }
+
   public has = (id: string) => Object.prototype.hasOwnProperty.call(this.models, id);
 
   public add = (...models: Model[]) => {
@@ -246,7 +263,7 @@ class InternalModelManager implements ModelManager {
       const { state, ...model } = m as any;
 
       states[id] = state;
-      model.saga = coverSaga(id);
+      model.saga = coverSaga(id, this.hasAction);
 
       this.addListen(id, model);
       this.models[id] = model;

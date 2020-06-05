@@ -6,9 +6,11 @@ export interface GlobalState {
   loading?: Record<string, LoadingState>;
 }
 
-function getLoadingKey(id: string, effect?: string) {
+// #if WEB
+function mapEffectToLoading(effect?: string) {
   switch (effect) {
     case 'show':
+    case 'openForm':
       return 'showing';
     case 'create':
     case 'update':
@@ -16,11 +18,10 @@ function getLoadingKey(id: string, effect?: string) {
     case 'delete':
       return 'deleting';
     default:
-      break;
+      return 'loading';
   }
-
-  return 'loading';
 }
+// #endif
 
 const Global: Model<GlobalState> = {
   id: 'global',
@@ -32,18 +33,30 @@ const Global: Model<GlobalState> = {
 
     return { user, menus };
   },
-  *effecting({ put }, id, effect) {
-    const key = getLoadingKey(id, effect);
-    yield put({ type: 'saveLoading', id, payload: { [key]: true } });
+  // #if WEB
+  *effecting({ put, has }, id, effect) {
+    const type = `${id}/saveLoading`;
+
+    if (has(type)) {
+      yield put({ type, effect, loading: true });
+    } else {
+      yield put({ type: 'saveLoading', id, effect, loading: true });
+    }
   },
-  *effected({ put }, id, effect) {
-    const key = getLoadingKey(id, effect);
-    yield put({ type: 'saveLoading', id, payload: { [key]: false } });
+  *effected({ put, has }, id, effect) {
+    const type = `${id}/saveLoading`;
+
+    if (has(type)) {
+      yield put({ type, effect, loading: false });
+    } else {
+      yield put({ type: 'saveLoading', id, effect, loading: false });
+    }
   },
   reducers: {
-    saveLoading(state, { id, payload }) {
+    saveLoading(state, { id, effect, loading: l }) {
+      const name = mapEffectToLoading(effect);
       const loading: Record<string, LoadingState> = { ...state.loading };
-      loading[id] = { ...loading[id], ...payload };
+      loading[id] = { ...loading[id], [name]: l };
 
       return {
         ...state,
@@ -51,6 +64,7 @@ const Global: Model<GlobalState> = {
       };
     },
   },
+  // #endif
 };
 
 export default Global;
