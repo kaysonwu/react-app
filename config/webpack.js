@@ -1,6 +1,7 @@
 const { resolve, join } = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin');
 const merge = require('webpack-merge');
 
 // Constants.
@@ -73,6 +74,21 @@ const getConfig = (target, SSR) => {
     },
     externals: browser ? undefined : [(require('webpack-node-externals'))()],
     plugins: [
+      new AntdDayjsWebpackPlugin({
+        plugins: [
+          'isSameOrBefore',
+          'isSameOrAfter',
+          'advancedFormat',
+          'customParseFormat',
+          'weekday',
+          'weekYear',
+          'weekOfYear',
+          'isMoment',
+          'localeData',
+          'localizedFormat',
+          'relativeTime',
+        ],
+      }),
       new MiniCssExtractPlugin({
         chunkFilename: 'css/[id].css',
       }),

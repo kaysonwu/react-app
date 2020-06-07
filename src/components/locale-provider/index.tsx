@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import Dayjs from 'dayjs';
 import { IntlProvider } from 'react-intl';
 import { ConfigProvider } from 'antd';
 import { ConfigProviderProps } from 'antd/lib/config-provider';
@@ -12,8 +13,12 @@ interface LocaleProviderProps extends Omit<ConfigProviderProps, 'locale' | 'form
 
 const LocaleProvider: FC<LocaleProviderProps> = ({ locale, files, children, ...props }) => (
   <Loadable paths={files || [locale]}>
-    {({ antd, validateMessages, ...messages }) => {
+    {({ antd, validateMessages, dayjs, ...messages }) => {
       const intl = <IntlProvider locale={locale} messages={messages}>{children}</IntlProvider>;
+
+      if (dayjs) {
+        Dayjs.locale(dayjs);
+      }
 
       if (!antd) {
         return intl;
