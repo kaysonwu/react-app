@@ -36,7 +36,7 @@ function coverSaga(id: string, has: (type: string) => boolean) {
   return {
     ...saga,
     has,
-    select(selector: (state: unknown, ...args: unknown[]) => unknown, ...args: unknown[]) {
+    select(selector: (state: any, ...args: any[]) => any, ...args: any[]) {
       return select(state => selector(state[id], ...args));
     },
     put<A extends Action>(action: A) {
