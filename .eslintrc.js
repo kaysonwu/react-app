@@ -72,10 +72,12 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
       ],
       rules: {
+        'no-unused-expressions': 'off',
         '@typescript-eslint/ban-ts-ignore': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/prefer-includes': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/no-unused-expressions': 'error',
         '@typescript-eslint/prefer-optional-chain': 'error',
         '@typescript-eslint/no-extra-parens': ['error', 'all', {
           ignoreJSX: 'all',
