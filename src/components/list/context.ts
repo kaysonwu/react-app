@@ -1,9 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext } from 'react';
 import { NormalizeColumnsType } from './interface';
 
 interface ListContext {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columns: NormalizeColumnsType<any>;
+  onColumnsChange: (columns: NormalizeColumnsType<any>) => void;
 }
 
-export default createContext<ListContext>({ columns: [] });
+export { NormalizeColumnsType };
+export default createContext<ListContext>({
+  columns: [],
+  onColumnsChange() {
+    // do nothing
+  },
+});

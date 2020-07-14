@@ -5,9 +5,10 @@ import { Table as TableBase } from 'antd';
 import { TableProps as Props } from 'antd/lib/table';
 import { ConfigContext } from 'antd/lib/config-provider';
 import { convertChildrenToColumns } from 'rc-table/lib/hooks/useColumns';
-import { ColumnsType, ColumnProps, ColumnGroupProps } from './interface';
+import { ColumnsType, ColumnProps, ColumnGroupProps, NormalizeColumnsType } from './interface';
 import { normalizeColumns, filterInvisible } from './utils';
 import ListContext from './context';
+import './table.less';
 
 export interface TableProps<T> extends Props<T> {
   columns?: ColumnsType<T>;
@@ -22,6 +23,7 @@ const InternalTable = <T extends object = {}>(
     className: customizeClassName,
     style,
     onChange,
+    ...props
   }: TableProps<T>,
 ): ReactElement => {
   const intl = useIntl();
@@ -35,15 +37,17 @@ const InternalTable = <T extends object = {}>(
   const prefixCls = getPrefixCls('list');
   const className = classNames(prefixCls, customizeClassName);
 
+  function onColumnsChange(columns: NormalizeColumnsType<T>) {
+    setColumns(columns);
+  }
+
   return (
-    <div
-      className={className}
-      style={style}
-    >
-      <ListContext.Provider value={{ columns }}>
+    <div className={className} style={style}>
+      <ListContext.Provider value={{ columns, onColumnsChange }}>
         {toolbar}
       </ListContext.Provider>
       <TableBase<T>
+        {...props}
         columns={filterInvisible<T>(columns)}
         className={`${prefixCls}-table`}
         onChange={onChange ? (...params) => onChange(...params) : undefined}

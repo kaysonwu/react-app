@@ -1,1 +1,2 @@
-export { default as Table, TableProps } from './table';
+export { default as Table } from './table';
+export { default as AnimateTable } from './animateTable';

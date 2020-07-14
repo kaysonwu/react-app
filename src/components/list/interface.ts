@@ -7,6 +7,7 @@ export interface ColumnType<T = unknown> extends ColumnTypeBase<T> {
 }
 
 export interface ColumnGroupType<T = unknown> extends Omit<ColumnType<T>, 'dataIndex'> {
+  key: Key;
   children: ColumnsType<T>;
 }
 
@@ -25,7 +26,7 @@ export interface NormalizeColumnType<T = unknown> extends ColumnType<T> {
   visible: boolean;
 }
 
-export interface NormalizeColumnGroupType<T = unknown> extends Omit<NormalizeColumnType<T>, 'dataIndex' | 'visible'> {
+export interface NormalizeColumnGroupType<T = unknown> extends ColumnGroupType<T> {
   visible: boolean | null;
   children: NormalizeColumnsType<T>;
 }
