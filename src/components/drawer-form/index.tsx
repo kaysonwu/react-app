@@ -1,120 +1,130 @@
-import React, { CSSProperties, FC, useContext, useEffect, MouseEvent } from 'react';
+import React, { CSSProperties, FC, useContext, useEffect, MouseEvent, MouseEventHandler } from 'react';
 import classNames from 'classnames';
 import { useIntl } from 'react-intl';
-import { DispatchProp } from 'react-redux';
-import { Drawer, Spin, Form, Button, Dropdown, Menu } from 'antd';
+import { Button, Dropdown, Menu, Form, Drawer, Spin } from 'antd';
 import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
 import { ConfigContext } from 'antd/lib/config-provider';
 import { DrawerProps } from 'antd/lib/drawer';
-import { FormProps } from 'antd/lib/form';
+import { FormProps, FormInstance } from 'antd/lib/form';
 import { Store } from 'antd/lib/form/interface';
-import { ClickParam } from 'antd/lib/menu';
+import { SpinProps } from 'antd/lib/spin';
 import './index.less';
 
-interface DrawerFormProps extends
-DispatchProp,
-DrawerProps,
-Omit<FormProps, 'title' | 'initialValues' | 'onFinish' | 'onFinishFailed' | 'onFieldsChange' | 'onValuesChange'> {
-  id: string;
+export type SubmitEventHandler = (
+  record: Store | undefined,
+  value: Store,
+  form: FormInstance,
+  formVisible: boolean,
+) => void;
+
+interface DrawerFormProps
+  extends DrawerProps,
+    Omit<
+      FormProps,
+      | 'title'
+      | 'initialValues'
+      | 'onFinish'
+      | 'onFinishFailed'
+      | 'onFieldsChange'
+      | 'onValuesChange'
+    > {
   record?: Store;
   formStyle?: CSSProperties;
-  loading?: boolean;
+  loading?: boolean | SpinProps;
   submitting?: boolean;
+  onSubmit?: SubmitEventHandler;
 }
 
-const DrawerForm: FC<DrawerFormProps> = (
-  {
-    form: formInstance,
-    component,
-    colon,
-    fields,
-    hideRequiredMark,
-    record,
-    labelAlign,
-    labelCol,
-    layout,
-    name,
-    scrollToFirstError,
-    size,
-    validateMessages,
-    wrapperCol,
-    formStyle,
-    children,
-    footer,
-    loading,
-    submitting,
-    id,
-    dispatch,
-    className: customizeClassName,
-    ...resetProps
-  },
-) => {
+const DrawerForm: FC<DrawerFormProps> = ({
+  form: formInstance,
+  component,
+  colon,
+  fields,
+  hideRequiredMark,
+  record,
+  labelAlign,
+  labelCol,
+  layout,
+  name,
+  scrollToFirstError,
+  size,
+  validateMessages,
+  wrapperCol,
+  formStyle,
+  children,
+  footer: customizeFooter,
+  loading = false,
+  submitting,
+  visible,
+  className: customizeClassName,
+  onClose,
+  onSubmit,
+  ...resetProps
+}) => {
   const { getPrefixCls } = useContext(ConfigContext);
   const prefixCls = getPrefixCls('drawer-form');
   const className = classNames(prefixCls, customizeClassName);
 
+  const spinProps = typeof loading === 'boolean' ? { spinning: loading } : loading;
   const [form] = Form.useForm(formInstance);
-  const intl = useIntl();
+  const { formatMessage } = useIntl();
 
   useEffect(() => {
     if (record) {
-      form.setFieldsValue(record);
-    }
-  }, [record, form]);
-
-  function onSubmit(e: ClickParam | MouseEvent) {
-    const closeForm = (e as ClickParam).key === undefined;
-
-    form.validateFields().then(payload => {
-      if (record) {
-        dispatch({ type: `${id}/update`, id: record.id, payload, closeForm });
+      if (visible) {
+        form.setFieldsValue(record);
       } else {
-        dispatch({ type: `${id}/create`, payload, closeForm });
+        form.resetFields();
       }
+    }
+  }, [visible, record, form]);
+
+  function handleSubmit(e: { key: React.Key } | MouseEvent) {
+    const continued = (e as { key: React.Key }).key === 'submit';
+    form.validateFields().then(value => {
+      onSubmit?.(record, value, form, continued);
     });
   }
 
-  function onClose() {
-    form.resetFields();
-    dispatch({ type: `${id}/setFormVisible`, visible: false });
+  let footer = customizeFooter;
+  if (footer === undefined) {
+    footer = (
+      <>
+        <Button size={size} onClick={onClose as MouseEventHandler}>
+          {formatMessage({ id: 'Cancel' })}
+        </Button>
+        <Dropdown.Button
+          type="primary"
+          trigger={['click']}
+          size={size}
+          icon={<DownOutlined />}
+          overlay={(
+            <Menu onClick={handleSubmit}>
+              <Menu.Item key="submit">
+                {formatMessage({ id: 'Submit And Continue' })}
+              </Menu.Item>
+            </Menu>
+          )}
+          onClick={handleSubmit}
+        >
+          {submitting && <LoadingOutlined />}
+          {formatMessage({ id: 'Submit' })}
+        </Dropdown.Button>
+      </>
+    );
   }
-
-  const footerDom = (
-    <>
-      {footer}
-      <Button size={size} onClick={onClose}>
-        {intl.formatMessage({ id: 'Cancel' })}
-      </Button>
-      <Dropdown.Button
-        type="primary"
-        trigger={['click']}
-        size={size}
-        icon={<DownOutlined />}
-        overlay={(
-          <Menu onClick={onSubmit}>
-            <Menu.Item key="submit">
-              {intl.formatMessage({ id: 'Submit And Continue' })}
-            </Menu.Item>
-          </Menu>
-        )}
-        onClick={onSubmit}
-      >
-        {submitting && <LoadingOutlined />}
-        {intl.formatMessage({ id: 'Submit' })}
-      </Dropdown.Button>
-    </>
-  );
 
   return (
     <Drawer
       maskStyle={{ opacity: 0, animation: 'none' }}
       {...resetProps}
       closable={false}
-      footer={footerDom}
+      visible={visible}
+      footer={footer}
       className={className}
       onClose={onClose}
     >
-      <Spin spinning={!!loading}>
+      <Spin {...spinProps}>
         <Form
           component={component}
           colon={colon}
