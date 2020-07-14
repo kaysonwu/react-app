@@ -1,71 +1,77 @@
-import { post, put, get, del } from '@/utils/request';
+import { post, put as Put, get, del } from '@/utils/request';
 
 export interface UserState {
-  users: IUser[];
-  user?: IUser;
+  data: IUser[];
+  record?: IUser;
   formVisible?: boolean;
 }
 
 const User: Model<UserState> = {
   id: 'user',
   async state(request) {
-    const users = await get('/v1/users', request.query);
+    const data = await get('/v1/users', request.query);
 
-    return {
-      users,
-    };
+    return { data };
   },
+  // #if WEB
   effects: {
-    *create({ call, put }, action) {
-      yield call(post, '/v1/users', action.payload);
-      yield put({ type: 'query' });
+    *create({ call, select, put }, { data, form, formVisible }) {
+      const record = yield call(post, '/v1/users', data, { form });
 
-      if (!action.formVisible) {
-        yield put({ type: 'setFormVisible', visible: false });
+      if (record) {
+        const data = (yield select(state => state.data)) as IUser[];
+        yield put({ type: 'saveData', data: [record, ...data], formVisible });
       }
     },
-    *update(saga, action) {
-      yield saga.call(put, `/v1/users/${action.id}`, action.payload);
-      yield saga.put({ type: 'query' });
+    *update({ call, put, select }, { id, data, form, formVisible }) {
+      const record = (yield call(Put, `/v1/users/${id}`, data, { form })) as IUser;
 
-      if (!action.formVisible) {
-        yield saga.put({ type: 'setFormVisible', visible: false });
+      if (record) {
+        const data = (yield select(state => state.data)) as IUser[];
+        yield put({ type: 'saveData', data: data.map(r => (r.id === record.id ? record : r)), formVisible });
       }
     },
     *query({ call, put }, action) {
-      const users = yield call(get, '/v1/users', action.payload);
-      yield put({ type: 'saveUsers', users });
+      const data = yield call(get, '/v1/users', action.payload);
+      yield put({ type: 'saveData', data });
     },
-    *show({ call, put }, action) {
-      yield put({ type: 'setFormVisible', visible: true });
-      const user = yield call(get, `/v1/users/${action.payload}`);
-      yield put({ type: 'saveUser', user });
+    *show({ call, put }, { id }) {
+      const record = yield call(get, `/v1/users/${id}`);
+
+      if (record) {
+        yield put({ type: 'openForm', record });
+      }
     },
-    *delete({ call, put }, action) {
-      yield call(del, `/v1/users/${action.payload}`);
-      yield put({ type: 'query' });
+    *delete({ call, select, put }, { id }) {
+      const res = yield call(del, `/v1/users/${id}`);
+      if (res) {
+        const data = (yield select(state => state.data)) as IUser[];
+        yield put({ type: 'saveData', data: data.filter(record => record.id === Number(id)) });
+      }
     },
   },
   reducers: {
-    saveUsers(state, { users }) {
+    saveData(state, { data, formVisible = state.formVisible }) {
       return {
         ...state,
-        users,
+        data,
+        formVisible,
       };
     },
-    saveUser(state, { user }) {
+    saveRecord(state, { record }) {
       return {
         ...state,
-        user,
+        record,
       };
     },
-    setFormVisible(state, { visible }) {
-      return {
-        ...state,
-        formVisible: visible,
-      };
+    openForm(state, { record }) {
+      return { ...state, formVisible: true, record };
+    },
+    closeForm(state) {
+      return { ...state, formVisible: false };
     },
   },
+  // #endif
 };
 
 export default User;

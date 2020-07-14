@@ -36,4 +36,4 @@ function validator(data: Store) {
   };
 }
 
-export default delays(resource('/v1/users', users, { validator }), 100, 1500);
+export default delays(resource('/v1/users', users, { validator, echo: true }), 100, 1500);

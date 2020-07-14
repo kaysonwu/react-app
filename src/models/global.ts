@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { get } from '@/utils/request';
 
 export interface GlobalState {
@@ -9,14 +10,9 @@ export interface GlobalState {
 // #if WEB
 function mapEffectToLoading(effect?: string) {
   switch (effect) {
-    case 'show':
-    case 'openForm':
-      return 'showing';
     case 'create':
     case 'update':
       return 'submitting';
-    case 'delete':
-      return 'deleting';
     default:
       return 'loading';
   }
@@ -36,20 +32,30 @@ const Global: Model<GlobalState> = {
   // #if WEB
   *effecting({ put, has }, id, effect) {
     const type = `${id}/saveLoading`;
+    const loading = true;
 
-    if (has(type)) {
-      yield put({ type, effect, loading: true });
+    if (id !== 'global' && has(type)) {
+      yield put({ type, effect, loading });
+    } else if (effect === 'show') {
+      message.loading({ key: `${id}/${effect}`, content: window.intl!.formatMessage({ id: 'Fetching' }), duration: 0 });
+    } else if (effect === 'delete') {
+      message.loading({ key: `${id}/${effect}`, content: window.intl!.formatMessage({ id: 'Deleting' }), duration: 0 });
     } else {
-      yield put({ type: 'saveLoading', id, effect, loading: true });
+      yield put({ type: 'saveLoading', id, effect, loading });
     }
   },
   *effected({ put, has }, id, effect) {
     const type = `${id}/saveLoading`;
+    const loading = false;
 
-    if (has(type)) {
-      yield put({ type, effect, loading: false });
+    if (id !== 'global' && has(type)) {
+      yield put({ type, effect, loading });
+    } else if (effect === 'show') {
+      message.loading({ key: `${id}/${effect}`, content: window.intl!.formatMessage({ id: 'Fetching' }), duration: 0.01 });
+    } else if (effect === 'delete') {
+      message.loading({ key: `${id}/${effect}`, content: window.intl!.formatMessage({ id: 'Deleting' }), duration: 0.01 });
     } else {
-      yield put({ type: 'saveLoading', id, effect, loading: false });
+      yield put({ type: 'saveLoading', id, effect, loading });
     }
   },
   reducers: {

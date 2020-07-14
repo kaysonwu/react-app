@@ -69,6 +69,9 @@ const zhCN: Locale = {
   'User Level': '用户等级',
   'User Manage': '用户管理',
 
+  'Fetching': '正在获取数据...',
+  'Deleting': '正在删除记录...',
+
   // Toolbar
   'Tools': '工具箱',
   'Please check the columns to be exported': '请勾选需要导出的列',
