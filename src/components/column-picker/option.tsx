@@ -14,7 +14,7 @@ export interface OptionProps {
 }
 
 const Option: FC<OptionProps> = ({ value, fixed, className, style, onFixed }) => {
-  const intl = useIntl();
+  const { formatMessage } = useIntl();
 
   function onClick(e: React.MouseEvent<HTMLElement>) {
     e.stopPropagation();
@@ -28,17 +28,17 @@ const Option: FC<OptionProps> = ({ value, fixed, className, style, onFixed }) =>
   return (
     <span className={className} style={style}>
       {(!fixed || fixed !== 'left') && (
-        <Tooltip title={intl.formatMessage({ id: 'Pin Left' })}>
+        <Tooltip title={formatMessage({ id: 'Pin Left' })}>
           <PushpinOutlined data-fixed="left" onClick={onClick} />
         </Tooltip>
       )}
       {fixed && (
-        <Tooltip title={intl.formatMessage({ id: 'Unpin' })}>
+        <Tooltip title={formatMessage({ id: 'Unpin' })}>
           <StopOutlined onClick={onClick} />
         </Tooltip>
       )}
       {(!fixed || fixed !== 'right') && (
-        <Tooltip title={intl.formatMessage({ id: 'Pin Right' })}>
+        <Tooltip title={formatMessage({ id: 'Pin Right' })}>
           <PushpinOutlined data-fixed="right" onClick={onClick} />
         </Tooltip>
       )}

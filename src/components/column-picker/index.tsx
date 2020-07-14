@@ -23,7 +23,7 @@ const ColumnSelect: FC<ToolProps> = (
     title,
   },
 ) => {
-  const intl = useIntl();
+  const { formatMessage } = useIntl();
   const { columns, onColumnsChange } = useContext(ListContext);
   const visible = everyVisible(columns, true);
   const group = columnsGroup(columns);
@@ -73,7 +73,7 @@ const ColumnSelect: FC<ToolProps> = (
         <Fragment key={key}>
           {keys.length > 1 && (
             <span className={`${prefixCls}-group-title`}>
-              {intl.formatMessage({ id: upperWords(snake(key, ' ')) })}
+              {formatMessage({ id: upperWords(snake(key, ' ')) })}
             </span>
           )}
           <Picker columns={group[key]} onFixed={onFixed} onChange={onChange} />
@@ -93,10 +93,10 @@ const ColumnSelect: FC<ToolProps> = (
             indeterminate={visible === null}
             onChange={onCheckAll}
           >
-            {intl.formatMessage({ id: 'Column Display' })}
+            {formatMessage({ id: 'Column Display' })}
           </Checkbox>
           <Button type="link" onClick={onReset}>
-            {intl.formatMessage({ id: 'Reset' })}
+            {formatMessage({ id: 'Reset' })}
           </Button>
         </div>
       )}
@@ -108,7 +108,7 @@ const ColumnSelect: FC<ToolProps> = (
     >
       <IconButton
         icon={icon}
-        title={title || intl.formatMessage({ id: 'Setting Column' })}
+        title={title || formatMessage({ id: 'Setting Column' })}
       />
     </Popover>
   );
