@@ -20,6 +20,13 @@ interface IUser {
   updated_at?: string;
 }
 
+interface ILink {
+  id: number;
+  name: string;
+  url: string;
+  icon?: string;
+}
+
 interface IMenu {
   id: number;
   name: string;
