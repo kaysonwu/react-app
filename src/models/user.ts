@@ -44,9 +44,10 @@ const User: Model<UserState> = {
     },
     *delete({ call, select, put }, { id }) {
       const res = yield call(del, `/v1/users/${id}`);
-      if (res) {
+
+      if (res !== undefined) {
         const data = (yield select(state => state.data)) as IUser[];
-        yield put({ type: 'saveData', data: data.filter(record => record.id === Number(id)) });
+        yield put({ type: 'saveData', data: data.filter(record => record.id !== Number(id)) });
       }
     },
   },

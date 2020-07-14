@@ -64,6 +64,14 @@ const zhCN: Locale = {
   'Delete': '删除',
   'Action': '操作',
   'Download': '下载',
+
+  // Page Head DropwonMenu
+  'Account Settings': '个人设置',
+  'Logout': '退出',
+  'English': 'English',
+  '简体中文': '简体中文',
+
+  // Menu
   'Home': '首页',
   'User': '用户',
   'User Level': '用户等级',
