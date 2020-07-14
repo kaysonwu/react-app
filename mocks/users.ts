@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
+import { ParsedUrlQuery } from 'querystring';
 import { delays, resource } from 'serve-mock/utils';
 import dayjs from 'dayjs';
 
@@ -36,4 +37,14 @@ function validator(data: Store) {
   };
 }
 
-export default delays(resource('/v1/users', users, { validator, echo: true }), 100, 1500);
+function filter(data: IUser[], query: ParsedUrlQuery) {
+  const { keywords } = query;
+
+  if (keywords) {
+    return data.filter(record => record.name.includes(keywords as string));
+  }
+
+  return data;
+}
+
+export default delays(resource('/v1/users', users, { validator, filter, echo: true }), 100, 1500);
