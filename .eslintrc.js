@@ -73,12 +73,21 @@ module.exports = {
       ],
       rules: {
         'no-unused-expressions': 'off',
+        'space-before-function-paren': 'off',
         '@typescript-eslint/ban-ts-ignore': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/prefer-includes': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/no-unused-expressions': 'error',
         '@typescript-eslint/prefer-optional-chain': 'error',
+        '@typescript-eslint/no-explicit-any': ['warn', {
+          ignoreRestArgs: true,
+        }],
+        '@typescript-eslint/space-before-function-paren': ['error', {
+          anonymous: 'always',
+          named: 'never',
+          asyncArrow: 'always',
+        }],
         '@typescript-eslint/no-extra-parens': ['error', 'all', {
           ignoreJSX: 'all',
           nestedBinaryExpressions: false,
