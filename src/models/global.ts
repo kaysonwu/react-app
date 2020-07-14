@@ -67,9 +67,9 @@ const Global: Model<GlobalState> = {
     if (id !== 'global' && has(type)) {
       yield put({ type, effect, loading });
     } else if (effect === 'show') {
-      message.loading({ key: `${id}/${effect}`, content: window.intl!.formatMessage({ id: 'Fetching' }), duration: 0 });
+      message.loading({ key: `${id}/${effect}`, content: window.intl.formatMessage({ id: 'Fetching' }), duration: 0 });
     } else if (effect === 'delete') {
-      message.loading({ key: `${id}/${effect}`, content: window.intl!.formatMessage({ id: 'Deleting' }), duration: 0 });
+      message.loading({ key: `${id}/${effect}`, content: window.intl.formatMessage({ id: 'Deleting' }), duration: 0 });
     } else {
       yield put({ type: 'saveLoading', id, effect, loading });
     }
@@ -81,9 +81,9 @@ const Global: Model<GlobalState> = {
     if (id !== 'global' && has(type)) {
       yield put({ type, effect, loading });
     } else if (effect === 'show') {
-      message.loading({ key: `${id}/${effect}`, content: window.intl!.formatMessage({ id: 'Fetching' }), duration: 0.01 });
+      message.loading({ key: `${id}/${effect}`, content: window.intl.formatMessage({ id: 'Fetching' }), duration: 0.01 });
     } else if (effect === 'delete') {
-      message.loading({ key: `${id}/${effect}`, content: window.intl!.formatMessage({ id: 'Deleting' }), duration: 0.01 });
+      message.loading({ key: `${id}/${effect}`, content: window.intl.formatMessage({ id: 'Deleting' }), duration: 0.01 });
     } else {
       yield put({ type: 'saveLoading', id, effect, loading });
     }
