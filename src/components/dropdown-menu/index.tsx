@@ -1,9 +1,11 @@
 import React, { Key, ReactNode, FC } from 'react';
+import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { Dropdown, Menu } from 'antd';
 import { DropDownProps } from 'antd/lib/dropdown';
 import { MenuProps } from 'antd/lib/menu';
-import Icon from '../icon';
+import { isURL } from '@/utils/util';
+import { normalizeIcon } from '../icon';
 
 export type MenuItem = {
   key: Key;
@@ -11,6 +13,7 @@ export type MenuItem = {
   icon?: ReactNode;
   disabled?: boolean;
   divider?: boolean;
+  url?: string;
 }
 
 interface DropdownMenuProps extends
@@ -28,7 +31,7 @@ const DropdownMenu: FC<DropdownMenuProps> = props => {
     onSelect,
     ...reset
   } = props;
-  const intl = useIntl();
+  const { formatMessage } = useIntl();
 
   function renderItems() {
     return items.map(item => {
@@ -38,19 +41,18 @@ const DropdownMenu: FC<DropdownMenuProps> = props => {
         return <Menu.Divider key={key} />;
       }
 
-      let { icon, title } = item;
+      const { icon, title, url } = item;
+      let children = typeof title === 'string' ? formatMessage({ id: title }) : title;
 
-      if (typeof icon === 'string') {
-        icon = <Icon type={icon} />;
-      }
-
-      if (typeof title === 'string') {
-        title = intl.formatMessage({ id: title });
+      if (url !== undefined) {
+        children = isURL(url)
+          ? <a href={url}>{children}</a>
+          : <Link to={url}>{children}</Link>;
       }
 
       return (
-        <Menu.Item key={key} icon={icon}>
-          {title}
+        <Menu.Item key={key} icon={normalizeIcon(icon)}>
+          {children}
         </Menu.Item>
       );
     });
