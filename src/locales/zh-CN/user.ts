@@ -8,4 +8,5 @@ export default {
   'CreatedAt': '开卡时间',
   'UpdatedAt': '活跃时间',
   'State': '状态',
+  'Input search text': '请输入姓名',
 };

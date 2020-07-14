@@ -18,6 +18,7 @@ const { Column } = Table;
 const { Option } = Select;
 
 interface UserPageProps extends UserState, LoadingState, DispatchProp {
+  onSearch: (keywords: string) => void;
   onCreate: () => void;
   onEdit: (e: SyntheticEvent) => void;
   onDelete: (e: SyntheticEvent) => void;
@@ -32,6 +33,7 @@ const User: FC<UserPageProps> = (
     record,
     formVisible,
     submitting,
+    onSearch,
     onCloseForm,
     onSubmit,
     onCreate,
@@ -98,6 +100,7 @@ const User: FC<UserPageProps> = (
                 </Toolbar.ItemGroup>
               )}
               <Toolbar.ItemGroup key="right" align="right">
+                <Toolbar.Item key="query" component={<Input.Search placeholder={formatMessage({ id: 'Input search text' })} onSearch={onSearch} enterButton />} />
                 <Toolbar.Item key="column-select" component={ColumnSelect} />
               </Toolbar.ItemGroup>
             </Toolbar>
@@ -165,6 +168,7 @@ export default connect(({ global: { loading }, user }: ConnectState) => ({
   ...loading?.user,
   ...user,
 }), dispatch => ({
+  onSearch: (keywords: string) => dispatch({ type: 'user/query', payload: { keywords } }),
   onCreate: () => dispatch({ type: 'user/openForm' }),
   onEdit: (e: SyntheticEvent) => dispatch({ type: 'user/show', id: e.currentTarget.getAttribute('data-id') }),
   onDelete: (e: SyntheticEvent) => dispatch({ type: 'user/delete', id: e.currentTarget.getAttribute('data-id') }),

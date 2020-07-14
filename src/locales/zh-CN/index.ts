@@ -69,6 +69,7 @@ const zhCN: Locale = {
   'User Level': '用户等级',
   'User Manage': '用户管理',
 
+  'App Name': 'React 脚手架',
   'Fetching': '正在获取数据...',
   'Deleting': '正在删除记录...',
 
