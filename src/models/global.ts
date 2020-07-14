@@ -1,9 +1,27 @@
 import { message } from 'antd';
+import IsMobile from 'is-mobile';
 import { get } from '@/utils/request';
+
+export type Theme = {
+  // Menu layout
+  layout: 'top' | 'sider' | 'top-sider' | 'sider2';
+  // Theme style light-dark 与 dark-light 不支持 top 布局
+  style: 'dark' | 'light' | 'light-dark' | 'dark-light';
+  // Primary Color
+  color: string;
+  // true 流式宽度 number 固定宽度 仅在布局为 top 时有效
+  contentWidth: true | number;
+  colorWeak?: boolean;
+  fixedHeader?: boolean;
+  fixSiderbar?: boolean;
+};
 
 export interface GlobalState {
   user?: IUser;
   menus?: IMenu[];
+  links?: ILink[];
+  theme?: Theme;
+  isMobile?: boolean;
   loading?: Record<string, LoadingState>;
 }
 
@@ -21,13 +39,25 @@ function mapEffectToLoading(effect?: string) {
 
 const Global: Model<GlobalState> = {
   id: 'global',
-  async state() {
-    const [user, menus] = await Promise.all([
+  async state(request) {
+    const ua = typeof navigator !== 'undefined' ? navigator.userAgent : request;
+    const isMobile = IsMobile({ ua });
+
+    const [user, menus, links] = await Promise.all([
       get('/v1/currentUser') as Promise<IUser>,
       get('/v1/menus') as Promise<IMenu[]>,
+      get('/v1/links', { type: 'ic-footer' }) as Promise<ILink[]>,
     ]);
 
-    return { user, menus };
+    const theme = {
+      layout: 'top',
+      style: 'light-dark',
+      color: '#1890ff',
+      contentWidth: true,
+      fixedHeader: true,
+    };
+
+    return { user, menus, theme, links, isMobile } as GlobalState;
   },
   // #if WEB
   *effecting({ put, has }, id, effect) {

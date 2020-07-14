@@ -2,14 +2,14 @@ import React, { ReactNode, CSSProperties, FC, useState, useContext } from 'react
 import ResizeObserver from 'rc-resize-observer';
 import classNames from 'classnames';
 import { ConfigContext } from 'antd/lib/config-provider';
-import AuthContext from '../auth/context';
+import AppContext from '../layout/context';
 import renderBreadcrumb from './breadcrumb';
 import renderHeader, { HeaderProps } from './header';
 import renderContent, { ContentProps } from './content';
 import 'antd/lib/page-header/style/index.less';
 import './index.less';
 
-interface PageHeaderProps extends
+export interface PageHeaderProps extends
 Omit<HeaderProps, 'prefixCls' | 'direction'>,
 Omit<ContentProps, 'prefixCls'> {
   ghost?: boolean;
@@ -34,9 +34,10 @@ const PageHeader: FC<PageHeaderProps> = props => {
     className: customizeClassName,
     ...headerProps
   } = props;
-  const { title, routes } = useContext(AuthContext);
-  const breadcrumb = hideBreadcrumb ? null : renderBreadcrumb(routes, showBreadcrumbIcon);
   const [compact, updateCompact] = useState(false);
+  const { getPageTitle, routes } = useContext(AppContext);
+  const title = getPageTitle(undefined, customizeTitle as string);
+  const breadcrumb = hideBreadcrumb ? null : renderBreadcrumb(routes, showBreadcrumbIcon);
   const { getPrefixCls, pageHeader, direction } = useContext(ConfigContext);
 
   const prefixCls = getPrefixCls('page-header');
@@ -56,7 +57,7 @@ const PageHeader: FC<PageHeaderProps> = props => {
     <ResizeObserver onResize={onResize}>
       <div className={className} style={style}>
         {breadcrumb}
-        {renderHeader({ ...headerProps, prefixCls, title: customizeTitle || title, direction })}
+        {renderHeader({ ...headerProps, prefixCls, title, direction })}
         {renderContent({ prefixCls, links, extra, children })}
         {footer && <div className={`${prefixCls}-footer`}>{footer}</div>}
       </div>
