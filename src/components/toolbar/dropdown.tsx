@@ -22,8 +22,8 @@ const Dropdown: FC<DropdownProps> = (
     renderItem,
   },
 ) => {
+  const { formatMessage } = useIntl();
   const [visible, setVisible] = useState(false);
-  const intl = useIntl();
 
   function renderMenuItems(items: ItemsType) {
     return items.map(item => {
@@ -76,7 +76,7 @@ const Dropdown: FC<DropdownProps> = (
       {overflowedIndicator || (
         <IconButton
           icon={<ToolOutlined />}
-          title={intl.formatMessage({ id: 'Tools' })}
+          title={formatMessage({ id: 'Tools' })}
           className={`${prefixCls}-indicator`}
         />
       )}
