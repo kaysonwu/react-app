@@ -16,7 +16,7 @@ describe('Test locale util', () => {
     window.dispatchEvent = dispatchEvent;
 
     setLocale('en-US', false);
-   
+
     expect(getLocale()).toEqual('en-US');
     expect(dispatchEvent.mock.results.length).toBe(1);
 
