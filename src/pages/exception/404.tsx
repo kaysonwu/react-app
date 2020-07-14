@@ -1,8 +1,26 @@
-import React from 'react';
+import React, { FC } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useIntl } from 'react-intl';
+import { Result, Button } from 'antd';
 
-export default (props: any) => {
-  console.log(props);
+const NotFound: FC = () => {
+  const { replace } = useHistory();
+  const { formatMessage } = useIntl();
+
   return (
-    <div>Not found page!</div>
-  )
-}
+    <>
+      <Result
+        status="404"
+        title={formatMessage({ id: 'Not Found' })}
+        subTitle={formatMessage({ id: 'Sorry, the page you visited does not exist.' })}
+        extra={(
+          <Button type="primary" onClick={() => replace('/')}>
+            {formatMessage({ id: 'Back Home' })}
+          </Button>
+        )}
+      />
+    </>
+  );
+};
+
+export default NotFound;
