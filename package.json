@@ -20,6 +20,7 @@
     "classnames": "^2.2.0",
     "cookie": "^0.3.0",
     "dayjs": "^1.8.28",
+    "formidable": "^1.2.2",
     "is-mobile": "^2.2.2",
     "omit.js": "^2.0.2",
     "path-to-regexp": "^6.0.0",
