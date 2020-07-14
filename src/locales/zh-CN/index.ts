@@ -81,6 +81,10 @@ const zhCN: Locale = {
   'Unfixed': '不固定',
   'Right Fixed': '固定在右侧',
 
+  // Upload
+  'File type': '{label} 应是一个类型为 {types} 的文件',
+  'File size': '{label} 必须小于 {size}',
+
   // Exception
   'Back Home': '返回首页',
   'Go Back': '回到之前',
