@@ -32,28 +32,48 @@
       }
     }
 
-    .@{prefix}-item-label {
-      > label {
-        height: auto;
-        color: @text-color;
+    .@{prefix}-item {
+      &-label {
+        > label {
+          height: auto;
+          color: @text-color;
+        }
+
+        + .@{ant-prefix}-form-item-control .@{ant-prefix} {
+          &-input,
+          &-input-number,
+          &-input-number-input,
+          &-input-affix-wrapper,
+          &-picker,
+          &-mentions,
+          &-mentions > textarea,
+          &-mentions-measure,
+          &-cascader-picker-label,
+          &-select-selector,
+          &-color-picker {
+            padding-left: 0;
+          }
+
+          &-select-selector-placeholder,
+          &-color-picker-placeholder,
+          &-select-selection-search {
+            left: 0;
+          }
+        }
       }
 
-      + .@{ant-prefix}-form-item-control .@{ant-prefix} {
-        &-input,
-        &-input-number,
-        &-input-number-input,
-        &-picker,
-        &-mentions,
-        &-mentions > textarea,
-        &-mentions-measure,
-        &-cascader-picker-label,
-        &-select-selector {
-          padding-left: 0;
-        }
+      // &-control-input {
+      //   min-height: 0;
+      // }
 
-        &-select-selection-search {
-          left: 0;
+      &-control-input-content {
+        > .@{ant-prefix}-switch:only-child {
+          float: right;
         }
+      }
+
+      &-explain {
+        position: absolute;
       }
     }
 
@@ -61,18 +81,19 @@
       &-input,
       &-input-group-addon,
       &-input-number,
+      &-input-affix-wrapper,
       &-picker,
       &-cascader-picker,
       &-mentions,
       &-select-selector {
-        top: -@border-width-base;
         background-color: transparent !important;
-        border-color: transparent !important;
+        border: none !important;
         outline: none;
       }
 
       &-input:focus,
       &-input-number-focused,
+      &-input-affix-wrapper-focused,
       &-picker-focused,
       &-mentions-focused,
       &-cascader-picker:focus .@{ant-prefix}-cascader-input,
@@ -104,7 +125,14 @@
   .@{prefix} {
     & &-item {
       .@{prefix}-item {
-        &-label,
+        &-label {
+          flex: 0 1 auto;
+
+          > label::after {
+            display: block;
+          }
+        }
+
         &-control {
           flex: 1 1 0;
         }

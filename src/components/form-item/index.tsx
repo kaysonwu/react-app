@@ -24,8 +24,15 @@ interface Props extends FormItemProps {
   bordered?: boolean;
 }
 
-const FormItem: FC<Props> = ({ bordered = true, className: customizeClassName, ...props }) => {
-  const intl = useIntl();
+const FormItem: FC<Props> = (
+  {
+    bordered = true,
+    noStyle,
+    className: customizeClassName,
+    ...props
+  },
+) => {
+  const { formatMessage } = useIntl();
   const [focused, setFocused] = useState(false);
   const { getPrefixCls } = useContext(ConfigContext);
   let { name, label } = props;
@@ -42,8 +49,8 @@ const FormItem: FC<Props> = ({ bordered = true, className: customizeClassName, .
     name = name.split('.');
   }
 
-  if (!label && name) {
-    label = intl.formatMessage({ id: studly(name as string) });
+  if (!noStyle && !label && name) {
+    label = formatMessage({ id: studly(name as string) });
   }
 
   return (
@@ -51,6 +58,7 @@ const FormItem: FC<Props> = ({ bordered = true, className: customizeClassName, .
       {...props}
       name={name}
       label={label}
+      noStyle={noStyle}
       className={className}
       // @ts-ignore
       onFocus={e => isInput(e.target) && setFocused(true)}
