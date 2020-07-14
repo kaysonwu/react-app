@@ -1,13 +1,11 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Page from '@/components/page';
+import { Content as Page } from '@/components/layout';
 
-const Home = () => {
-  return (
-    <Page>
-      <FormattedMessage id="Start your imagination here!" />
-    </Page>
-  );
-}
+const Home = () => (
+  <Page>
+    <FormattedMessage id="Start your imagination here!" />
+  </Page>
+);
 
 export default Home;
