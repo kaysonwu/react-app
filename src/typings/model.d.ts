@@ -94,9 +94,7 @@ interface Model<S = any, A extends Action = AnyAction> {
 }
 
 type LoadingState = {
-  showing?: boolean;
   submitting?: boolean;
-  deleting?: boolean;
   loading?: boolean;
 };
 
