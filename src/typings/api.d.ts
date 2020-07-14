@@ -10,11 +10,14 @@ interface IUser {
   id: number;
   avatar: string;
   name: string;
+  sex?: number;
   level?: IUserLevel;
   phone?: string;
   balance?: string;
   points?: string;
   state?: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface IMenu {
@@ -24,7 +27,7 @@ interface IMenu {
   url: string;
   icon?: string;
   hide?: boolean;
-  isGroup?: boolean;
+  is_group?: boolean;
   disabled?: boolean;
   children?: IMenu[];
 }

@@ -1,23 +1,20 @@
+import { IMock } from 'serve-mock';
 import { delays } from 'serve-mock/utils';
 
-const proxies = {
-  'GET /v1/currentUser': {
-    id: 1, 
-    name: 'kayson', 
-    avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' 
-  },
-  'GET /v1/menus': [
-    {
-      key: 1,
-      name: 'Home',
-      url: '/'
-    },
-    {
-      key: 2,
-      name: 'User',
-      url: '/user',
-    },
-  ],
+const user: IUser = {
+  id: 1,
+  name: 'kayson',
+  avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
 };
 
-export default delays(proxies, 100, 1500);
+const menus: IMenu[] = [
+  { id: 1, name: 'Home', url: '/' },
+  { id: 2, name: 'User', url: '/user' },
+];
+
+const mock: IMock = {
+  'GET /v1/currentUser': user,
+  'GET /v1/menus': menus,
+};
+
+export default delays(mock, 100, 1500);
