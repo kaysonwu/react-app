@@ -65,6 +65,8 @@ const zhCN: Locale = {
   'Action': '操作',
   'Download': '下载',
 
+  'Are you sure delete?': '你确定要删除吗？',
+
   // Page Head DropwonMenu
   'Account Settings': '个人设置',
   'Logout': '退出',

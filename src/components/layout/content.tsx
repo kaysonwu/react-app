@@ -1,6 +1,6 @@
-import React, { ReactNode, FC, useEffect } from 'react';
-import { useIntl } from 'react-intl';
+import React, { ReactNode, FC, useContext, useEffect } from 'react';
 import { Layout } from 'antd';
+import AppContext from '../application/context';
 import PageHeader, { PageHeaderProps } from '../page-header';
 
 interface ContentProps extends PageHeaderProps {
@@ -19,13 +19,14 @@ const Content: FC<ContentProps> = (
     ...props
   },
 ) => {
-  const { formatMessage } = useIntl();
+  const { getPageTitle } = useContext(AppContext);
 
   useEffect(() => {
     if (title) {
-      document.title = `${title} - ${formatMessage({ id: 'App Name' })}`;
+      document.title = getPageTitle(title as string);
     }
-  }, [formatMessage, title]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title]);
 
   return (
     <Layout.Content

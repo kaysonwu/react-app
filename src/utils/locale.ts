@@ -1,5 +1,6 @@
 import { serialize, parse } from 'cookie';
 import { IncomingHttpHeaders } from 'http';
+import { IntlShape, IntlFormatters } from 'react-intl';
 
 const LANGUAGE_KEY = 'locale';
 
@@ -42,3 +43,51 @@ export function __getLocale__(headers: IncomingHttpHeaders, fallback = 'zh-CN') 
     || fallback;
 }
 // #endif
+
+let intl: IntlShape | undefined;
+const intlApi = {} as IntlFormatters;
+
+// @Internal Don't modify it
+// Used to expose the react-intl API
+export function injectionIntl(intlShap: IntlShape) {
+  intl = intlShap;
+}
+
+([
+  'formatDate',
+  'formatTime',
+  'formatDateToParts',
+  'formatTimeToParts',
+  'formatRelativeTime',
+  'formatNumber',
+  'formatNumberToParts',
+  'formatPlural',
+  'formatMessage',
+  'formatList',
+  'formatDisplayName',
+] as (keyof IntlFormatters)[]).forEach(method => {
+  intlApi[method] = (...args: any[]) => {
+    if (intl?.[method]) {
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return intl[method].call(intl, ...args) as any;
+    }
+
+    throw new Error(`react-intl ${method} not initialized yet, you should use it after react app mounted.`);
+  };
+});
+
+
+export const {
+  formatDate,
+  formatTime,
+  formatDateToParts,
+  formatTimeToParts,
+  formatRelativeTime,
+  formatNumber,
+  formatNumberToParts,
+  formatPlural,
+  formatMessage,
+  formatList,
+  formatDisplayName,
+} = intlApi;

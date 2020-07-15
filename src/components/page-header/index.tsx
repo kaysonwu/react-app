@@ -2,7 +2,7 @@ import React, { ReactNode, CSSProperties, FC, useState, useContext } from 'react
 import ResizeObserver from 'rc-resize-observer';
 import classNames from 'classnames';
 import { ConfigContext } from 'antd/lib/config-provider';
-import AppContext from '../layout/context';
+import AppContext from '../application/context';
 import renderBreadcrumb from './breadcrumb';
 import renderHeader, { HeaderProps } from './header';
 import renderContent, { ContentProps } from './content';
@@ -35,8 +35,8 @@ const PageHeader: FC<PageHeaderProps> = props => {
     ...headerProps
   } = props;
   const [compact, updateCompact] = useState(false);
-  const { getPageTitle, routes } = useContext(AppContext);
-  const title = getPageTitle(undefined, customizeTitle as string);
+  const { routes, getPageTitle } = useContext(AppContext);
+  const title = getPageTitle(customizeTitle as string, false);
   const breadcrumb = hideBreadcrumb ? null : renderBreadcrumb(routes, showBreadcrumbIcon);
   const { getPrefixCls, pageHeader, direction } = useContext(ConfigContext);
 

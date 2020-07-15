@@ -29,6 +29,10 @@ module.exports = {
     'no-restricted-syntax': 'off',
     'no-shadow': 'off',
     'arrow-parens': ['error', 'as-needed'],
+    'prefer-const': ['error', {
+      destructuring: 'all',
+      ignoreReadBeforeAssign: true,
+    }],
     'generator-star-spacing': ['error', {
       before: false,
       after: true,

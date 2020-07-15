@@ -1,16 +1,13 @@
-import React, { CSSProperties, FC, useContext, useMemo, useEffect } from 'react';
+import React, { CSSProperties, FC, useState, useContext, useEffect } from 'react';
 import classNames from 'classnames';
-import omit from 'omit.js';
-import { useLocation } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
-import { Layout, Drawer, Spin } from 'antd';
+import { Layout, Drawer } from 'antd';
 import { CopyrightOutlined } from '@ant-design/icons';
 import { ConfigContext } from 'antd/lib/config-provider';
 import { useToggle } from '@/hooks';
+import { getTheme } from '@/utils/theme';
 import { normalizeIcon } from '../icon';
-import { getPathRoutes } from './util';
-import Context from './context';
+import AppContext from '../application/context';
 import Header from './header';
 import Sider from './sider';
 import Footer from './footer';
@@ -23,38 +20,32 @@ interface PageProps {
 
 const Basic: FC<PageProps> = ({ children, className: customizeClassName, style }) => {
   const [collapsed, { toggle: onCollapse }] = useToggle(false, true);
-  const { isMobile, theme, user, menus, links } = useSelector(
-    ({ global }: ConnectState) => omit(global, ['loading']),
-  );
+  const { isMobile, routes, state: { user, menus, links }, getPageTitle } = useContext(AppContext);
+  const [theme, setTheme] = useState(() => getTheme({
+    layout: 'top',
+    style: 'light-dark',
+    color: '#1890ff',
+    contentWidth: true,
+    fixedHeader: true,
+  }));
 
-  // TODO 移动到 model 里面去
   const logo = 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
-
   const { formatMessage } = useIntl();
+
+  // Style
   const { getPrefixCls } = useContext(ConfigContext);
+  const prefixCls = getPrefixCls('layout-basic');
+  const { layout, colorWeak, style: themeStyle, fixedHeader, fixSiderbar } = theme;
+  const headTheme = themeStyle === 'light' || themeStyle === 'light-dark' ? 'light' : 'dark';
+  const siderTheme = themeStyle === 'dark' || themeStyle === 'light-dark' ? 'dark' : 'light';
+  const className = classNames(prefixCls, customizeClassName, {
+    [`${prefixCls}-color-weak`]: colorWeak,
+    [`${prefixCls}-fixed-header`]: fixedHeader,
+    [`${prefixCls}-fixed-siderbar`]: fixSiderbar,
+  });
 
-  const { pathname } = useLocation();
-  const routes = useMemo(() => menus && getPathRoutes(menus, pathname), [menus, pathname])!;
-
-  function getPageTitle(suffix?: string, customizeTitle?: string) {
-    let title = customizeTitle;
-
-    if (!title) {
-      const name = routes[routes.length - 1]?.name;
-      if (name) {
-        title = formatMessage({ id: name });
-      }
-    }
-
-    if (suffix) {
-      return title ? `${title} - ${suffix}` : suffix;
-    }
-
-    return title!;
-  }
-
-  const selectedKeys = routes?.map(route => String(route.id));
-  const title = routes && getPageTitle(formatMessage({ id: 'App Name' }));
+  const title = getPageTitle();
+  const selectedKeys = routes.map(route => String(route.id));
 
   useEffect(() => {
     const node = document.getElementById('app-loading');
@@ -69,23 +60,8 @@ const Basic: FC<PageProps> = ({ children, className: customizeClassName, style }
     document.title = title;
   }, [title]);
 
-  if (menus === undefined) {
-    return <Spin />;
-  }
-
-  // Style
-  const prefixCls = getPrefixCls('layout-basic');
-  const { layout, colorWeak, style: themeStyle, fixedHeader, fixSiderbar } = theme;
-  const headTheme = themeStyle === 'light' || themeStyle === 'light-dark' ? 'light' : 'dark';
-  const siderTheme = themeStyle === 'dark' || themeStyle === 'light-dark' ? 'dark' : 'light';
-  const className = classNames(prefixCls, customizeClassName, {
-    [`${prefixCls}-color-weak`]: colorWeak,
-    [`${prefixCls}-fixed-header`]: fixedHeader,
-    [`${prefixCls}-fixed-siderbar`]: fixSiderbar,
-  });
-
   const childrenNode = (
-    <Context.Provider value={{ routes, getPageTitle }}>
+    <>
       {children}
       <Footer
         links={links}
@@ -100,7 +76,7 @@ const Basic: FC<PageProps> = ({ children, className: customizeClassName, style }
         )}
         prefixCls={prefixCls}
       />
-    </Context.Provider>
+    </>
   );
 
   if (isMobile) {

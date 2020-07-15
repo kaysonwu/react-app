@@ -1,6 +1,5 @@
-import React, { FC, useEffect } from 'react';
-import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
-import { useIntl } from 'react-intl';
+import React, { FC } from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { Spin } from 'antd';
 import Page from '../loadable/page';
 import { Basic } from '../layout';
@@ -9,29 +8,27 @@ const Router: FC = () => {
   let loading;
 
   // #if WEB
-  const intl = useIntl();
-  const history = useHistory();
-
   // eslint-disable-next-line prefer-const
   loading = <Spin />;
-
-  useEffect(() => {
-    window.intl = intl;
-    window.route = history;
-  }, [intl, history]);
   // #endif
 
   return (
     <Basic>
       <Switch>
         <Route path="/user">
-          <Page path="user" fallback={loading} />
+          <Page path="user" loading={loading} />
         </Route>
         <Route path="/exception/404">
-          <Page path="exception/404" fallback={loading} />
+          <Page path="exception/404" loading={loading} />
+        </Route>
+        <Route path="/exception/403">
+          <Page path="exception/403" loading={loading} />
+        </Route>
+        <Route path="/exception/500">
+          <Page path="exception/500" loading={loading} />
         </Route>
         <Route exact path="/">
-          <Page path="home" fallback={loading} />
+          <Page path="home" loading={loading} />
         </Route>
         <Redirect from="*" to="/exception/404" />
       </Switch>

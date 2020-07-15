@@ -1,4 +1,4 @@
-interface Locale extends Record<string, string> {
+interface Locale {
   /**
    * Antd component language pack.
    *

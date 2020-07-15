@@ -47,4 +47,24 @@ function filter(data: IUser[], query: ParsedUrlQuery) {
   return data;
 }
 
-export default delays(resource('/v1/users', users, { validator, filter, echo: true }), 100, 1500);
+function pagination(records: unknown[], query: ParsedUrlQuery) {
+  if (query.simple) {
+    return records;
+  }
+
+  const { page = 1, pageSize = 15 } = query;
+  const current = Math.max(1, Number(page));
+  const size = Math.max(1, Number(pageSize));
+
+  const start = (current - 1) * size;
+  const end = start + size;
+
+  return {
+    data: records.slice(start, end),
+    current_page: current,
+    per_page: size,
+    total: records.length,
+  };
+}
+
+export default delays(resource('/v1/users', users, { validator, filter, pagination, echo: true }), 100, 1500);

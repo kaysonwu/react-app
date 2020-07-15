@@ -4,6 +4,8 @@ import axios, { AxiosRequestConfig, AxiosInterceptorManager, AxiosResponse } fro
 import { stringify } from 'qs';
 import { message } from 'antd';
 import { FormInstance } from 'antd/lib/form';
+import { push } from '../route';
+import { formatMessage } from '../locale';
 
 export type ParamsType = Record<string, any>;
 
@@ -110,7 +112,7 @@ instance.interceptors.response.use(res => {
     form.resetFields();
 
     if (typeof response === 'string') {
-      message.success(response || window.intl.formatMessage({ id: 'Successful operation' }));
+      message.success(response || formatMessage({ id: 'Successful operation' }));
       return true;
     }
   }
@@ -132,13 +134,13 @@ instance.interceptors.response.use(res => {
         window.location.href = data;
         return;
       case 403:
-        window.route.push('/exception/404');
+        push('/exception/404');
         return;
       case 404:
         message.error(data);
         return;
       case 500:
-        window.route.push('/exception/500');
+        push('/exception/500');
         return;
       default: // TODO 更多的错误拦截
     }
