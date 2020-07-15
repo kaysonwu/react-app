@@ -1,13 +1,7 @@
 import React, { FC, CSSProperties, MouseEventHandler, useMemo } from 'react';
 import classNames from 'classnames';
 import { Layout, Spin, Avatar } from 'antd';
-import {
-  GlobalOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  SettingOutlined,
-  PoweroffOutlined,
-} from '@ant-design/icons';
+import { GlobalOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined, PoweroffOutlined } from '@ant-design/icons';
 import { SelectParam } from 'antd/lib/menu';
 import { getLocale, setLocale } from '@/utils/locale';
 import DropdownMenu, { MenuItem } from '../dropdown-menu';

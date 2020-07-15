@@ -1,13 +1,6 @@
 import { IntlShape } from 'react-intl';
 import { studly } from '@/utils/string';
-import {
-  ColumnsType,
-  ColumnType,
-  ColumnGroupType,
-  NormalizeColumnsType,
-  NormalizeColumnType,
-  NormalizeColumnGroupType,
-} from './interface';
+import { ColumnsType, ColumnType, ColumnGroupType, NormalizeColumnsType, NormalizeColumnType, NormalizeColumnGroupType } from './interface';
 
 export function isDefaultVisible(column: { required?: boolean; defaultVisible?: boolean }) {
   return Boolean(column.required || column.defaultVisible);
