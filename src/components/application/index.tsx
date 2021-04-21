@@ -62,6 +62,11 @@ const Application: FC<ApplicationProps> = ({ isMobile, state: initialState, loca
   // #endif
 
   function getPageTitle(customizeTitle?: string, signed = true) {
+    // There is no legal route.
+    if (routes.length < 1) {
+      return formatMessage({ id: 'App Name' });
+    }
+
     const title = customizeTitle || formatMessage({ id: routes[routes.length - 1]?.name });
 
     if (signed) {
