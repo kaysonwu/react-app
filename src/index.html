@@ -3,13 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <script type="text/javascript" src="https://polyfill.io/v3/polyfill.min.js?features=Object.assign%2CPromise%2CPromise.prototype.finally"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <script type="text/javascript">
       var ua = navigator.userAgent;
       // lte IE 11
       if (ua.indexOf('compatible') > -1 && ua.indexOf('MSIE') > -1) {
-        window.location.href = 'update-browser.html';
+        window.location.href = '/update-browser.html';
+      } else if ('ActiveXObject' in window) {
+        var script = document.createElement('script');
+
+        script.src = "https://polyfill.io/v3/polyfill.min.js?features=es7%2Ces6"
+        script.language = 'javascript';
+        script.type = 'text/javascript';
+
+        document.getElementsByTagName('head').item(0).appendChild(script);
       }
     </script>
   </head>
