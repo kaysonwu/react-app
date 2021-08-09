@@ -10,23 +10,21 @@ interface ModuleProps {
 }
 
 const Module = loadable.lib(
-  props => import(/* webpackChunkName: "pages/[request]" */`@/pages/${(props as ModuleProps).path}`),
-  { cacheKey: props => `pages/${props.path}` },
+  (props: ModuleProps) => import(`@/pages/${props.path}`),
+  { cacheKey: (props) => `pages/${props.path}` },
 );
 
 function wrapInitialPropsFetch(Component: ComponentType, loading: ReactNode): FC {
   return props => {
     const [initialProps, setInitialProps] = useState(() => pullInitialProps('page'));
 
-    // #if WEB
+    // #if IS_BROWSER
     if (initialProps === undefined
       && Component.getInitialProps
     ) {
       Component.getInitialProps(makeRequestContext())
         .then(props => setInitialProps(props))
-        .catch(() => {
-          // TODO Page errors can use interceptor
-        });
+        .catch(error => console.error(error));
 
       return <>{loading}</>;
     }
@@ -36,7 +34,7 @@ function wrapInitialPropsFetch(Component: ComponentType, loading: ReactNode): FC
   };
 }
 
-const Page = <P extends object = {}>({ path, loading, ...props }: P & ModuleProps) => (
+const Page = <P extends ModuleProps>({ path, loading, ...props }: P) => (
   <Module path={path} fallback={loading}>
     {(module: ModuleType) => {
       const Component = wrapInitialPropsFetch(module.default, loading);

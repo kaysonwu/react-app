@@ -4,8 +4,12 @@ import { onLoadError } from '@/utils/loadable';
 
 type ModuleType = { default: Locale };
 
+type ModuleProps = {
+  path: string;
+};
+
 const Module = loadable.lib(
-  props => import(/* webpackChunkName: "locales/[request]" */`@/locales/${(props as { path: string }).path}`).catch(onLoadError),
+  (props: ModuleProps) => import(`@/locales/${props.path}`).catch(onLoadError),
   { cacheKey: props => `locales/${props.path}` },
 );
 
@@ -22,6 +26,6 @@ function reduce(children: Function, path: string) {
   );
 }
 
-export default function Locale(props: LocaleProps) {
-  return props.paths.reduceRight(reduce, props.children)({}) as JSX.Element;
+export default function Locale({ paths, children }: LocaleProps) {
+  return paths.reduceRight(reduce, children)({}) as JSX.Element;
 }

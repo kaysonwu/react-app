@@ -7,8 +7,14 @@ import { injectionIntl } from '@/utils/locale';
 import Loadable from '../loadable/locale';
 
 interface LocaleProviderProps extends Omit<ConfigProviderProps, 'locale' | 'form'> {
+  /**
+   * Indicate the current locale.
+   */
   locale: string;
-  // Language files. path relative to @/locales
+
+  /**
+   * Indicate the locale language files path. path relative to @/locales.
+   */
   files?: string[];
 }
 

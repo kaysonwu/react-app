@@ -1,100 +1,68 @@
-import React, { FC, useReducer, useMemo } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
-import { getPathRoutes, injectionRoute } from '@/utils/route';
-import { LANGUAGE_CHANGE, formatMessage } from '@/utils/locale';
-// #if WEB
+import React, { FC, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import isMobile from 'is-mobile';
+import { LOCALE_CHANGE } from '@/utils/locale';
+// #if IS_BROWSER
 import { getNameFromPath } from '@/utils/loadable';
-import { ErrorResponse, get } from '@/utils/request';
 import { makeRequestContext } from '@/utils/store';
 // #endif
 import LocaleProvider from '../locale-provider';
 import App, { GlobalState } from './context';
-import reducer from './reducer';
 import Router from './router';
 
 export interface ApplicationProps {
-  isMobile: boolean;
+  /**
+   * Application Locale Configuration.
+   */
   locale: string;
+
+  /**
+   * Global Props.
+   */
   state?: GlobalState;
-  page?: string;
 }
 
-const Application: FC<ApplicationProps> = ({ isMobile, state: initialState, locale, page }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { pathname } = useLocation();
+const Application: FC<ApplicationProps> = ({ state: initialState, locale }) => {
+  const [state, setState] = useState(initialState);
+  const files = [locale, `${locale}/${getNameFromPath(useLocation().pathname)}`];
 
-  const { menus } = state || {};
-  const routes = useMemo(() => menus && getPathRoutes(menus, pathname), [menus, pathname])!;
-
-  injectionRoute(useHistory());
-
-  // #if WEB
+  // #if IS_BROWSER
   let setLocale: React.Dispatch<React.SetStateAction<string>>;
-  // eslint-disable-next-line no-param-reassign
-  [locale, setLocale] = React.useState(locale);
-  // eslint-disable-next-line no-param-reassign
-  page = getNameFromPath(pathname);
+  [locale, setLocale] = useState(locale);
 
-  function onLanguageChange(e: Event) {
+  function onLocaleChange(e: Event) {
     setLocale((e as CustomEvent).detail.locale);
   }
 
   React.useEffect(() => {
-    window.addEventListener(LANGUAGE_CHANGE, onLanguageChange);
+    window.addEventListener(LOCALE_CHANGE, onLocaleChange);
     return () => {
-      window.removeEventListener(LANGUAGE_CHANGE, onLanguageChange);
+      window.removeEventListener(LOCALE_CHANGE, onLocaleChange);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (state === undefined) {
     Application.getInitialProps!(makeRequestContext())
-      .then(props => dispatch({ type: 'initial', payload: props.state! }))
-      .catch(error => {
-        const { response: { status, data } } = error as ErrorResponse;
-        if (status === 401) {
-          window.location.href = data;
-        }
-      });
+      .then(props => setState(props.state))
+      .catch(error => console.error(error));
 
     return null;
   }
   // #endif
 
-  function getPageTitle(customizeTitle?: string, signed = true) {
-    // There is no legal route.
-    if (routes.length < 1) {
-      return formatMessage({ id: 'App Name' });
-    }
-
-    const title = customizeTitle || formatMessage({ id: routes[routes.length - 1]?.name });
-
-    if (signed) {
-      return `${title} - ${formatMessage({ id: 'App Name' })}`;
-    }
-
-    return title;
-  }
-
   return (
-    <LocaleProvider locale={locale} files={page ? [locale, `${locale}/${page}`] : undefined}>
-      <App.Provider value={{ isMobile, routes, state, dispatch, getPageTitle }}>
+    <LocaleProvider locale={locale} files={files}>
+      <App.Provider value={{ state }}>
         <Router />
       </App.Provider>
     </LocaleProvider>
   );
 };
 
-// #if WEB
-Application.getInitialProps = async () => {
-  const [user, menus, links] = await Promise.all([
-    get('/v1/currentUser') as Promise<IUser>,
-    get('/v1/my/menus') as Promise<IMenu[]>,
-    get('/v1/links', { type: 'ic-footer' }) as Promise<ILink[]>,
-  ]);
+Application.getInitialProps = async (ctx) => {
+  const ua = ctx.request ? ctx.request.headers['user-agent'] : navigator.userAgent;
 
-  return { state: { user, menus, links } };
+  return { state: { isMobile: isMobile({ ua }) } };
 };
-// #endif
 
 export default Application;

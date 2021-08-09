@@ -10,8 +10,7 @@
 - [代码分离](code-splitting.md)
 - [懒加载](lazy-loading.md)  
 - [国际化](i18n.md)
-- ~~[模型数据流 1.x 分支](model.md)~~
-- [Hook 数据流](hook-data.md)
+- [Hook 数据流](hooks.md)
 - [服务端渲染](ssr.md)
 - [条件编译](conditional-compile.md)
 - [声明文件](declaration.md)

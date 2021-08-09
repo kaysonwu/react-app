@@ -1,19 +1,27 @@
 import { singular } from 'pluralize';
 
-// #if WEB
+// #if IS_BROWSER
 export function onLoadError() {
   // do nothing
 }
 // #endif
 
-export function getNameFromPath(path: string) {
+/**
+ * Parse the given path to a singular filename.
+ */
+export function getNameFromPath(path: string): string {
   if (!path || path === '/') {
     return 'home';
   }
 
-  return singular(
-    path.replace(/\/\d+\//, '/') // a/:id/b => a/b
-      .replace(/^\/|\/$/g, '')
-      .replace(/\//g, '-'), // a/b => a-b
-  );
+  const name = path.replace(/\/\d+\//, '/') // a/:id/b => a/b
+    .replace(/^\/|\/$/g, '')
+    .replace(/\//g, '-'); // a/b => a-b
+
+  // Special noun.
+  if (['goods'].includes(name)) {
+    return name;
+  }
+
+  return singular(name);
 }

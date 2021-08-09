@@ -53,51 +53,8 @@ const validateMessages = {
 const zhCN: Locale = {
   antd,
   validateMessages,
-  'Submit': '提交',
-  'Cancel': '取消',
-  'Submit And Continue': '提交并继续',
-  'New': '新建',
-  'Import': '导入',
-  'Export': '导出',
-  'Reset': '重置',
-  'Edit': '编辑',
-  'Delete': '删除',
-  'Action': '操作',
-  'Download': '下载',
-
-  'Are you sure delete?': '你确定要删除吗？',
-
-  // Page Head DropwonMenu
-  'Account Settings': '个人设置',
-  'Logout': '退出',
-  'English': 'English',
-  '简体中文': '简体中文',
-
-  // Menu
-  'Home': '首页',
-  'User': '用户',
-  'User Level': '用户等级',
-  'User Manage': '用户管理',
 
   'App Name': 'React 脚手架',
-  'Fetching': '正在获取数据...',
-  'Deleting': '正在删除记录...',
-
-  // Toolbar
-  'Tools': '工具箱',
-  'Please check the columns to be exported': '请勾选需要导出的列',
-  'Setting Column': '自定义列',
-  'Column Display': '列展示',
-  'Pin Left': '向左固定',
-  'Unpin': '取消固定',
-  'Pin Right': '向右固定',
-  'Left Fixed': '固定在左侧',
-  'Unfixed': '不固定',
-  'Right Fixed': '固定在右侧',
-
-  // Upload
-  'File type': '{label} 应是一个类型为 {types} 的文件',
-  'File size': '{label} 必须小于 {size}',
 
   // Exception
   'Back Home': '返回首页',

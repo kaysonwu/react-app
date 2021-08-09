@@ -1,31 +1,18 @@
 import { createContext } from 'react';
 
 export interface GlobalState {
-  user: IUser;
-  menus: IMenu[];
-  links: ILink[];
-}
+  /**
+   * Determine whether the device type is a mobile device.
+   */
+  isMobile: boolean;
 
-export interface ReducerAction extends Partial<GlobalState> {
-  type: keyof GlobalState;
+  [key: string]: any;
 }
 
 interface ContextProps {
-  isMobile: boolean;
-  routes: IMenu[];
   state: GlobalState;
-  dispatch: (action: ReducerAction) => void;
-  getPageTitle: (customizeTitle?: string, signed?: boolean) => string;
 }
 
 export default createContext<ContextProps>({
-  isMobile: false,
-  routes: [] as IMenu[],
-  state: {} as GlobalState,
-  dispatch() {
-    // Do nothing by default
-  },
-  getPageTitle() {
-    return '';
-  },
+  state: { isMobile: false },
 } as ContextProps);

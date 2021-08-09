@@ -1,3 +1,3 @@
 export default {
-  'Start your imagination here!': '从这里开始你的想象！',
+  'Hello React and Typescript!': 'Hello React and Typescript!',
 };

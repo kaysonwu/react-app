@@ -8,6 +8,3 @@ node_modules/
 
 # test
 coverage/
-
-# macos
-.Ds_Store

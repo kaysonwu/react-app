@@ -14,14 +14,14 @@ declare namespace React {
     pathname: string | null;
     query: Record<string, any>;
     // HTTP request object (server only)
-    req?: import('http').IncomingMessage;
+    request?: import('http').IncomingMessage;
   }
 
   interface FunctionComponent<P = {}> {
-    getInitialProps?: (request: RequestContext) => Promise<Partial<P>>;
+    getInitialProps?: (context: RequestContext) => Promise<Partial<P>>;
   }
 
   interface ComponentClass<P = {}> {
-    getInitialProps?: (request: RequestContext) => Promise<Partial<P>>;
+    getInitialProps?: (context: RequestContext) => Promise<Partial<P>>;
   }
 }
