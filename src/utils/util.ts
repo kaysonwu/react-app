@@ -6,6 +6,6 @@ const patterns = {
   ),
 };
 
-export function isURL(string: string) {
+export function isURL(string: string): boolean {
   return patterns.url.test(string);
 }

@@ -2,7 +2,7 @@ import { parse } from 'qs';
 import { parse as parseUrl } from 'url';
 import type { IncomingMessage } from 'http';
 
-export function pullInitialProps(key: string, defaultValue?: object) {
+export function pullInitialProps<T>(key: string, defaultValue?: T): T | undefined {
   const store = typeof window === 'undefined' ? global : window;
 
   if (typeof store.initialProps === 'undefined') {
@@ -10,7 +10,7 @@ export function pullInitialProps(key: string, defaultValue?: object) {
   }
 
   if (typeof store.initialProps === 'string') {
-    store.initialProps = JSON.parse(store.initialProps) as object;
+    store.initialProps = JSON.parse(store.initialProps) as T;
   }
 
   if (!Object.prototype.hasOwnProperty.call(store.initialProps, key)) {
@@ -39,7 +39,7 @@ export function makeRequestContext(request?: IncomingMessage): React.RequestCont
 /**
  * Store the global initial props on the window object.
  */
-export function createStateScript(props: object): string {
+export function createStateScript(props: Record<string, unknown>): string {
   return `
     <script type="text/javascript">
       window.initialProps = ${JSON.stringify(props).replace(/</g, '\\u003c')}

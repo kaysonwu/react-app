@@ -1,0 +1,42 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true,
+    "jest": true
+  },
+  "settings": {
+    "polyfills": ["Promise"]
+  },
+  "extends": [
+    "airbnb",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "plugin:compat/recommended",
+    "plugin:jest/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": ["jest", "@typescript-eslint"],
+  "rules": {
+    "import/extensions": "off",
+    "import/no-unresolved": ["error", {
+      "commonjs": false,
+      // 忽略模块别名以解除 import/no-unresolved 误报，当然还可以使用 import/resolver
+      // https://github.com/benmosher/eslint-plugin-import/blob/v2.20.2/README.md#resolvers
+      "ignore": ["^@/*", "^\\.+/*"]
+    }],
+    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+    // https://github.com/typescript-eslint/typescript-eslint/issues/2540#issuecomment-692866111
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": "error",
+    "@typescript-eslint/no-non-null-assertion": "off"
+  }
+}

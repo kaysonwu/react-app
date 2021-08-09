@@ -1,7 +1,7 @@
 import { singular } from 'pluralize';
 
 // #if IS_BROWSER
-export function onLoadError() {
+export function onLoadError(): void {
   // do nothing
 }
 // #endif

@@ -43,20 +43,17 @@ export function setLocale(locale: string, reload = true): void {
 }
 // #endif
 
-// #if IS_NODE_SERVER
-
 /**
  * Get the locale of the application from the request.
  */
 export function getLocaleFromRequest(request: IncomingMessage, fallback = 'zh-CN'): string {
   const { headers } = request;
 
-  return (headers['cookie'] && parse(headers['cookie'])[LOCALE_KEY])
+  return (headers.cookie && parse(headers.cookie)[LOCALE_KEY])
     || headers['accept-language']?.split(',')[0]
     || fallback;
 }
 
-// #else
 // @Internal Don't modify it
 let Intl: IntlShape | undefined;
 export const IntlFormatter = {} as IntlFormatters;
@@ -84,8 +81,8 @@ export function injectionIntl(intlShap: IntlShape): void {
 
   IntlFormatter[method] = (...parameters) => {
     if (Intl?.[method]) {
-      // @ts-ignore
-      return Intl[method].call(Intl, ...parameters) as any;
+      // @ts-expect-error: Wait for type inference upgrade.
+      return Intl[method].call(Intl, ...parameters) as never;
     }
 
     throw new Error(`react-intl ${method} not initialized yet, you should use it after react app mounted.`);
@@ -107,4 +104,3 @@ export const {
   formatListToParts,
   formatDisplayName,
 } = IntlFormatter;
-// #endif
