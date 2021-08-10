@@ -27,13 +27,13 @@ export default ({ paths, children  }: Props) => {
   return paths.reduceRight((fn, path) => {
     return (messages: Locale) => {
       return (
-        /* #if WEB */
+        /* #if IS_BROWSER */
         <ErrorBoundary fallback={() => fn(messages)}>
         {/* #endif */}
           <Locale path={path}>
             { ({ default: m }: any) => fn({ ...messages, ...m }) }
           </Locale>
-        {/* #if WEB */}
+        {/* #if IS_BROWSER */}
         </ErrorBoundary>
         /* #endif */
       );
@@ -42,7 +42,7 @@ export default ({ paths, children  }: Props) => {
 }
 ```
 
-[WEB](#预置的变量) 是预置的变量，通过 [babel-plugin-preprocessor symbols](https://github.com/kaysonwu/babel-plugin-preprocessor#options) 选项所定义的，用来区分编译的目标环境。
+[IS_BROWSER](#预置的变量) 是预置的变量，通过 [babel-plugin-preprocessor symbols](https://github.com/kaysonwu/babel-plugin-preprocessor#options) 选项所定义的，用来区分编译的目标环境。
 
 ### 内置指令
 
@@ -53,15 +53,15 @@ export default ({ paths, children  }: Props) => {
 ```js
 ...
 plugins: [
-  ['preprocessor', { symbols: { WEB: true } }],
+  ['preprocessor', { symbols: { IS_BROWSER: true } }],
   ...
 ],
 ```
 
-然后，使用这个 `WEB` 变量进行判断：
+然后，使用这个 `IS_BROWSER` 变量进行判断：
 
 ```js
-// #if WEB
+// #if IS_BROWSER
 console.log('hello browser!');
 // #else
 console.log('hello world!');
@@ -77,8 +77,8 @@ console.log('hello browser!');
 ### 预置的变量
 
 - `SSR`：确定当前编译的运行目标是否要支持服务端渲染
-- `WEB`：确定当前编译的运行目标是否为浏览器
-- `NODE_SERVER`：确定当前编译的运行目标是否为 Node HTTP 服务器
+- `IS_BROWSER`：确定当前编译的运行目标是否为浏览器
+- `IS_NODE`：确定当前编译的运行目标是否为 Node
 
 ### 自定义指令
 
@@ -108,14 +108,14 @@ console.log('Kept');   // 这一行代码将被保留
 ```
 ### Typescript
 
-为了抑制错误，最简单的方式是在所有声明前使用 `// @ts-ignore`
+为了抑制错误，最简单的方式是在所有声明前使用 `// @ts-expect-error`
 
 ```ts
-// #if ENV = 'develop'
-// @ts-ignore
+// #if ENV === 'development'
+// @ts-expect-error: Use preprocessor instructions.
 const foo = 1;
 // #else
-// @ts-ignore
+// @ts-expect-error: Use preprocessor instructions.
 const foo = -1;
 // #endif
 ```
