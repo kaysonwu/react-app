@@ -7,10 +7,10 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "husky install",
+    "dev": "webpack server --progress",
     "build": "webpack --progress",
     "build:server": "rollup --config=./rollup.config.js",
-    "build:lib": "babel -d server src -x .ts,.tsx",
-    "start": "webpack server --progress"
+    "build:lib": "babel -d server src -x .ts,.tsx"
   },
   "browserslist": [
     "> 0.5%",
@@ -19,6 +19,9 @@
     "not dead",
     "ie > 10"
   ],
+  "lint-staged": {
+    "*.{ts,tsx,less}": "prettier --write"
+  },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
     "@loadable/component": "^5.14.0",
