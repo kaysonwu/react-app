@@ -186,7 +186,7 @@ yarn start
   
 <p align="center">
 <br />
-<a href="docs/README.md"><< 文档</a>
+<a href="/docs/README.md"><< 文档</a>
 &emsp;&emsp;&emsp;&emsp;
-<a href="docs/hooks.md">Hooks 数据流 >></a>
+<a href="/docs/hooks.md">Hooks 数据流 >></a>
 </p>

@@ -13,7 +13,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
 - 📦 [开箱即用](docs/getting-started.md)
 - 🌳 [基于 Typescript 构建](http://www.typescriptlang.org/)
 - 🌷 [内置 antd UI 框架](https://ant.design/)
-- 🌹 [一致的代码风格](docs/prettier)
+- 🌹 [一致的代码风格](docs/code-style.md)
 - ✂️ [代码分割](docs/code-splitting.md)
 - 🚀 [懒加载](docs/lazy-loading.md)   
 - 🌏 [国际化](docs/i18n.md)

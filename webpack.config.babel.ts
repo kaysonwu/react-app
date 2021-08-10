@@ -7,17 +7,15 @@ import nodeExternals from 'webpack-node-externals';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
-// @ts-ignore
+// @ts-expect-error: Waiting for declaration file.
 import AntdDayjsPlugin from 'antd-dayjs-webpack-plugin';
 import 'webpack-dev-server';
 
 type Flags = {
-
   /**
    * Environment passed to the configuration when it is a function.
    */
   env: {
-
     /**
      * true if serve|s is being used.
      */
@@ -39,7 +37,7 @@ type Flags = {
     ssr?: boolean;
 
     [key: string]: unknown;
-  },
+  };
 
   /**
    * Sets the build target.
@@ -55,7 +53,7 @@ type Flags = {
    * see: https://webpack.js.org/api/cli/#flags
    */
   [key: string]: any;
-}
+};
 
 const makeConfig = (target: string, mode: Configuration['mode'], ssr: boolean) => {
   const entryPath = resolve(__dirname, 'src');
@@ -124,15 +122,17 @@ const makeConfig = (target: string, mode: Configuration['mode'], ssr: boolean) =
           '!*-stats.json',
         ],
       }),
-      ssr ? new LoadablePlugin({
-        outputAsset: false,
-        writeToDisk: true,
-        filename: resolve(__dirname, 'server', `${target}-stats.json`),
-      }) : new HtmlPlugin({
-        template: join(entryPath, 'index.html'),
-      }),
+      ssr
+        ? new LoadablePlugin({
+            outputAsset: false,
+            writeToDisk: true,
+            filename: resolve(__dirname, 'server', `${target}-stats.json`),
+          })
+        : new HtmlPlugin({
+            template: join(entryPath, 'index.html'),
+          }),
     ],
-    devtool: false, //'cheap-module-source-map',
+    devtool: mode === 'development' ? 'cheap-module-source-map' : false,
     externalsPresets: { [target]: true },
     externals: target === 'node' ? [nodeExternals()] : undefined,
     devServer: {
@@ -145,7 +145,7 @@ const makeConfig = (target: string, mode: Configuration['mode'], ssr: boolean) =
       minimize: false,
       minimizer: [
         new TerserPlugin(),
-        new CssMinimizerPlugin()
+        new CssMinimizerPlugin(),
       ] as unknown as WebpackPluginInstance[],
       splitChunks: {
         cacheGroups: {
@@ -162,12 +162,10 @@ const makeConfig = (target: string, mode: Configuration['mode'], ssr: boolean) =
   return config;
 };
 
-export default (env: Flags['env'], argv: Flags) => {
-  const {
-    target = ['web'],
-    mode = env.WEBPACK_SERVE ? 'development' : 'production',
-  } = argv;
+export default (env: Flags['env'], argv: Flags): Configuration[] => {
+  const { target = ['web'], mode = env.WEBPACK_SERVE ? 'development' : 'production' } = argv;
 
-  return target.filter(t => ['web', 'node'].includes(t))
+  return target
+    .filter(t => ['web', 'node'].includes(t))
     .map((t, _, array) => makeConfig(t, mode, array.length > 1));
 };
