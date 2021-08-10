@@ -184,9 +184,9 @@ yarn start
 └── yarn.lock                           // yarn 依赖包缓存        
 ```
   
-<center>
+<p align="center">
 <br />
 <a href="docs/README.md"><< 文档</a>
-&emsp;&emsp;&emsp;&emsp;
+&emsp;&emsp;&emsp;&emsp;
 <a href="docs/hooks.md">Hooks 数据流 >></a>
-</center>
+</p>
