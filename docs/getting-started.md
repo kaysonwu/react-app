@@ -183,12 +183,10 @@ yarn start
 ├── tsconfig.json                       // Typescript 配置
 └── yarn.lock                           // yarn 依赖包缓存        
 ```
-
-<div style="clear: both; margin: 16px 0;">
-  <div style="float: left;">
-    <a href="docs/README.md"><< 文档</a>
-  </div>
-  <div style="float: right">
-    <a href="docs/hooks.md">Hooks 数据流 >></a>
-  </div>
-</div>
+  
+<center>
+<br />
+<a href="docs/README.md"><< 文档</a>
+&emsp;&emsp;&emsp;&emsp;
+<a href="docs/hooks.md">Hooks 数据流 >></a>
+</center>
