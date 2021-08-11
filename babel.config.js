@@ -6,7 +6,7 @@ module.exports = ({ caller }) => {
   const SSR = caller(c => c && c.ssr);
   const IS_BROWSER = target === 'web';
 
-  return {
+  const config = {
     presets: [
       '@babel/preset-react',
       '@babel/preset-typescript',
@@ -16,14 +16,6 @@ module.exports = ({ caller }) => {
       }],
     ],
     plugins: [
-      // Preprocessor will delete some irrelevant code, so it should be executed at the front.
-      ['preprocessor', {
-        symbols: {
-          SSR,
-          IS_BROWSER,
-          IS_NODE: target === 'node',
-        },
-      }],
      // ['@babel/plugin-transform-modules-commonjs', { importInterop: 'node', loose: true }],
       ['module-resolver', {
         alias: {
@@ -33,4 +25,17 @@ module.exports = ({ caller }) => {
       '@loadable/babel-plugin',
     ],
   };
+
+  if (name !== 'babel-jest') {
+    // Preprocessor will delete some irrelevant code, so it should be executed at the front.
+    config.plugins.unshift(['preprocessor', {
+      symbols: {
+        SSR,
+        IS_BROWSER,
+        IS_NODE: target === 'node',
+      },
+    }]);
+  }
+
+  return config;
 };

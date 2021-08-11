@@ -13,9 +13,7 @@ export const LOCALE_CHANGE = 'LocaleChange';
 export function getLocale(fallback = 'zh-CN'): string {
   // navigator.language minimum support IE11.
   // Use cookies instead of window.localStorage for better SSR compatibility
-  return parse(document.cookie)[LOCALE_KEY]
-    || navigator.language
-    || fallback;
+  return parse(document.cookie)[LOCALE_KEY] || navigator.language || fallback;
 }
 
 /**
@@ -41,7 +39,8 @@ export function setLocale(locale: string, reload = true): void {
     window.dispatchEvent(new CustomEvent(LOCALE_CHANGE, { detail: { locale } }));
   }
 }
-// #endif
+
+// #else
 
 /**
  * Get the locale of the application from the request.
@@ -49,10 +48,13 @@ export function setLocale(locale: string, reload = true): void {
 export function getLocaleFromRequest(request: IncomingMessage, fallback = 'zh-CN'): string {
   const { headers } = request;
 
-  return (headers.cookie && parse(headers.cookie)[LOCALE_KEY])
-    || headers['accept-language']?.split(',')[0]
-    || fallback;
+  return (
+    (headers.cookie && parse(headers.cookie)[LOCALE_KEY]) ||
+    headers['accept-language']?.split(',')[0] ||
+    fallback
+  );
 }
+// #endif
 
 // @Internal Don't modify it
 let Intl: IntlShape | undefined;
@@ -63,29 +65,32 @@ export function injectionIntl(intlShap: IntlShape): void {
   Intl = intlShap;
 }
 
-([
-  'formatDateTimeRange',
-  'formatDate',
-  'formatTime',
-  'formatDateToParts',
-  'formatTimeToParts',
-  'formatRelativeTime',
-  'formatNumber',
-  'formatNumberToParts',
-  'formatPlural',
-  'formatMessage',
-  'formatList',
-  'formatListToParts',
-  'formatDisplayName',
-] as (keyof IntlFormatters)[]).forEach(method => {
-
+(
+  [
+    'formatDateTimeRange',
+    'formatDate',
+    'formatTime',
+    'formatDateToParts',
+    'formatTimeToParts',
+    'formatRelativeTime',
+    'formatNumber',
+    'formatNumberToParts',
+    'formatPlural',
+    'formatMessage',
+    'formatList',
+    'formatListToParts',
+    'formatDisplayName',
+  ] as (keyof IntlFormatters)[]
+).forEach(method => {
   IntlFormatter[method] = (...parameters) => {
     if (Intl?.[method]) {
       // @ts-expect-error: Wait for type inference upgrade.
       return Intl[method].call(Intl, ...parameters) as never;
     }
 
-    throw new Error(`react-intl ${method} not initialized yet, you should use it after react app mounted.`);
+    throw new Error(
+      `react-intl ${method} not initialized yet, you should use it after react app mounted.`,
+    );
   };
 });
 

@@ -1,23 +1,25 @@
 ## 自动化测试
 
-[jest](https://jestjs.io/) 是一个令人愉悦的 Javascript 测试框架，通过它就可以实现自动化测试，而无需借助人工进行运行时测试。
+脚手架选用了由 Facebook 团队出品的 Javascript 测试框架 [jest](https://jestjs.io/)，[jest](https://jestjs.io/) 是一款优雅、简洁的 JavaScript 测试框架，[jest](https://jestjs.io/) 支持 [Babel](https://babeljs.io)、[TypeScript](https://www.typescriptlang.org)、[Node](https://nodejs.org)、[React](https://reactjs.org)、[Angular](https://angular.io)、[Vue](https://vuejs.org) 等诸多框架
+
+脚手架将测试代码与源代码分离，测试代码统一放置在 `tests` 文件夹内，并按照 `src` 目录结构进行组织，为了你能够更流畅的抒写测试代码，你首先需要熟悉 [jest](https://jestjs.io/) 并了解 [jest cli 选项](https://jestjs.io/zh-Hans/docs/cli)
 
 ### 测试命令
 
-```
+```shell
 yarn test --coverage
 ```
 
 #### 测试单个文件
 
-```
+```shell
 yarn test filename --coverage 
 ```
+#### 测试指定名称的测试用例
 
-#### 过滤测试
+```shell
+yarn test --testNamePattern "snake"
 
-### 模型测试
-
-### 组件测试
-
-### 测试模拟器
+// 缩写方式
+yarn test -t snake
+```

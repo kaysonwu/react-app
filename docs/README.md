@@ -10,7 +10,7 @@
 - [ ] [Hooks 数据流](hooks.md)
 - [x] [国际化](i18n.md)
 - [数据模拟](mock.md)
-- [自动化测试](testing.md)
+- [x] [自动化测试](testing.md)
 - [代码分离](code-splitting.md)
 - [x] [懒加载](lazy-loading.md)
 - [x] [条件编译](conditional-compile.md)

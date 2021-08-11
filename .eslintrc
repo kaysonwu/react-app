@@ -7,7 +7,7 @@
     "jest": true
   },
   "settings": {
-    "polyfills": ["Promise"]
+    "polyfills": ["Promise", "navigator.language"]
   },
   "extends": [
     "airbnb",

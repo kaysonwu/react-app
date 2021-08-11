@@ -10,7 +10,8 @@
     "dev": "webpack server --progress",
     "build": "webpack --progress",
     "build:server": "rollup --config=./rollup.config.js",
-    "build:lib": "babel -d server src -x .ts,.tsx"
+    "build:lib": "babel -d server src -x .ts,.tsx",
+    "test": "jest --rootDir tests --testEnvironment jsdom"
   },
   "browserslist": [
     "> 0.5%",
@@ -52,6 +53,7 @@
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@types/cookie": "^0.4.1",
     "@types/css-minimizer-webpack-plugin": "^3.0.0",
+    "@types/jest": "^27.0.0",
     "@types/loadable__component": "^5.13.0",
     "@types/loadable__server": "^5.12.0",
     "@types/loadable__webpack-plugin": "^5.7.0",
@@ -69,6 +71,7 @@
     "@typescript-eslint/eslint-plugin": "^4.0.0",
     "@typescript-eslint/parser": "^4.0.0",
     "antd-dayjs-webpack-plugin": "^1.0.0",
+    "babel-jest": "^27.0.0",
     "babel-loader": "^8.0.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-preprocessor": "https://github.com/kaysonwu/babel-plugin-preprocessor",

@@ -1,40 +1,40 @@
 import { lowerFirst, upperFirst, upperWords, studly, camel, snake, kebab } from '@/utils/string';
 
 describe('Test locale util', () => {
-  test('test lowerFirst', () => {
+  test('lowerFirst', () => {
     expect(lowerFirst('Words')).toEqual('words');
   });
 
-  test('test upperFirst', () => {
+  test('upperFirst', () => {
     expect(upperFirst('words')).toEqual('Words');
   });
 
-  test('test upperWords', () => {
+  test('upperWords', () => {
     expect(upperWords('hello world')).toEqual('Hello World');
     expect(upperWords('HELLO WORLD')).toEqual('HELLO WORLD');
     expect(upperWords('hello  world')).toEqual('Hello  World');
     expect(upperWords("i'm a baby")).toEqual("I'm A Baby");
   });
 
-  test('test studly', () => {
+  test('studly', () => {
     expect(studly('user_name')).toEqual('UserName');
     expect(studly('created-at')).toEqual('CreatedAt');
     expect(studly(['level', 'name'])).toEqual('LevelName');
   });
 
-  test('test camel', () => {
+  test('camel', () => {
     expect(camel('user_name')).toEqual('userName');
     expect(camel('created-at')).toEqual('createdAt');
     expect(camel('updated at')).toEqual('updatedAt');
   });
 
-  test('test snake', () => {
+  test('snake', () => {
     expect(snake('User Name')).toEqual('user_name');
     expect(snake('User Name', '__')).toEqual('user__name');
     expect(snake('userName')).toEqual('user_name');
   });
 
-  test('test kebab', () => {
+  test('kebab', () => {
     expect(kebab('User Name')).toEqual('user-name');
   });
 });
