@@ -13,8 +13,9 @@ yarn test --coverage
 #### 测试单个文件
 
 ```shell
-yarn test filename --coverage 
+yarn test filename --coverage
 ```
+
 #### 测试指定名称的测试用例
 
 ```shell

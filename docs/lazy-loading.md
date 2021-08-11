@@ -24,11 +24,11 @@ import Page from '@/components/loadable/page';
 
 `页面` 通常需要我们使用 `Page` 组件进行引入，而 `语言文件` 则只需要遵循命名约定即可完成自动加载。其中语言文件被细分为公共与页面两种文件类型，页面类型文件是可选的，如果存在则应当遵循以下命名约定：
 
-路由| 语言文件
----|---
-/  | {locale}/home.ts
-/posts | {locale}/post.ts
-/post/comments | {locale}/post-comment.ts
+| 路由           | 语言文件                 |
+| -------------- | ------------------------ |
+| /              | {locale}/home.ts         |
+| /posts         | {locale}/post.ts         |
+| /post/comments | {locale}/post-comment.ts |
 
 ### 自定义命名约定
 
@@ -60,6 +60,6 @@ export function getNameFromPath(path: string): string {
 
 以上修改后的约定将按以下格式进行匹配语言的页面文件
 
-路由| 语言文件
----|---
-/ | {locale}/base.ts
+| 路由 | 语言文件         |
+| ---- | ---------------- |
+| /    | {locale}/base.ts |

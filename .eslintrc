@@ -28,20 +28,21 @@
   "rules": {
     "no-console": ["error", { "allow": ["warn", "error"] }],
     "import/extensions": "off",
-    "import/no-unresolved": ["error", {
-      "commonjs": false,
-      // 忽略模块别名以解除 import/no-unresolved 误报，当然还可以使用 import/resolver
-      // https://github.com/benmosher/eslint-plugin-import/blob/v2.20.2/README.md#resolvers
-      "ignore": ["^@/*", "^\\.+/*"]
-    }],
-    "import/no-extraneous-dependencies": ["error", {
-      "devDependencies": [
-        "tests/**",
-        "scripts/**",
-        "mocks/**",
-        "*.config*.{js,ts}"
-      ]
-    }],
+    "import/no-unresolved": [
+      "error",
+      {
+        "commonjs": false,
+        // 忽略模块别名以解除 import/no-unresolved 误报，当然还可以使用 import/resolver
+        // https://github.com/benmosher/eslint-plugin-import/blob/v2.20.2/README.md#resolvers
+        "ignore": ["^@/*", "^\\.+/*"]
+      }
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": ["tests/**", "scripts/**", "mocks/**", "*.config*.{js,ts}"]
+      }
+    ],
     "react/prop-types": "off",
     "react/jsx-props-no-spreading": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
@@ -49,5 +50,6 @@
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "error",
     "@typescript-eslint/no-non-null-assertion": "off"
-  }
+  },
+  "ignorePatterns": ["public/**", "server/**"]
 }

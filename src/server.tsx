@@ -12,13 +12,15 @@ import { getNameFromPath } from './utils/loadable';
 import { getLocaleFromRequest } from './utils/locale';
 
 // const nodeExtractor = new ChunkExtractor({ statsFile: join(__dirname, 'node-stats.json') });
-const webExtractor = new ChunkExtractor({ statsFile: resolve(__dirname, 'web-stats.json'), entrypoints: ['app'] });
+const webExtractor = new ChunkExtractor({
+  statsFile: resolve(__dirname, 'web-stats.json'),
+  entrypoints: ['app'],
+});
 
 // const Application = nodeExtractor.requireEntrypoint('app').default as React.ComponentType<ApplicationProps>;
 const serve = serveStatic((webExtractor as any).stats.outputPath);
 
 const server = createServer((req, res) => {
-
   serve(req, res, async () => {
     const pathname = parseUrl(req.url!).pathname!;
     const page = getNameFromPath(pathname);
@@ -28,16 +30,16 @@ const server = createServer((req, res) => {
       <ChunkExtractorManager extractor={webExtractor}>
         <StaticRouter location={req.url}>
           <Application
-           // store={store}
+            // store={store}
             locale={getLocaleFromRequest(req)}
-           // page={hasLocaleFile(page) ? page : undefined}
+            // page={hasLocaleFile(page) ? page : undefined}
           />
         </StaticRouter>
-      </ChunkExtractorManager>
+      </ChunkExtractorManager>,
     );
 
     res.setHeader('Content-Type', 'text/html');
-    res. write(`
+    res.write(`
       <html>
         <head>
           ${webExtractor.getLinkTags()}
@@ -55,5 +57,5 @@ const server = createServer((req, res) => {
   });
 }).listen(process.env.port || 8080, () => {
   const { address, port } = server.address() as AddressInfo;
-  console.log('Server started http://%s:%d', (address === '::' ? 'localhost' : address), port);
+  console.log('Server started http://%s:%d', address === '::' ? 'localhost' : address, port);
 });

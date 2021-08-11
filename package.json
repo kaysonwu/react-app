@@ -11,7 +11,11 @@
     "build": "webpack --progress",
     "build:server": "rollup --config=./rollup.config.js",
     "build:lib": "babel -d server src -x .ts,.tsx",
-    "test": "jest --rootDir tests --testEnvironment jsdom"
+    "test": "jest --rootDir tests --testEnvironment jsdom",
+    "lint": "npm run lint:script && npm run lint:style",
+    "lint:script": "eslint . --ext '.js,.ts,.tsx'",
+    "lint:style": "stylelint stylelint 'src/**/*.less' --syntax less",
+    "prettier": "prettier -c --write '**/*'"
   },
   "browserslist": [
     "> 0.5%",
@@ -21,7 +25,9 @@
     "ie > 10"
   ],
   "lint-staged": {
-    "*.{ts,tsx,less}": "prettier --write"
+    "*.{js,ts,tsx}": "eslint --fix",
+    "*.less": "stylelint --fix",
+    "*.{js,ts,tsx,less}": "prettier --write"
   },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",

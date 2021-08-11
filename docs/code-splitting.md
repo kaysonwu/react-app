@@ -21,42 +21,42 @@
 
 **注意**：更改此选项将导致 `webpack` 使用 `typescript` 语言所编写的配置文件出现编译错误。这是因为 `node.js` 无法识别 `import` 和 `export` 等 `ES6` 模块语法。修复该错误有两个方法：
 
-  1. **【推荐】** 不使用 typescript 语言编写配置文件。因为配置文件属于低频类型。
-  2. 使用 [tsconfig-paths](https://www.npmjs.com/package/tsconfig-paths) 为 [ts-node](https://www.npmjs.com/package/ts-node) 单独指定一个 `typescript` 配置文件  
+1. **【推荐】** 不使用 typescript 语言编写配置文件。因为配置文件属于低频类型。
+2. 使用 [tsconfig-paths](https://www.npmjs.com/package/tsconfig-paths) 为 [ts-node](https://www.npmjs.com/package/ts-node) 单独指定一个 `typescript` 配置文件
 
-      ```shell
-      // 添加配置文件编译依赖包
-      yarn add -D ts-node@^8.0.0 
+   ```shell
+   // 添加配置文件编译依赖包
+   yarn add -D ts-node@^8.0.0
 
-      // 添加为 ts-node 提供独立配置的依赖包
-      yarn add -D tsconfig-paths@^3.0.0 cross-env@^7.0.0
+   // 添加为 ts-node 提供独立配置的依赖包
+   yarn add -D tsconfig-paths@^3.0.0 cross-env@^7.0.0
 
-      // 添加声明文件
-      yarn add -D @types/webpack@^4.0.0 @types/webpack-dev-server@^3.1.0 @types/webpack-merge@^4.1.0 @types/html-webpack-plugin@^3.2.0
-      ```
+   // 添加声明文件
+   yarn add -D @types/webpack@^4.0.0 @types/webpack-dev-server@^3.1.0 @types/webpack-merge@^4.1.0 @types/html-webpack-plugin@^3.2.0
+   ```
 
-      **./config/tsconfig-for-webpack.json**
+   **./config/tsconfig-for-webpack.json**
 
-      ```json
-      {
-        "compilerOptions": {
-          "module": "commonjs",
-          "target": "es5",
-          "esModuleInterop": true
-        }
-      }
-      ```
+   ```json
+   {
+     "compilerOptions": {
+       "module": "commonjs",
+       "target": "es5",
+       "esModuleInterop": true
+     }
+   }
+   ```
 
-      **package.json**
+   **package.json**
 
-      ```json
-      {
-        "scripts": {
-          "dev": "cross-env TS_NODE_PROJECT=\"./config/tsconfig-for-webpack.json\" webpack-dev-server --mode=development --config=./config/webpack.ts",
-          "build": "cross-env TS_NODE_PROJECT=\"./config/tsconfig-for-webpack.json\" webpack --mode=production --config=./config/webpack.ts"
-        }
-      }
-      ```
+   ```json
+   {
+     "scripts": {
+       "dev": "cross-env TS_NODE_PROJECT=\"./config/tsconfig-for-webpack.json\" webpack-dev-server --mode=development --config=./config/webpack.ts",
+       "build": "cross-env TS_NODE_PROJECT=\"./config/tsconfig-for-webpack.json\" webpack --mode=production --config=./config/webpack.ts"
+     }
+   }
+   ```
 
 #### Babel
 
@@ -70,7 +70,7 @@
 
 ```typescript
 import(
-  /* webpackChunkName: "pages/[request]" */  
+  /* webpackChunkName: "pages/[request]" */
   'module'
 );
 ```

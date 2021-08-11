@@ -12,10 +12,10 @@ import loadable from '@loadable/component';
 import ErrorBoundary from './boundary';
 
 const Locale = loadable.lib(
-  (props: any) => import(/* webpackChunkName: "locales/[request]" */`@/locales/${props.path}`),
+  (props: any) => import(/* webpackChunkName: "locales/[request]" */ `@/locales/${props.path}`),
   {
-    cacheKey: props => `locales/${props.path}`
-  }
+    cacheKey: props => `locales/${props.path}`,
+  },
 );
 
 interface Props {
@@ -23,23 +23,21 @@ interface Props {
   children: (messages: Locale) => React.ReactNode;
 }
 
-export default ({ paths, children  }: Props) => {
+export default ({ paths, children }: Props) => {
   return paths.reduceRight((fn, path) => {
     return (messages: Locale) => {
       return (
         /* #if IS_BROWSER */
         <ErrorBoundary fallback={() => fn(messages)}>
-        {/* #endif */}
-          <Locale path={path}>
-            { ({ default: m }: any) => fn({ ...messages, ...m }) }
-          </Locale>
-        {/* #if IS_BROWSER */}
+          {/* #endif */}
+          <Locale path={path}>{({ default: m }: any) => fn({ ...messages, ...m })}</Locale>
+          {/* #if IS_BROWSER */}
         </ErrorBoundary>
         /* #endif */
       );
-    }
+    };
   }, children)({}) as JSX.Element;
-}
+};
 ```
 
 [IS_BROWSER](#预置的变量) 是预置的变量，通过 [babel-plugin-preprocessor symbols](https://github.com/kaysonwu/babel-plugin-preprocessor#options) 选项所定义的，用来区分编译的目标环境。
@@ -96,7 +94,7 @@ plugins: [
 
 ```js
 // #secret
-console.log('wow');  // 这一行代码将被省略
+console.log('wow'); // 这一行代码将被省略
 ```
 
 **注意**：自定义指令仅影响其下一行代码，这意味着：
@@ -104,8 +102,9 @@ console.log('wow');  // 这一行代码将被省略
 ```js
 // #secret
 console.log('Removed'); // 这一行代码将被省略
-console.log('Kept');   // 这一行代码将被保留
+console.log('Kept'); // 这一行代码将被保留
 ```
+
 ### Typescript
 
 为了抑制错误，最简单的方式是在所有声明前使用 `// @ts-expect-error`

@@ -30,10 +30,7 @@ export function studly(value: string | string[]): string {
     return value.reduce((str, val) => str + upperFirst(val), '');
   }
 
-  return value.replace(
-    /(?:[-_\t\r\n\f\v ]+|^)([a-z])/g,
-    (_, first) => first.toUpperCase(),
-  );
+  return value.replace(/(?:[-_\t\r\n\f\v ]+|^)([a-z])/g, (_, first) => first.toUpperCase());
 }
 
 /**

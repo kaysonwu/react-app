@@ -12,17 +12,15 @@ const Forbidden: FC = () => {
       <Result
         status="403"
         title={formatMessage({ id: 'Forbidden' })}
-        subTitle={formatMessage({ id: 'Sorry, you don\'t have access to this page.' })}
-        extra={(
+        subTitle={formatMessage({ id: "Sorry, you don't have access to this page." })}
+        extra={
           <Space>
-            <Button onClick={goBack}>
-              {formatMessage({ id: 'Go Back' })}
-            </Button>
+            <Button onClick={goBack}>{formatMessage({ id: 'Go Back' })}</Button>
             <Button type="primary" onClick={() => replace('/')}>
               {formatMessage({ id: 'Back Home' })}
             </Button>
           </Space>
-        )}
+        }
       />
     </>
   );

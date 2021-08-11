@@ -35,6 +35,6 @@ type EffectEvent<A extends Action = AnyAction> = (
   // Effect name
   effect?: string,
   // Effect action
-  action?: A
-) => Generator
+  action?: A,
+) => Generator;
 ```

@@ -10,6 +10,7 @@
 ```shell
 npm install -g yarn
 ```
+
 </details>
 <br />
 
@@ -42,8 +43,7 @@ yarn start
 我们推荐你使用 [Visual Studio Code](https://code.visualstudio.com/) 作为代码编辑器，然后你还需要为编辑器安装以下插件：
 
 - [Auto Rename Tag](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag)
-- [EditorConfig for VS Code
-](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+- [EditorConfig for VS Code ](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
 - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 - [stylelint](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint)
@@ -59,15 +59,15 @@ yarn start
 
 1. 启动开发服务器
 
-    ```shell
-    yarn dev
-    ```
+   ```shell
+   yarn dev
+   ```
 
 2. 在 `src/pages` 目录里新建一个 `home` 文件夹
 
-    ```shell
-    mkdir ./src/pages/home
-    ```
+   ```shell
+   mkdir ./src/pages/home
+   ```
 
 3. 然后，在 `home` 文件夹里创建一个 `index.tsx` 文件，并写上一些代码
 
@@ -84,32 +84,31 @@ yarn start
     );
 
     export default Home;
-   ``` 
+   ```
 
-4. 最后，在 `src/components/application/router.tsx` 文件中，为 `home`
- 页面配置路由
+4. 最后，在 `src/components/application/router.tsx` 文件中，为 `home` 页面配置路由
 
-    ```tsx
-    vi src/components/application/router.tsx
-    
-    import React, { FC } from 'react';
-    import { Switch, Route, Redirect } from 'react-router-dom';
-    import Page from '../loadable/page';
+   ```tsx
+   vi src/components/application/router.tsx
 
-    const Router: FC = () => {
-      return (
-        <Switch>
-          ...
-          <Route exact path="/home">
-            <Page path="home" />
-          </Route>
-          ...
-        </Switch>
-      );
-    };
+   import React, { FC } from 'react';
+   import { Switch, Route, Redirect } from 'react-router-dom';
+   import Page from '../loadable/page';
 
-    export default Router;
-    ```
+   const Router: FC = () => {
+     return (
+       <Switch>
+         ...
+         <Route exact path="/home">
+           <Page path="home" />
+         </Route>
+         ...
+       </Switch>
+     );
+   };
+
+   export default Router;
+   ```
 
 ### 目录结构
 
@@ -129,8 +128,8 @@ yarn start
 │   ├── components                      //  组件目录
 │   │   ├── application                 //    应用
 │   │   │   ├── context.tsx             //      上下文
-│   │   │   ├── index.tsx               //      
-│   │   │   └── route.tsx               //      路由 
+│   │   │   ├── index.tsx               //
+│   │   │   └── route.tsx               //      路由
 │   │   │
 │   │   ├── loadable                    //    代码拆分
 │   │   │   ├── locale.tsx              //      国际化
@@ -143,12 +142,12 @@ yarn start
 │   │   └── zh-CN                       //    简体中文
 │   │       ├── home.ts                 //      home 页面翻译
 │   │       └── index.ts                //      公用翻译
-│   │   
+│   │
 │   ├── pages                           //  页面目录
 │   │   ├── exception                   //    异常页面
-│   │   │   ├── 403.tsx 
-│   │   │   ├── 404.tsx 
-│   │   │   └── 500.tsx                
+│   │   │   ├── 403.tsx
+│   │   │   ├── 404.tsx
+│   │   │   └── 500.tsx
 │   │   └── home                        //    Home 示例页面
 │   │       └── index.tsx
 │   │
@@ -157,18 +156,18 @@ yarn start
 │   │   ├── locale.d.ts                 //    国际化
 │   │   └── store.d.ts                  //    数据
 │   │
-│   ├── utils                           //  应用工具箱 
+│   ├── utils                           //  应用工具箱
 │   │   ├── loadable.ts                 //    代码拆分
 │   │   ├── locale.ts                   //    国际化
 │   │   ├── route.ts                    //    路由
 │   │   ├── store.ts                    //    数据
 │   │   ├── string.ts                   //    字符串辅助函数
 │   │   └── util.ts                     //    辅助函数
-│   │   
-│   ├── indedx.html                     //  HTML 模板 
+│   │
+│   ├── indedx.html                     //  HTML 模板
 │   ├── index.tsx                       //  入口文件
 │   └── server.tsx                      //  服务器文件
-│ 
+│
 ├── tests                               // 测试目录
 ├── .editorconfig                       // EditorConfig 配置文件
 ├── .eslintrc                           // ESLint 配置文件
@@ -181,9 +180,9 @@ yarn start
 ├── package.json
 ├── README.md                           // 自述文档
 ├── tsconfig.json                       // Typescript 配置
-└── yarn.lock                           // yarn 依赖包缓存        
+└── yarn.lock                           // yarn 依赖包缓存
 ```
-  
+
 <p align="center">
 <br />
 <a href="/docs/README.md"><< 文档</a>

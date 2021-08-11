@@ -37,11 +37,7 @@ const LocaleProvider: FC<LocaleProviderProps> = ({ locale, files, children, ...p
       }
 
       return (
-        <ConfigProvider
-          {...props}
-          locale={antd}
-          form={{ validateMessages }}
-        >
+        <ConfigProvider {...props} locale={antd} form={{ validateMessages }}>
           {provider}
         </ConfigProvider>
       );

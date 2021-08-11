@@ -1,10 +1,26 @@
 # dependencies
 node_modules/
+yarn.lock
+yarn-error.log
+
+# editor
+/.vscode
 
 # production
 /dist
-/.vscode
+/public
 /server
+/.husky
+LICENSE
+
+# config
+.editorconfig
+.stylelintrc
+.gitignore
+.prettierignore
 
 # test
 coverage/
+
+# macos
+.DS_Store

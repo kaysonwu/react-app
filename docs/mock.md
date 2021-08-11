@@ -4,7 +4,7 @@
 
 ### 数据文件
 
-模拟数据文件存放在工程根目录下的 [mocks](getting-started#目录结构) 文件夹内，文件名后缀支持 `.ts`、`.js`、`.json`。文件匹配的模式是根据 `请求路径` **自右向左** 依次匹配，找到文件即停止。  
+模拟数据文件存放在工程根目录下的 [mocks](getting-started#目录结构) 文件夹内，文件名后缀支持 `.ts`、`.js`、`.json`。文件匹配的模式是根据 `请求路径` **自右向左** 依次匹配，找到文件即停止。
 
 **例如：** 当请求 `/api/user` 时，将依次匹配 `user.ts`、`api.ts`，如果 `user.ts` 存在则不再寻找 `api.ts`。所以文件的命名应该是 `请求路径` 中所包含的字符。
 
@@ -17,8 +17,8 @@ import { IMock } from 'serve-mock';
 
 const mock: IMock = {
   'GET /api/users': [
-    {id: 1, name: '曲丽丽'},
-    {id: 2, name: '付小小'},
+    { id: 1, name: '曲丽丽' },
+    { id: 2, name: '付小小' },
   ],
   'POST /api/users': '新建成功',
   'PUT /api/users': '更新成功',
@@ -41,7 +41,10 @@ export default mock;
 import { IMock } from 'serve-mock';
 import { parse } from 'url';
 
-let data: any[] = [{ id: 1, name: 'zhangsan' }, { id: 2, name: 'lisi' }];
+let data: any[] = [
+  { id: 1, name: 'zhangsan' },
+  { id: 2, name: 'lisi' },
+];
 const mock: IMock = {
   // 获取所有用户 -> index
   'GET /api/users': (req, res) => {
@@ -74,7 +77,7 @@ const mock: IMock = {
   'DELETE /api/users/:id': (req, res) => {
     res.statusCode = 204;
     res.end();
-  }
+  },
 };
 
 export default mock;
@@ -118,7 +121,7 @@ import { IMock } from 'serve-mock';
 import { delay } from 'serve-mock/utils';
 
 const mock: IMock = {
-  'PUT /api/users': delay('操作成功', 1000)
+  'PUT /api/users': delay('操作成功', 1000),
 };
 
 export default mock;
@@ -135,7 +138,7 @@ const mock: IMock = {
     id: 1,
     name: '曲丽丽',
   },
-  'PUT /api/users': '操作成功'
+  'PUT /api/users': '操作成功',
 };
 
 export default delays(mock, 1000);
@@ -160,7 +163,7 @@ import mockjs from 'mockjs';
 
 const mock: IMock = {
   'GET /api/tags': mockjs.mock({
-    'list|100': [{ name: '@city', 'value|1-100': 50, 'type|0-2': 1 }]
+    'list|100': [{ name: '@city', 'value|1-100': 50, 'type|0-2': 1 }],
   }),
 };
 

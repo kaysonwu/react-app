@@ -13,11 +13,11 @@ const NotFound: FC = () => {
         status="404"
         title={formatMessage({ id: 'Not Found' })}
         subTitle={formatMessage({ id: 'Sorry, the page you visited does not exist.' })}
-        extra={(
+        extra={
           <Button type="primary" onClick={() => replace('/')}>
             {formatMessage({ id: 'Back Home' })}
           </Button>
-        )}
+        }
       />
     </>
   );

@@ -5,6 +5,7 @@
 **注意：** 为了更好的遵循风格指南，请为编辑器安装 [ESLint](https://eslint.org/) 扩展插件，具体安装方式请参阅 [ESLint 集成指南](https://eslint.org/docs/user-guide/integrations)
 
 ## 目录
+
 - Javascript
   - [函数](#函数)
   - [箭头函数](#箭头函数)
@@ -14,17 +15,20 @@
 - React
   - [函数组件](#函数组件)
 
-
 ## 函数
 
 - 在 Typescript 中不显示定义函数的返回类型，应该优先依赖类推推断。规则：[`@typescript-eslint/explicit-function-return-type`](https://github.com/typescript-eslint/typescript-eslint/blob/v2.27.0/packages/eslint-plugin/docs/rules/explicit-function-return-type.md)
 
   ```ts
   // bad
-  function test(): string { return 'Hello'; }
+  function test(): string {
+    return 'Hello';
+  }
 
   // good
-  function test() { return 'Hello'; }
+  function test() {
+    return 'Hello';
+  }
   ```
 
 ## 箭头函数
@@ -33,18 +37,19 @@
 
 ```js
 // bad
-[1, 2, 3].map((x) => x * x);
+[1, 2, 3].map(x => x * x);
 
 // good
 [1, 2, 3].map(x => x * x);
 
 // good
-[1, 2, 3].map(number => (
-  `A long string with the ${number}. It’s so long that we don’t want it to take up space on the .map line!`
-));
+[1, 2, 3].map(
+  number =>
+    `A long string with the ${number}. It’s so long that we don’t want it to take up space on the .map line!`,
+);
 
 // bad
-[1, 2, 3].map((x) => {
+[1, 2, 3].map(x => {
   const y = x + 1;
   return x * y;
 });
@@ -94,7 +99,7 @@ function myFunc(foo: T | null) {
 ```ts
 const emptyString = '';
 
-const nullish1 = emptyString ?? 'unsafe'; 
+const nullish1 = emptyString ?? 'unsafe';
 const logical1 = emptyString || 'unsafe';
 
 // nullish1 === ''
@@ -119,13 +124,13 @@ function myFunc(foo: string | null) {
 
 ```js
 // bad
-a = (b * c);
+a = b * c;
 
 // good
 a = b * c;
 
 // bad
-(a * b) + c;
+a * b + c;
 
 //good
 a * b + c;
@@ -147,18 +152,12 @@ const Component = function (props) {
 };
 
 // good
-const Component: React.FC = props => {
-
-};
+const Component: React.FC = props => {};
 
 // very good
 interface ComponentProps {
   name: string;
 }
 
-const Component: React.FC<ComponentProps> = props => {
-
-};
-
-
+const Component: React.FC<ComponentProps> = props => {};
 ```

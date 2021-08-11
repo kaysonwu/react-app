@@ -13,16 +13,14 @@ const InternalServerError: FC = () => {
         status={500}
         title={formatMessage({ id: 'Internal Server Error' })}
         subTitle={formatMessage({ id: 'Sorry, the server is reporting an error.' })}
-        extra={(
+        extra={
           <Space>
-            <Button onClick={() => replace('/')}>
-              {formatMessage({ id: 'Back Home' })}
-            </Button>
+            <Button onClick={() => replace('/')}>{formatMessage({ id: 'Back Home' })}</Button>
             <Button type="primary" onClick={goBack}>
               {formatMessage({ id: 'Try Again' })}
             </Button>
           </Space>
-        )}
+        }
       />
     </>
   );
