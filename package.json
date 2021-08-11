@@ -25,9 +25,15 @@
     "ie > 10"
   ],
   "lint-staged": {
-    "*.{js,ts,tsx}": "eslint --fix",
-    "*.less": "stylelint --fix",
-    "*.{js,ts,tsx,less}": "prettier --write"
+    "*.{js,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.less": [
+      "stylelint --syntax less --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": "prettier --write"
   },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
@@ -109,6 +115,7 @@
     "stylelint-config-prettier": "^8.0.0",
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^22.0.0",
+    "stylelint-no-unsupported-browser-features": "^5.0.0",
     "stylelint-order": "^4.0.0",
     "stylelint-scss": "^3.18.0",
     "typescript": "^4.0.0",
