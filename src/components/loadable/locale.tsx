@@ -18,7 +18,7 @@ interface LocaleProps {
   children: (messages: Locale) => React.ReactNode;
 }
 
-function reduce(children: Function, path: string) {
+function reduce(children: LocaleProps['children'], path: string) {
   return (messages: Locale) => (
     <Module path={path}>
       {(module?: ModuleType) => children(module ? { ...messages, ...module.default } : messages)}
@@ -26,6 +26,6 @@ function reduce(children: Function, path: string) {
   );
 }
 
-export default function Locale({ paths, children }: LocaleProps) {
+export default function Locale({ paths, children }: LocaleProps): JSX.Element {
   return paths.reduceRight(reduce, children)({}) as JSX.Element;
 }

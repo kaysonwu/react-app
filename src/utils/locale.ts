@@ -58,7 +58,7 @@ export function getLocaleFromRequest(request: IncomingMessage, fallback = 'zh-CN
 
 // @Internal Don't modify it
 let Intl: IntlShape | undefined;
-export const IntlFormatter = {} as IntlFormatters;
+const IntlFormatter = {} as IntlFormatters;
 
 // Used to expose the react-intl API
 export function injectionIntl(intlShap: IntlShape): void {

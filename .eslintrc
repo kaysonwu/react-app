@@ -26,6 +26,7 @@
   },
   "plugins": ["jest", "@typescript-eslint"],
   "rules": {
+    "no-console": ["error", { "allow": ["warn", "error"] }],
     "import/extensions": "off",
     "import/no-unresolved": ["error", {
       "commonjs": false,
@@ -41,6 +42,8 @@
         "*.config*.{js,ts}"
       ]
     }],
+    "react/prop-types": "off",
+    "react/jsx-props-no-spreading": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
     // https://github.com/typescript-eslint/typescript-eslint/issues/2540#issuecomment-692866111
     "no-use-before-define": "off",

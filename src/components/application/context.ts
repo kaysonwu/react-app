@@ -5,8 +5,6 @@ export interface GlobalState {
    * Determine whether the device type is a mobile device.
    */
   isMobile: boolean;
-
-  [key: string]: any;
 }
 
 interface ContextProps {

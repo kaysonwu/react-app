@@ -1,11 +1,10 @@
 import React, { FC, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import isMobile from 'is-mobile';
-import { LOCALE_CHANGE } from '@/utils/locale';
-// #if IS_BROWSER
 import { getNameFromPath } from '@/utils/loadable';
+import { LOCALE_CHANGE } from '@/utils/locale';
+import { injectionHistory } from '@/utils/route';
 import { makeRequestContext } from '@/utils/store';
-// #endif
 import LocaleProvider from '../locale-provider';
 import App, { GlobalState } from './context';
 import Router from './router';
@@ -24,10 +23,14 @@ export interface ApplicationProps {
 
 const Application: FC<ApplicationProps> = ({ state: initialState, locale }) => {
   const [state, setState] = useState(initialState);
-  const files = [locale, `${locale}/${getNameFromPath(useLocation().pathname)}`];
+  // TODO: fix page file load.
+  const files = [locale]; // `${locale}/${getNameFromPath(useLocation().pathname)}`
+
+  injectionHistory(useHistory());
 
   // #if IS_BROWSER
   let setLocale: React.Dispatch<React.SetStateAction<string>>;
+  // eslint-disable-next-line no-param-reassign
   [locale, setLocale] = useState(locale);
 
   function onLocaleChange(e: Event) {
@@ -59,7 +62,7 @@ const Application: FC<ApplicationProps> = ({ state: initialState, locale }) => {
   );
 };
 
-Application.getInitialProps = async (ctx) => {
+Application.getInitialProps = async ctx => {
   const ua = ctx.request ? ctx.request.headers['user-agent'] : navigator.userAgent;
 
   return { state: { isMobile: isMobile({ ua }) } };
