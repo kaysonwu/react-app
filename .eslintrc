@@ -24,7 +24,7 @@
       "jsx": true
     }
   },
-  "plugins": ["jest", "@typescript-eslint"],
+  "plugins": ["jest", "react-hooks", "@typescript-eslint"],
   "rules": {
     "no-console": ["error", { "allow": ["warn", "error"] }],
     "import/extensions": "off",
@@ -46,6 +46,7 @@
     "react/prop-types": "off",
     "react/jsx-props-no-spreading": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+    "react-hooks/rules-of-hooks": "error",
     // https://github.com/typescript-eslint/typescript-eslint/issues/2540#issuecomment-692866111
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "error",

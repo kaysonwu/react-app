@@ -1,4 +1,3 @@
-/* eslint-disable no-case-declarations */
 module.exports = ({ caller }) => {
   const target = caller(c => c && c.target);
   const name = caller(c => c && c.name);
