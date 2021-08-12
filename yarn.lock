@@ -2701,9 +2701,10 @@ babel-plugin-polyfill-regenerator@^0.2.2:
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.2.2"
 
-"babel-plugin-preprocessor@https://github.com/kaysonwu/babel-plugin-preprocessor":
+babel-plugin-preprocessor@^0.0.4:
   version "0.0.4"
-  resolved "https://github.com/kaysonwu/babel-plugin-preprocessor#81d8415f5d0562ee096be5a7f1ae70ca81aebf6e"
+  resolved "https://registry.yarnpkg.com/babel-plugin-preprocessor/-/babel-plugin-preprocessor-0.0.4.tgz#e83e0357c9562e46b00dd05340474728ea0866cc"
+  integrity sha512-mU2iQMEFxLtwrOSFvkR4R92Q1zQswNwDbxwcK8Bbca4A7drSm4cePiJglPmV37PvHXHaUAYjgBmy0Us0FnS9gQ==
 
 babel-preset-current-node-syntax@^1.0.0:
   version "1.0.1"
