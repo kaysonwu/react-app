@@ -15,7 +15,7 @@
 - [x] [懒加载](lazy-loading.md)
 - [x] [条件编译](conditional-compile.md)
 - [服务端渲染](ssr.md)
-- [x] [浏览器兼容性](IE.md)
+- [x] [浏览器兼容性](compat.md)
 - [x] [声明文件](declaration.md)
 - [一致的代码风格](code-style.md)
 - [搭建指南](build-guide.md)

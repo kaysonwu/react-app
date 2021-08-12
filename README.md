@@ -22,4 +22,4 @@
 - 💎 [条件编译](docs/conditional-compile.md)
 - 🌟 [数据模拟](docs/mock.md)
 - 🐛 [自动化测试](docs/testing.md)
-- 📌 [最低可支持 IE9](docs/IE.md)
+- 📌 [最低可支持 IE9](docs/compat.md)
