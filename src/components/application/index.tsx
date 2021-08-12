@@ -23,8 +23,7 @@ export interface ApplicationProps {
 
 const Application: FC<ApplicationProps> = ({ state: initialState, locale }) => {
   const [state, setState] = useState(initialState);
-  // TODO: fix page file load.
-  const files = [locale]; // `${locale}/${getNameFromPath(useLocation().pathname)}`
+  const files = [locale, `${locale}/${getNameFromPath(useLocation().pathname)}`];
 
   injectionHistory(useHistory());
 

@@ -1,31 +1,42 @@
-import React from 'react';
-import loadable from '@loadable/component';
+import { FC, ReactElement, useState } from 'react';
 import { onLoadError } from '@/utils/loadable';
-
-type ModuleType = { default: Locale };
-
-type ModuleProps = {
-  path: string;
-};
-
-const Module = loadable.lib(
-  (props: ModuleProps) => import(`@/locales/${props.path}`).catch(onLoadError),
-  { cacheKey: props => `locales/${props.path}` },
-);
 
 interface LocaleProps {
   paths: string[];
-  children: (messages: Locale) => React.ReactNode;
+  fallback?: ReactElement;
+  children: (messages: Locale) => ReactElement;
 }
 
-function reduce(children: LocaleProps['children'], path: string) {
-  return (messages: Locale) => (
-    <Module path={path}>
-      {(module?: ModuleType) => children(module ? { ...messages, ...module.default } : messages)}
-    </Module>
+const Locale: FC<LocaleProps> = ({ paths, fallback, children }) => {
+  // #if IS_BROWSER
+  const [messages, setMessages] = useState<Locale>();
+
+  if (messages === undefined) {
+    Promise.all(paths.map(path => import(`@/locales/${path}`).catch(onLoadError))).then(modules =>
+      setMessages(
+        modules.reduce(
+          (state, module) => (module ? Object.assign(state, module.default) : state),
+          {},
+        ),
+      ),
+    );
+
+    return fallback || null;
+  }
+
+  return children(messages);
+  // #endif
+
+  return children(
+    paths.reduce((state, path) => {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require, global-require
+        return Object.assign(state, require(`@/locales/${path}`));
+      } catch {
+        return state;
+      }
+    }, {}),
   );
-}
+};
 
-export default function Locale({ paths, children }: LocaleProps): JSX.Element {
-  return paths.reduceRight(reduce, children)({}) as JSX.Element;
-}
+export default Locale;
