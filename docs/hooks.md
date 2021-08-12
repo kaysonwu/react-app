@@ -1,11 +1,10 @@
-## Hook 数据流
+# Hooks 数据流
 
-> 设计参考自：[ahooks](https://ahooks.js.org/zh-CN)
+Hooks 是 `React 16.8` 中的新增功能。它们让你无需编写类即可使用状态和其他 React 功能，Hooks 的出现，使 [Redux](https://www.npmjs.com/package/react-redux) 不再成为唯一的数据流的方案
 
-### useList
+Hooks 数据流的优势：
 
-`useList` 对数据表格常用的动作进行了封装以及权限处理。针对没有权限的动作可以实现自动隐藏
+- 耦合度降低
+- 可维护性增强
 
-### useRequest
-
-`useRequest` 通常用于单个请求，与 `ahooks` 不同的是，它没有太多的东西，因为大多数后台程序都会被公共的响应与请求拦截器进行了处理，所以通常只关注 **data**、**loading**、**error** 这三个属性
+[ahooks](https://ahooks.js.org/zh-CN) 是由 [ icejs](https://github.com/alibaba/ice)、[umijs](https://github.com/umijs/umi)、[阿里体育](https://www.alisports.com/) 等阿里系团队出品，它给了 Hooks 数据流指明了前进的方向，未来将会涌现出更多的 Hooks 数据流～
