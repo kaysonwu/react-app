@@ -1,10 +1,21 @@
-import { FC, ReactElement, useState } from 'react';
+import { FC, useState } from 'react';
 import { onLoadError } from '@/utils/loadable';
 
 interface LocaleProps {
+  /**
+   * Locale files path, relative to `@/locale` folder.
+   */
   paths: string[];
-  fallback?: ReactElement;
-  children: (messages: Locale) => ReactElement;
+
+  /**
+   * Fallback displayed during the loading.
+   */
+  fallback?: JSX.Element;
+
+  /**
+   * The locale messages are received by the child.
+   */
+  children: (messages: Locale) => JSX.Element;
 }
 
 const Locale: FC<LocaleProps> = ({ paths, fallback, children }) => {
@@ -31,7 +42,7 @@ const Locale: FC<LocaleProps> = ({ paths, fallback, children }) => {
     paths.reduce((state, path) => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require, global-require
-        return Object.assign(state, require(`@/locales/${path}`));
+        return Object.assign(state, require(`@/locales/${path}`).default);
       } catch {
         return state;
       }

@@ -1,43 +1,55 @@
-import React, { ComponentType, ReactNode, FC, useState } from 'react';
-import loadable from '@loadable/component';
+import React, { FC, ComponentType, useState, useRef } from 'react';
 import { pullInitialProps, makeRequestContext } from '@/utils/store';
 
-type ModuleType = { default: ComponentType };
-
-interface ModuleProps {
+interface PageProps {
+  /**
+   * Page component path, relative to `@/pages` folder.
+   */
   path: string;
-  loading?: ReactNode;
+
+  /**
+   * Fallback displayed during the loading.
+   */
+  fallback?: JSX.Element;
+
+  /**
+   * Disable children.
+   */
+  children?: null;
 }
 
-const Module = loadable.lib((props: ModuleProps) => import(`@/pages/${props.path}`), {
-  cacheKey: props => `pages/${props.path}`,
-});
-
-function wrapInitialPropsFetch(Component: ComponentType, loading: ReactNode): FC {
-  return props => {
-    const [initialProps, setInitialProps] = useState(() => pullInitialProps('page'));
-
-    // #if IS_BROWSER
-    if (initialProps === undefined && Component.getInitialProps) {
-      Component.getInitialProps(makeRequestContext())
-        .then(data => setInitialProps(data))
-        .catch(error => console.error(error));
-
-      return <>{loading}</>;
-    }
+const Page: FC<PageProps> = ({ path, fallback, ...props }) => {
+  const initialProps = useRef<unknown>();
+  const [View, setView] = useState<ComponentType>(
+    // #if
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require, global-require
+    () => require(`@/pages/${path}`).default,
     // #endif
+  );
 
-    return <Component {...props} {...initialProps} />;
-  };
-}
+  if (initialProps.current === undefined) {
+    initialProps.current = pullInitialProps('page');
+  }
 
-const Page = <P extends ModuleProps>({ path, loading, ...props }: P): JSX.Element => (
-  <Module path={path} fallback={loading}>
-    {(module: ModuleType) => {
-      const Component = wrapInitialPropsFetch(module.default, loading);
-      return <Component {...props} />;
-    }}
-  </Module>
-);
+  // #if IS_BROWSER
+  if (View === undefined) {
+    import(`@/pages/${path}`).then(async module => {
+      const view = module.default as ComponentType;
+
+      if (initialProps.current === undefined && view.getInitialProps) {
+        initialProps.current = await view
+          .getInitialProps(makeRequestContext())
+          .catch(e => console.error(e));
+      }
+
+      setView(() => view);
+    });
+
+    return fallback || null;
+  }
+  // #endif
+
+  return <View {...props} {...initialProps.current} />;
+};
 
 export default Page;

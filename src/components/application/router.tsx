@@ -9,16 +9,16 @@ const Router: FC = () => {
   return (
     <Switch>
       <Route path="/exception/404">
-        <Page path="exception/404" loading={loading} />
+        <Page path="exception/404" fallback={loading} />
       </Route>
       <Route path="/exception/403">
-        <Page path="exception/403" loading={loading} />
+        <Page path="exception/403" fallback={loading} />
       </Route>
       <Route path="/exception/500">
-        <Page path="exception/500" loading={loading} />
+        <Page path="exception/500" fallback={loading} />
       </Route>
       <Route exact path="/">
-        <Page path="home" loading={loading} />
+        <Page path="home" fallback={loading} />
       </Route>
       <Redirect from="*" to="/exception/404" />
     </Switch>
