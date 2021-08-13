@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, Dispatch, SetStateAction, useState } from 'react';
 import { onLoadError } from '@/utils/loadable';
 
 interface LocaleProps {
@@ -19,14 +19,34 @@ interface LocaleProps {
 }
 
 const Locale: FC<LocaleProps> = ({ paths, fallback, children }) => {
-  // #if IS_BROWSER
-  const [messages, setMessages] = useState<Locale>();
+  let messages: Locale | undefined =
+    // #if IS_NODE
+    paths.reduce((message, path) => {
+      try {
+        return Object.assign(
+          message,
+          // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require, global-require
+          require(`../../locales/${path.includes('/') ? path : `${path}/index`}`).default,
+        );
+      } catch {
+        return message;
+      }
+    }, {});
+
+  // #elif IS_BROWSER
+  let setMessages: Dispatch<SetStateAction<Locale | undefined>>;
+  // eslint-disable-next-line prefer-const
+  [messages, setMessages] = useState<Locale>();
 
   if (messages === undefined) {
-    Promise.all(paths.map(path => import(`@/locales/${path}`).catch(onLoadError))).then(modules =>
+    Promise.all(
+      paths.map(path =>
+        import(/* webpackChunkName: "locales/[request]" */ `@/locales/${path}`).catch(onLoadError),
+      ),
+    ).then(modules =>
       setMessages(
         modules.reduce(
-          (state, module) => (module ? Object.assign(state, module.default) : state),
+          (message, module) => (module ? Object.assign(message, module.default) : message),
           {},
         ),
       ),
@@ -34,20 +54,9 @@ const Locale: FC<LocaleProps> = ({ paths, fallback, children }) => {
 
     return fallback || null;
   }
-
-  return children(messages);
   // #endif
 
-  return children(
-    paths.reduce((state, path) => {
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require, global-require
-        return Object.assign(state, require(`@/locales/${path}`).default);
-      } catch {
-        return state;
-      }
-    }, {}),
-  );
+  return children(messages);
 };
 
 export default Locale;

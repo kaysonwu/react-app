@@ -2,7 +2,6 @@ import { resolve, join } from 'path';
 import { Configuration, WebpackPluginInstance } from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import HtmlPlugin from 'html-webpack-plugin';
-import LoadablePlugin from '@loadable/webpack-plugin';
 import nodeExternals from 'webpack-node-externals';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
@@ -52,7 +51,7 @@ type Flags = {
   /**
    * see: https://webpack.js.org/api/cli/#flags
    */
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 const makeConfig = (target: string, mode: Configuration['mode'], ssr: boolean) => {
@@ -69,6 +68,15 @@ const makeConfig = (target: string, mode: Configuration['mode'], ssr: boolean) =
     output: {
       path: outputPath,
       publicPath: '/',
+      chunkFilename: ({ chunk }) => {
+        const name = chunk!.name!.replace(/-([a-z0-9])/g, '/$1');
+
+        if (name.split('/').length === 2) {
+          return `${name}/index.js`;
+        }
+
+        return `${name}.js`;
+      },
     },
     resolve: {
       extensions: ['.js', '.ts', '.jsx', '.tsx'],
@@ -122,15 +130,9 @@ const makeConfig = (target: string, mode: Configuration['mode'], ssr: boolean) =
           '!*-stats.json',
         ],
       }),
-      ssr
-        ? new LoadablePlugin({
-            outputAsset: false,
-            writeToDisk: true,
-            filename: resolve(__dirname, 'server', `${target}-stats.json`),
-          })
-        : new HtmlPlugin({
-            template: join(entryPath, 'index.html'),
-          }),
+      new HtmlPlugin({
+        template: join(entryPath, 'index.html'),
+      }),
     ],
     devtool: mode === 'development' ? 'cheap-module-source-map' : false,
     externalsPresets: { [target]: true },

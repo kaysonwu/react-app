@@ -27,7 +27,6 @@ module.exports = ({ caller }) => {
           },
         },
       ],
-      '@loadable/babel-plugin',
     ],
   };
 
@@ -39,7 +38,7 @@ module.exports = ({ caller }) => {
         symbols: {
           SSR,
           IS_BROWSER,
-          IS_NODE: target === 'node',
+          IS_NODE: !IS_BROWSER,
         },
       },
     ]);

@@ -21,9 +21,9 @@ interface PageProps {
 const Page: FC<PageProps> = ({ path, fallback, ...props }) => {
   const initialProps = useRef<unknown>();
   const [View, setView] = useState<ComponentType>(
-    // #if
+    // #if IS_NODE
     // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require, global-require
-    () => require(`@/pages/${path}`).default,
+    () => require(`../../pages/${path.includes('/') ? path : `${path}/index`}`).default,
     // #endif
   );
 
@@ -33,7 +33,7 @@ const Page: FC<PageProps> = ({ path, fallback, ...props }) => {
 
   // #if IS_BROWSER
   if (View === undefined) {
-    import(`@/pages/${path}`).then(async module => {
+    import(/* webpackChunkName: "pages/[request]" */ `@/pages/${path}`).then(async module => {
       const view = module.default as ComponentType;
 
       if (initialProps.current === undefined && view.getInitialProps) {

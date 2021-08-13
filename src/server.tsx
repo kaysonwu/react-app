@@ -1,61 +1,49 @@
 import { createServer } from 'http';
 import serveStatic from 'serve-static';
-import { parse as parseUrl } from 'url';
-import { join, resolve } from 'path';
+// import { parse as parseUrl } from 'url';
+import { resolve } from 'path';
 import { AddressInfo } from 'net';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
-import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import Application from './index';
-import { getNameFromPath } from './utils/loadable';
+// import { getNameFromPath } from './utils/loadable';
 import { getLocaleFromRequest } from './utils/locale';
+import { makeRequestContext } from './utils/store';
 
-// const nodeExtractor = new ChunkExtractor({ statsFile: join(__dirname, 'node-stats.json') });
-const webExtractor = new ChunkExtractor({
-  statsFile: resolve(__dirname, 'web-stats.json'),
-  entrypoints: ['app'],
-});
-
-// const Application = nodeExtractor.requireEntrypoint('app').default as React.ComponentType<ApplicationProps>;
-const serve = serveStatic((webExtractor as any).stats.outputPath);
+const serve = serveStatic(resolve(__dirname, '..', 'public'));
 
 const server = createServer((req, res) => {
   serve(req, res, async () => {
-    const pathname = parseUrl(req.url!).pathname!;
-    const page = getNameFromPath(pathname);
+    // const pathname = parseUrl(req.url!).pathname!;
+    // const page = getNameFromPath(pathname);
 
-    // const store = await prepareStore(loadModel(['global', page], modelPath), req);
+    const state = await Application.getInitialProps?.(makeRequestContext(req));
     const app = renderToString(
-      <ChunkExtractorManager extractor={webExtractor}>
-        <StaticRouter location={req.url}>
-          <Application
-            // store={store}
-            locale={getLocaleFromRequest(req)}
-            // page={hasLocaleFile(page) ? page : undefined}
-          />
-        </StaticRouter>
-      </ChunkExtractorManager>,
+      <StaticRouter location={req.url}>
+        <Application state={state?.state} locale={getLocaleFromRequest(req)} />
+      </StaticRouter>,
     );
 
     res.setHeader('Content-Type', 'text/html');
     res.write(`
+      <!DOCTYPE html>
       <html>
         <head>
-          ${webExtractor.getLinkTags()}
-          ${webExtractor.getStyleTags()}
+          <meta charset="UTF-8" />
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
         </head>
-        <body id="app">
-          ${app}
+        <body>
+          <div id="app">${app}</div>
         </body>
-        <footer>
-          ${webExtractor.getScriptTags()}
-        </footer>
       </html>
     `);
     res.end();
   });
 }).listen(process.env.port || 8080, () => {
   const { address, port } = server.address() as AddressInfo;
+  // eslint-disable-next-line no-console
   console.log('Server started http://%s:%d', address === '::' ? 'localhost' : address, port);
 });

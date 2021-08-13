@@ -27,14 +27,14 @@ export function pullInitialProps<T>(key: string, defaultValue?: T): T | undefine
  * Create context for client request.
  */
 export function makeRequestContext(request?: IncomingMessage): React.RequestContext {
-  // #if IS_NODE_SERVER
+  // #if IS_NODE
   return { ...parseUrl(request!.url!, true), request };
-  // #else
+  // #elif IS_BROWSER
   return { ...window.location, query: parse(window.location.search.replace(/^\?+/g, '')) };
   // #endif
 }
 
-// #if IS_NODE_SERVER
+// #if IS_NODE
 
 /**
  * Store the global initial props on the window object.
