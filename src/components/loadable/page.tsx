@@ -22,6 +22,7 @@ const Page: FC<PageProps> = ({ path, fallback, ...props }) => {
   const initialProps = useRef<unknown>();
   const [View, setView] = useState<ComponentType>(
     // #if IS_NODE
+    // TODO: Waiting https://github.com/tleunen/babel-plugin-module-resolver/issues/322
     // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require, global-require
     () => require(`../../pages/${path.includes('/') ? path : `${path}/index`}`).default,
     // #endif
