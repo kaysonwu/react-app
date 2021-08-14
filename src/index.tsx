@@ -1,7 +1,6 @@
 import React from 'react';
 import { hydrate, render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import { loadableReady } from '@loadable/component';
 import Application from '@/components/application';
 import { getLocale } from '@/utils/locale';
 import { pullInitialProps } from '@/utils/store';
@@ -15,9 +14,7 @@ const element = (
 );
 
 // #if SSR
-loadableReady(() => {
-  hydrate(element, container);
-});
+hydrate(element, container);
 // #else
 render(element, container);
 // #endif
