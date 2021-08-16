@@ -28,3 +28,10 @@ yarn build --env ssr
 ```shell
 yarn remove @loadable/server serve-static @loadable/babel-plugin @loadable/webpack-plugin @types/loadable__server @types/serve-static webpack-node-externals rollup @rollup/plugin-node-resolve @rollup/plugin-babel rollup-plugin-terser
 ```
+
+<p align="center">
+<br />
+<a href="/docs/conditional-compile.md"><< 条件编译</a>
+&emsp;&emsp;&emsp;&emsp;
+<a href="/docs/compat.md">浏览器兼容性 >></a>
+</p>

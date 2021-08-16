@@ -63,3 +63,10 @@ export function getNameFromPath(path: string): string {
 | 路由 | 语言文件         |
 | ---- | ---------------- |
 | /    | {locale}/base.ts |
+
+<p align="center">
+<br />
+<a href="/docs/code-splitting.md"><< 代码分离</a>
+&emsp;&emsp;&emsp;&emsp;
+<a href="/docs/conditional-compile.md">条件编译 >></a>
+</p>

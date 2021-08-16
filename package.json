@@ -44,8 +44,8 @@
     "is-mobile": "^3.0.0",
     "pluralize": "^8.0.0",
     "qs": "^6.0.0",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "react-intl": "^5.0.0",
     "react-router-dom": "^5.1.0",
     "serve-static": "^1.13.0"
@@ -71,7 +71,6 @@
     "@types/serve-static": "^1.13.0",
     "@types/terser-webpack-plugin": "^5.0.0",
     "@types/webpack-dev-server": "^3.0.0",
-    "@types/webpack-node-externals": "^2.5.2",
     "@typescript-eslint/eslint-plugin": "^4.0.0",
     "@typescript-eslint/parser": "^4.0.0",
     "antd-dayjs-webpack-plugin": "^1.0.0",

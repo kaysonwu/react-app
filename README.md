@@ -2,7 +2,7 @@
 
 | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![IE](https://raw.github.com/alrra/browser-logos/master/src/archive/internet-explorer_9-11/internet-explorer_9-11_48x48.png) |
 | --- | --- | --- | --- | --- | --- |
-| Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 11 ✔ |
+| Last 2 versions ✔ | Last 2 versions ✔ | Last 2 versions ✔ | Last 2 versions ✔ | Last 2 versions ✔ | IE11, Edge ✔ |
 
 &nbsp;&nbsp;&nbsp;&nbsp;用于开发 [React](https://www.reactjs.org/) 应用程序的企业级脚手架。它形似 [umi](https://umijs.org)，但实际上，它是一个 Unopinionated 脚手架，这意味着你拥有一切权利，可以自由改造。更详细的说明，请参阅 [完整文档](docs/README.md)
 

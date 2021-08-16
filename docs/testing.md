@@ -24,3 +24,10 @@ yarn test --testNamePattern "snake"
 // 缩写方式
 yarn test -t snake
 ```
+
+<p align="center">
+<br />
+<a href="/docs/mock.md"><< 数据模拟</a>
+&emsp;&emsp;&emsp;&emsp;
+<a href="/docs/code-splitting.md">代码分离 >></a>
+</p>

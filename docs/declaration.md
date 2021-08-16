@@ -38,3 +38,10 @@ type EffectEvent<A extends Action = AnyAction> = (
   action?: A,
 ) => Generator;
 ```
+
+<p align="center">
+<br />
+<a href="/docs/compat.md"><< 浏览器兼容性</a>
+&emsp;&emsp;&emsp;&emsp;
+<a href="/docs/code-style.md">一致的代码风格 >></a>
+</p>

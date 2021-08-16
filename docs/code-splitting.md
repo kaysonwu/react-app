@@ -27,3 +27,10 @@
 - 国际化语言文件
 
 具体的实现方式，可以参考 [懒加载](#lazy-loading.md)
+
+<p align="center">
+<br />
+<a href="/docs/testing.md"><< 自动化测试</a>
+&emsp;&emsp;&emsp;&emsp;
+<a href="/docs/lazy-loading.md">懒加载 >></a>
+</p>

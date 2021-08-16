@@ -120,3 +120,10 @@ const foo = 1;
 const foo = -1;
 // #endif
 ```
+
+<p align="center">
+<br />
+<a href="/docs/lazy-loading.md"><< 懒加载</a>
+&emsp;&emsp;&emsp;&emsp;
+<a href="/docs/ssr.md">服务端渲染 >></a>
+</p>

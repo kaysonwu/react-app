@@ -174,18 +174,29 @@ export default mock;
 
 当本地开发完毕之后，如果服务器的接口已满足约定，那么，只需要关闭数据模拟或者代理到服务端的真实接口地址即可。
 
-通过使用 `--without-mock` 选项来关闭数据模拟：
+通过使用 `without-mock` 选项来关闭数据模拟：
 
 ```shell
-yarn run dev --without-mock
+yarn run dev --env without-mock
 ```
 
-通过更改 [webpack](https://webpack.js.org/) 开发配置文件 `config/webpack.dev.js` 中的 [devServer](https://webpack.js.org/configuration/dev-server/#devserverproxy) 选项，即可启用代理到服务端的真实接口地址上。
+#### 使用代理
 
-```js
-devServer: {
-  proxy: {
-    '/api': 'http://localhost:3000'
-  }
-}
+当拥有单独的 API 后端开发服务器并且希望在同一域上发送 API 请求时，代理某些 URL 可能会很有用。[webpack](https://webpack.js.org/) 开发服务器使用功能强大的 [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware) 软件包，在脚手架内只需要将 `.proxy.example` 文件复制一份并命名成 `.proxy.ts`，即可完成代理配置
+
+```ts
+import type { Configuration } from 'webpack-dev-server';
+
+const proxy: Configuration['proxy'] = {
+  '/api': 'http://example.com',
+};
+
+export default proxy;
 ```
+
+<p align="center">
+<br />
+<a href="/docs/i18n.md"><< 国际化</a>
+&emsp;&emsp;&emsp;&emsp;
+<a href="/docs/testing.md">自动化测试 >></a>
+</p>

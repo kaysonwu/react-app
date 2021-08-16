@@ -8,3 +8,10 @@ Hooks 数据流的优势：
 - 可维护性增强
 
 [ahooks](https://ahooks.js.org/zh-CN) 是由 [ icejs](https://github.com/alibaba/ice)、[umijs](https://github.com/umijs/umi)、[阿里体育](https://www.alisports.com/) 等阿里系团队出品，它给了 Hooks 数据流指明了前进的方向，未来将会涌现出更多的 Hooks 数据流～
+
+<p align="center">
+<br />
+<a href="/docs/getting-started.md"><< 入门指南</a>
+&emsp;&emsp;&emsp;&emsp;
+<a href="/docs/i18n.md">国际化 >></a>
+</p>
