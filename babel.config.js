@@ -1,8 +1,8 @@
-module.exports = ({ caller }) => {
+module.exports = ({ caller, env }) => {
   const target = caller(c => c && c.target);
   const name = caller(c => c && c.name);
 
-  const SSR = caller(c => c && c.ssr);
+  const SERVER_SIDE_RENDER = caller(c => c && c.ssr);
   const IS_BROWSER = target === 'web';
 
   const config = {
@@ -19,6 +19,7 @@ module.exports = ({ caller }) => {
     ],
     plugins: [
       // ['@babel/plugin-transform-modules-commonjs', { importInterop: 'node', loose: true }],
+      ['import', { libraryName: 'antd', style: true }],
       [
         'module-resolver',
         {
@@ -36,9 +37,11 @@ module.exports = ({ caller }) => {
       'preprocessor',
       {
         symbols: {
-          SSR,
           IS_BROWSER,
           IS_NODE: !IS_BROWSER,
+          SERVER_SIDE_RENDER,
+          PRODUCTION: env('production'),
+          DEVELOPMENT: env('development'),
         },
       },
     ]);

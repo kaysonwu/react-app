@@ -1,8 +1,10 @@
 import { singular } from 'pluralize';
 
 // #if IS_BROWSER
-export function onLoadError(): void {
-  // do nothing
+export function onLoadError(e: Error): void {
+  // #if DEVELOPMENT
+  console.warn(e);
+  // #endif
 }
 // #endif
 

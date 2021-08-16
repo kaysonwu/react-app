@@ -1,66 +1,38 @@
 import { resolve, join } from 'path';
 import { Configuration, WebpackPluginInstance } from 'webpack';
+import { createServe } from 'serve-mock';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import HtmlPlugin from 'html-webpack-plugin';
-import nodeExternals from 'webpack-node-externals';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 // @ts-expect-error: Waiting for declaration file.
+import ErrorOverlayPlugin from 'error-overlay-webpack-plugin';
+// @ts-expect-error: Waiting for declaration file.
 import AntdDayjsPlugin from 'antd-dayjs-webpack-plugin';
 import 'webpack-dev-server';
 
-type Flags = {
-  /**
-   * Environment passed to the configuration when it is a function.
-   */
-  env: {
-    /**
-     * true if serve|s is being used.
-     */
-    WEBPACK_SERVE?: boolean;
-
-    /**
-     * true if build|bundle|b is being used.
-     */
-    WEBPACK_BUILD?: boolean;
-
-    /**
-     * true if --watch|watch|w is being used.
-     */
-    WEBPACK_WATCH?: boolean;
-
-    /**
-     * Indicate whether server-side render is enabled.
-     */
-    ssr?: boolean;
-
-    [key: string]: unknown;
-  };
-
-  /**
-   * Sets the build target.
-   */
-  target: string[];
-
-  /**
-   * Defines the mode to pass to webpack e.g. 'development', 'production'.
-   */
-  mode: Configuration['mode'];
-
-  /**
-   * see: https://webpack.js.org/api/cli/#flags
-   */
-  [key: string]: unknown;
+const Try = <T>(fn: () => T): T | undefined => {
+  try {
+    return fn();
+  } catch {
+    return undefined;
+  }
 };
 
-const makeConfig = (target: string, mode: Configuration['mode'], ssr: boolean) => {
-  const entryPath = resolve(__dirname, 'src');
-  const outputPath = resolve(__dirname, target === 'web' ? 'public' : 'server');
+const ssr = process.argv.includes('ssr');
+const withoutMock = process.argv.includes('without-mock');
 
+// eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+const proxy = Try(() => require('./.proxy')?.default);
+const makeConfig = (target: string) => {
+  const entryPath = resolve(__dirname, 'src');
+  const outputPath = resolve(__dirname, 'public');
+
+  const mode = process.env.NODE_ENV as Configuration['mode'];
   const config: Configuration = {
     name: target,
-    target,
+    target: target === 'web' ? 'browserslist' : target,
     mode,
     entry: {
       app: join(entryPath, 'index.tsx'),
@@ -102,7 +74,6 @@ const makeConfig = (target: string, mode: Configuration['mode'], ssr: boolean) =
         {
           test: /\.less$/,
           use: [
-            'style-loader',
             MiniCssExtractPlugin.loader,
             'css-loader',
             {
@@ -119,7 +90,9 @@ const makeConfig = (target: string, mode: Configuration['mode'], ssr: boolean) =
     },
     plugins: [
       new AntdDayjsPlugin(),
-      new MiniCssExtractPlugin(),
+      new MiniCssExtractPlugin({
+        chunkFilename: 'css/[name].css',
+      }),
       new CleanWebpackPlugin({
         cleanOnceBeforeBuildPatterns: [
           '**/*',
@@ -134,17 +107,18 @@ const makeConfig = (target: string, mode: Configuration['mode'], ssr: boolean) =
         template: join(entryPath, 'index.html'),
       }),
     ],
-    devtool: mode === 'development' ? 'cheap-module-source-map' : false,
-    externalsPresets: { [target]: true },
-    externals: target === 'node' ? [nodeExternals()] : undefined,
+    devtool: false,
     devServer: {
       contentBase: outputPath,
       open: true,
       hot: true,
       historyApiFallback: true,
+      proxy,
+      after: withoutMock
+        ? undefined
+        : app => app.all('*', createServe(resolve(__dirname, 'mocks'))),
     },
     optimization: {
-      minimize: false,
       minimizer: [
         new TerserPlugin(),
         new CssMinimizerPlugin(),
@@ -161,13 +135,12 @@ const makeConfig = (target: string, mode: Configuration['mode'], ssr: boolean) =
     },
   };
 
+  if (mode === 'development') {
+    config.devtool = 'cheap-module-source-map';
+    config.plugins!.push(new ErrorOverlayPlugin());
+  }
+
   return config;
 };
 
-export default (env: Flags['env'], argv: Flags): Configuration[] => {
-  const { target = ['web'], mode = env.WEBPACK_SERVE ? 'development' : 'production' } = argv;
-
-  return target
-    .filter(t => ['web', 'node'].includes(t))
-    .map((t, _, array) => makeConfig(t, mode, array.length > 1));
-};
+export default [makeConfig('web')];

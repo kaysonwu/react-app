@@ -1,0 +1,7 @@
+import type { Configuration } from 'webpack-dev-server';
+
+const proxy: Configuration['proxy'] = {
+  '/api': 'http://example.com',
+};
+
+export default proxy;

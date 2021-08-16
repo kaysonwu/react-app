@@ -1,3 +1,3 @@
 export default {
-  'Hello React and Typescript!': 'Hello React and Typescript!',
+  'Learn React': '学习 React',
 };

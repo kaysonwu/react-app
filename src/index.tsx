@@ -13,7 +13,7 @@ const element = (
   </BrowserRouter>
 );
 
-// #if SSR
+// #if SERVER_SIDE_RENDER
 hydrate(element, container);
 // #else
 render(element, container);

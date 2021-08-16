@@ -74,7 +74,9 @@ console.log('hello browser!');
 
 ### 预置的变量
 
-- `SSR`：确定当前编译的运行目标是否要支持服务端渲染
+- `DEVELOPMENT`：确定当前编译环境是否为开发环境
+- `PRODUCTION`：确定当前编译环境是否为开发环境
+- `SERVER_SIDE_RENDER`：确定当前编译的运行目标是否要支持服务端渲染
 - `IS_BROWSER`：确定当前编译的运行目标是否为浏览器
 - `IS_NODE`：确定当前编译的运行目标是否为 Node
 
@@ -110,7 +112,7 @@ console.log('Kept'); // 这一行代码将被保留
 为了抑制错误，最简单的方式是在所有声明前使用 `// @ts-expect-error`
 
 ```ts
-// #if ENV === 'development'
+// #if DEVELOPMENT
 // @ts-expect-error: Use preprocessor instructions.
 const foo = 1;
 // #else

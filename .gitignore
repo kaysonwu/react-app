@@ -5,6 +5,7 @@ node_modules/
 /dist
 /.vscode
 /server
+/.proxy.ts
 
 # test
 coverage/

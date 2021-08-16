@@ -34,7 +34,11 @@ const Page: FC<PageProps> = ({ path, fallback, ...props }) => {
 
   // #if IS_BROWSER
   if (View === undefined) {
-    import(/* webpackChunkName: "pages/[request]" */ `@/pages/${path}`).then(async module => {
+    import(
+      /* webpackInclude: /\.(j|t)sx?$/ */
+      /* webpackChunkName: "pages/[request]" */
+      `@/pages/${path}`
+    ).then(async module => {
       const view = module.default as ComponentType;
 
       if (initialProps.current === undefined && view.getInitialProps) {
