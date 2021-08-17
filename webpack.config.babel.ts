@@ -6,6 +6,7 @@ import HtmlPlugin from 'html-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import ReactRefreshPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 // @ts-expect-error: Waiting for declaration file.
 import ErrorOverlayPlugin from 'error-overlay-webpack-plugin';
 // @ts-expect-error: Waiting for declaration file.
@@ -144,7 +145,7 @@ const makeConfig = (target: string) => {
 
   if (mode === 'development') {
     config.devtool = 'cheap-module-source-map';
-    config.plugins!.push(new ErrorOverlayPlugin());
+    config.plugins!.push(new ErrorOverlayPlugin(), new ReactRefreshPlugin());
   }
 
   return config;
