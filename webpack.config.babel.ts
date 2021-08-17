@@ -32,7 +32,7 @@ const makeConfig = (target: string) => {
   const mode = process.env.NODE_ENV as Configuration['mode'];
   const config: Configuration = {
     name: target,
-    target: target === 'web' ? 'browserslist' : target,
+    target,
     mode,
     entry: {
       app: join(entryPath, 'index.tsx'),
