@@ -1,5 +1,6 @@
 *
 !.gitignore
 !images/
-!images/**/*
+!images/chrome.png
+!images/ie.png
 !update-browser.html
