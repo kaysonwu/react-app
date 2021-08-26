@@ -11,7 +11,7 @@ import ReactRefreshPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import ErrorOverlayPlugin from 'error-overlay-webpack-plugin';
 // @ts-expect-error: Waiting for declaration file.
 import AntdDayjsPlugin from 'antd-dayjs-webpack-plugin';
-import 'webpack-dev-server';
+import { theme } from './package.json';
 
 const Try = <T>(fn: () => T): T | undefined => {
   try {
@@ -81,6 +81,7 @@ const makeConfig = (target: string) => {
               loader: 'less-loader',
               options: {
                 lessOptions: {
+                  modifyVars: theme,
                   javascriptEnabled: true,
                 },
               },

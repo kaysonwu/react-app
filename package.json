@@ -36,6 +36,9 @@
     ],
     "*.{json,md}": "prettier --write"
   },
+  "theme": {
+    "border-radius-base": "2px"
+  },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
     "antd": "^4.0.0",

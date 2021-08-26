@@ -4,7 +4,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["jest", "node", "dayjs/plugin/relativeTime"],
+    "types": ["jest", "node", "webpack-dev-server", "dayjs/plugin/relativeTime"],
     "strict": true,
     "jsx": "react",
     "target": "ES5",
@@ -13,6 +13,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"]
   },
   "exclude": ["node_modules"]
