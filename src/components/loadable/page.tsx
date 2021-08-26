@@ -1,4 +1,4 @@
-import React, { FC, ComponentType, useState, useRef } from 'react';
+import React, { FC, ComponentType, useState, useRef, useEffect } from 'react';
 import { pullInitialProps, makeRequestContext } from '@/utils/store';
 
 interface PageProps {
@@ -20,20 +20,23 @@ interface PageProps {
 
 const Page: FC<PageProps> = ({ path, fallback, ...props }) => {
   const initialProps = useRef<unknown>();
-  const [View, setView] = useState<ComponentType>(
-    // #if IS_NODE
-    // TODO: Waiting https://github.com/tleunen/babel-plugin-module-resolver/issues/322
-    // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require, global-require
-    () => require(`../../pages/${path.includes('/') ? path : `${path}/index`}`).default,
-    // #endif
-  );
 
   if (initialProps.current === undefined) {
     initialProps.current = pullInitialProps('page');
   }
 
-  // #if IS_BROWSER
-  if (View === undefined) {
+  let View: ComponentType | undefined =
+    // #if IS_NODE
+    // TODO: Waiting https://github.com/tleunen/babel-plugin-module-resolver/issues/322
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require, global-require
+    require(`../../pages/${path}`).default;
+
+  // #elif IS_BROWSER
+  let setView: React.Dispatch<React.SetStateAction<ComponentType | undefined>>;
+  // eslint-disable-next-line prefer-const
+  [View, setView] = useState<ComponentType | undefined>();
+
+  useEffect(() => {
     import(
       /* webpackInclude: /\.(j|t)sx?$/ */
       /* webpackChunkName: "pages/[request]" */
@@ -49,7 +52,9 @@ const Page: FC<PageProps> = ({ path, fallback, ...props }) => {
 
       setView(() => view);
     });
+  }, [path]);
 
+  if (View === undefined) {
     return fallback || null;
   }
   // #endif

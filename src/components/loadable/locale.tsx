@@ -1,4 +1,4 @@
-import { FC, Dispatch, SetStateAction, useState } from 'react';
+import { FC, Dispatch, SetStateAction, useState, useEffect } from 'react';
 import { onLoadError } from '@/utils/loadable';
 
 interface LocaleProps {
@@ -26,7 +26,7 @@ const Locale: FC<LocaleProps> = ({ paths, fallback, children }) => {
         return Object.assign(
           message,
           // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require, global-require
-          require(`../../locales/${path.includes('/') ? path : `${path}/index`}`).default,
+          require(`../../locales/${path}`).default,
         );
       } catch {
         return message;
@@ -38,7 +38,7 @@ const Locale: FC<LocaleProps> = ({ paths, fallback, children }) => {
   // eslint-disable-next-line prefer-const
   [messages, setMessages] = useState<Locale>();
 
-  if (messages === undefined) {
+  useEffect(() => {
     Promise.all(
       paths.map(path =>
         import(/* webpackChunkName: "locales/[request]" */ `@/locales/${path}`).catch(onLoadError),
@@ -51,7 +51,9 @@ const Locale: FC<LocaleProps> = ({ paths, fallback, children }) => {
         ),
       ),
     );
+  }, [paths]);
 
+  if (messages === undefined) {
     return fallback || null;
   }
   // #endif
