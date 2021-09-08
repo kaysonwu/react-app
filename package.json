@@ -39,9 +39,16 @@
   "theme": {
     "border-radius-base": "2px"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(less|jpg|jpeg|png|svg)$": "identity-obj-proxy"
+    }
+  },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
+    "@sindresorhus/is": "^3.0.0",
     "antd": "^4.0.0",
+    "axios": "^0.21.0",
     "cookie": "^0.4.1",
     "dayjs": "^1.6.0",
     "is-mobile": "^3.0.0",
@@ -98,6 +105,7 @@
     "eslint-plugin-react-hooks": "^4.0.0",
     "html-webpack-plugin": "^5.0.0",
     "husky": "^7.0.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^27.0.0",
     "less": "^4.0.0",
     "less-loader": "^10.0.0",
