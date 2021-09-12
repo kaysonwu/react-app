@@ -15,9 +15,9 @@ const Forbidden: FC = () => {
         subTitle={formatMessage({ id: "Sorry, you don't have access to this page." })}
         extra={
           <Space>
-            <Button onClick={goBack}>{formatMessage({ id: 'Go Back' })}</Button>
+            <Button onClick={goBack}>{formatMessage({ id: 'Go back' })}</Button>
             <Button type="primary" onClick={() => replace('/')}>
-              {formatMessage({ id: 'Back Home' })}
+              {formatMessage({ id: 'Back home' })}
             </Button>
           </Space>
         }

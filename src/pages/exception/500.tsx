@@ -15,9 +15,9 @@ const InternalServerError: FC = () => {
         subTitle={formatMessage({ id: 'Sorry, the server is reporting an error.' })}
         extra={
           <Space>
-            <Button onClick={() => replace('/')}>{formatMessage({ id: 'Back Home' })}</Button>
+            <Button onClick={() => replace('/')}>{formatMessage({ id: 'Back home' })}</Button>
             <Button type="primary" onClick={goBack}>
-              {formatMessage({ id: 'Try Again' })}
+              {formatMessage({ id: 'Try again' })}
             </Button>
           </Space>
         }

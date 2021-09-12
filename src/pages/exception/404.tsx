@@ -15,7 +15,7 @@ const NotFound: FC = () => {
         subTitle={formatMessage({ id: 'Sorry, the page you visited does not exist.' })}
         extra={
           <Button type="primary" onClick={() => replace('/')}>
-            {formatMessage({ id: 'Back Home' })}
+            {formatMessage({ id: 'Back home' })}
           </Button>
         }
       />
