@@ -1,5 +1,6 @@
-import React, { FC, ComponentType, useState, useRef, useEffect } from 'react';
+import React, { FC, ComponentType, useState, useRef } from 'react';
 import { pullInitialProps, makeRequestContext } from '@/utils/store';
+import usePrevious from '@/hooks/usePrevious';
 
 interface PageProps {
   /**
@@ -32,11 +33,12 @@ const Page: FC<PageProps> = ({ path, fallback, ...props }) => {
     require(`../../pages/${path}`).default;
 
   // #elif IS_BROWSER
+  const previousPath = usePrevious(path);
   let setView: React.Dispatch<React.SetStateAction<ComponentType | undefined>>;
   // eslint-disable-next-line prefer-const
-  [View, setView] = useState<ComponentType | undefined>();
+  [View, setView] = useState<ComponentType>();
 
-  useEffect(() => {
+  if (View === undefined || previousPath !== path) {
     import(
       /* webpackInclude: /\.(j|t)sx?$/ */
       /* webpackChunkName: "pages/[request]" */
@@ -49,12 +51,9 @@ const Page: FC<PageProps> = ({ path, fallback, ...props }) => {
           .getInitialProps(makeRequestContext())
           .catch(e => console.error(e));
       }
-
       setView(() => view);
     });
-  }, [path]);
 
-  if (View === undefined) {
     return fallback || null;
   }
   // #endif

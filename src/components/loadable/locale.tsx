@@ -1,5 +1,6 @@
-import { FC, Dispatch, SetStateAction, useState, useEffect } from 'react';
+import { FC, Dispatch, SetStateAction, useState } from 'react';
 import { onLoadError } from '@/utils/loadable';
+import usePrevious from '@/hooks/usePrevious';
 
 interface LocaleProps {
   /**
@@ -34,11 +35,12 @@ const Locale: FC<LocaleProps> = ({ paths, fallback, children }) => {
     }, {});
 
   // #elif IS_BROWSER
+  const previousPaths = usePrevious(paths);
   let setMessages: Dispatch<SetStateAction<Locale | undefined>>;
   // eslint-disable-next-line prefer-const
   [messages, setMessages] = useState<Locale>();
 
-  useEffect(() => {
+  if (messages === undefined || previousPaths?.toString() !== paths.toString()) {
     Promise.all(
       paths.map(path =>
         import(/* webpackChunkName: "locales/[request]" */ `@/locales/${path}`).catch(onLoadError),
@@ -51,9 +53,6 @@ const Locale: FC<LocaleProps> = ({ paths, fallback, children }) => {
         ),
       ),
     );
-  }, [paths]);
-
-  if (messages === undefined) {
     return fallback || null;
   }
   // #endif
