@@ -7,11 +7,6 @@ interface Locale {
   antd?: import('antd/lib/locale-provider').Locale;
 
   /**
-   * Antd form component validate messages.
-   */
-  validateMessages?: import('rc-field-form/lib/interface').ValidateMessages;
-
-  /**
    * Dayjs
    */
   dayjs?: import('dayjs/locale/*').Locale;

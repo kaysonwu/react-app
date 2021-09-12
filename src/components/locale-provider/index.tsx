@@ -22,7 +22,7 @@ const cache = createIntlCache();
 
 const LocaleProvider: FC<LocaleProviderProps> = ({ locale, files, children, ...props }) => (
   <Loadable paths={files || [locale]}>
-    {({ antd, validateMessages, dayjs, ...messages }) => {
+    {({ antd, dayjs, ...messages }) => {
       const intl = createIntl({ locale, messages }, cache);
       const provider = <RawIntlProvider value={intl}>{children}</RawIntlProvider>;
 
@@ -37,7 +37,7 @@ const LocaleProvider: FC<LocaleProviderProps> = ({ locale, files, children, ...p
       }
 
       return (
-        <ConfigProvider {...props} locale={antd} form={{ validateMessages }}>
+        <ConfigProvider {...props} locale={antd}>
           {provider}
         </ConfigProvider>
       );
