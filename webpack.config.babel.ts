@@ -135,7 +135,7 @@ const makeConfig = (target: string) => {
       splitChunks: {
         cacheGroups: {
           vendor: {
-            test: /[\\/]node_modules[\\/]/,
+            test: /[\\/](node_modules|src[\\/]components)[\\/]/,
             chunks: 'all',
             name: 'vendor',
           },
