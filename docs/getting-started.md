@@ -151,8 +151,13 @@ yarn start
 │   │   └── home                        //    Home 示例页面
 │   │       └── index.tsx
 │   │
+│   ├── rules                           //  `antd` From 组件自定义验证规则
+│   │
+│   ├── services                        //  API 服务
+│   │
 │   ├── typings                         //  Typescript 全局声明文件
 │   │   ├── api.d.ts                    //    API
+│   │   ├── images.d.ts                 //    资源文件
 │   │   ├── locale.d.ts                 //    国际化
 │   │   └── store.d.ts                  //    数据
 │   │
@@ -161,8 +166,7 @@ yarn start
 │   │   ├── locale.ts                   //    国际化
 │   │   ├── route.ts                    //    路由
 │   │   ├── store.ts                    //    数据
-│   │   ├── string.ts                   //    字符串辅助函数
-│   │   └── util.ts                     //    辅助函数
+│   │   └── string.ts                   //    字符串辅助函数
 │   │
 │   ├── indedx.html                     //  HTML 模板
 │   ├── index.tsx                       //  入口文件
@@ -173,7 +177,8 @@ yarn start
 ├── .eslintrc                           // ESLint 配置文件
 ├── .gitignore                          // Git 忽略文件
 ├── .prettierignore                     // Prettier 忽略文件
-├── ..prettierrc                        // Prettier 配置文件
+├── .prettierrc                         // Prettier 配置文件
+├── .proxy.ts.example                   // webpack-dev-server 代理配置示例文件
 ├── .stylelintrc                        // Stylelint 配置文件
 ├── babel.config.js                     // Babel 配置文件
 ├── LICENSE                             // 开源协议
