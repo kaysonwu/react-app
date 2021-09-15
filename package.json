@@ -46,7 +46,6 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
-    "@sindresorhus/is": "^3.0.0",
     "antd": "^4.0.0",
     "axios": "^0.21.0",
     "cookie": "^0.4.1",
