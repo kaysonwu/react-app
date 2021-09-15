@@ -89,8 +89,6 @@
 │   │   └── home                        //    Home 示例页面
 │   │       └── index.tsx
 │   │
-│   ├── rules                           //  `antd` From 组件自定义验证规则
-│   │
 │   ├── services                        //  API 服务
 │   │
 │   ├── typings                         //  Typescript 全局声明文件
@@ -100,6 +98,8 @@
 │   │   └── store.d.ts                  //    数据
 │   │
 │   ├── utils                           //  应用工具箱
+│   │   ├── request                     //    请求库
+│   │   ├── rules                       //    antd From 组件自定义验证规则
 │   │   ├── loadable.ts                 //    代码拆分
 │   │   ├── locale.ts                   //    国际化
 │   │   ├── route.ts                    //    路由
