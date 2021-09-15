@@ -1,12 +1,12 @@
-import type { History } from 'history';
+import type { History as HistoryInstance } from 'history';
 
 // @Internal Don't modify it
-let _: History | undefined;
-const Route = {} as Omit<History, 'length' | 'action' | 'location'>;
+let History: HistoryInstance | undefined;
+const Route = {} as Omit<HistoryInstance, 'length' | 'action' | 'location'>;
 
 // Used to expose the react-router-dom API
-export function injectionHistory(history: History): void {
-  _ = history;
+export function injectionHistory(history: HistoryInstance): void {
+  History = history;
 }
 
 (
@@ -19,13 +19,13 @@ export function injectionHistory(history: History): void {
     'block',
     'listen',
     'createHref',
-  ] as (keyof History)[]
+  ] as (keyof HistoryInstance)[]
 ).forEach(method => {
   // @ts-expect-error: Wait for type inference upgrade.
   Route[method] = (...parameters) => {
-    if (_?.[method]) {
+    if (History?.[method]) {
       // @ts-expect-error: Wait for type inference upgrade.
-      return _[method].call(_, ...parameters);
+      return History[method].call(_, ...parameters);
     }
 
     throw new Error(
