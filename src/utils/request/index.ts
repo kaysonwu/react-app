@@ -20,5 +20,5 @@ instance.interceptors.request.use(config => ({
 // 通过请求拦截器设置错误处理程序
 instance.interceptors.response.use(undefined, errorHandler);
 
-export { Response, RequestError };
+export type { Response, RequestError };
 export const { getUri, request, get, post, put, patch, delete: del, head, options } = instance;
