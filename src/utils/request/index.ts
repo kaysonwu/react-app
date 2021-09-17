@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { paginate, serialize, unserialize } from './transformers';
 import errorHandler from './errorHandler';
-import type { RequestInstance, Response, RequestError } from './interface';
+import { paginate, serialize, unserialize } from './transformers';
+import type { RequestError, RequestInstance, Response } from './interface';
 
 const instance = axios.create({
   headers: { Accept: 'application/json, text/plain, */*' },

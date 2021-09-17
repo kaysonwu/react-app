@@ -1,11 +1,11 @@
 import React, { FC, useState } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
 import isMobile from 'is-mobile';
+import { useHistory, useLocation } from 'react-router-dom';
+import LocaleProvider from '@/components/locale-provider';
 import { getNameFromPath } from '@/utils/loadable';
 import { LOCALE_CHANGE } from '@/utils/locale';
 import { injectionHistory } from '@/utils/route';
 import { makeRequestContext } from '@/utils/store';
-import LocaleProvider from '../locale-provider';
 import App, { GlobalState } from './context';
 import Router from './router';
 

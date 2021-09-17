@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Button, Result } from 'antd';
 import { useIntl } from 'react-intl';
-import { Result, Button } from 'antd';
+import { useHistory } from 'react-router-dom';
 
 const NotFound: FC = () => {
   const { replace } = useHistory();

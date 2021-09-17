@@ -1,16 +1,16 @@
-import { resolve, join } from 'path';
 import { Configuration, WebpackPluginInstance } from 'webpack';
-import { createServe } from 'serve-mock';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import HtmlPlugin from 'html-webpack-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
-import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import { join, resolve } from 'path';
 import ReactRefreshPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 // @ts-expect-error: Waiting for declaration file.
-import ErrorOverlayPlugin from 'error-overlay-webpack-plugin';
-// @ts-expect-error: Waiting for declaration file.
 import AntdDayjsPlugin from 'antd-dayjs-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+// @ts-expect-error: Waiting for declaration file.
+import ErrorOverlayPlugin from 'error-overlay-webpack-plugin';
+import HtmlPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { createServe } from 'serve-mock';
+import TerserPlugin from 'terser-webpack-plugin';
 import { theme } from './package.json';
 
 const Try = <T>(fn: () => T): T | undefined => {

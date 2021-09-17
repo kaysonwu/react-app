@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Button, Result, Space } from 'antd';
 import { useIntl } from 'react-intl';
-import { Result, Space, Button } from 'antd';
+import { useHistory } from 'react-router-dom';
 
 const InternalServerError: FC = () => {
   const { replace, goBack } = useHistory();

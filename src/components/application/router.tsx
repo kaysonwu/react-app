@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
 import { Spin } from 'antd';
-import Page from '../loadable/page';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { Page } from '@/components/loadable';
 
 const Router: FC = () => {
   const loading = <Spin />;

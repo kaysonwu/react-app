@@ -1,6 +1,6 @@
-import type { AxiosRequestConfig, AxiosTransformer, AxiosResponse, AxiosPromise } from 'axios';
 import type { FormInstance } from 'antd';
-import type { IncomingHttpHeaders, ClientRequest } from 'http';
+import type { AxiosPromise, AxiosRequestConfig, AxiosResponse, AxiosTransformer } from 'axios';
+import type { ClientRequest, IncomingHttpHeaders } from 'http';
 
 interface RequestConfig extends AxiosRequestConfig {
   transformRequest?: AxiosTransformer[];

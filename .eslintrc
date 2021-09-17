@@ -28,6 +28,33 @@
   "rules": {
     "no-console": ["error", { "allow": ["warn", "error"] }],
     "import/extensions": "off",
+    "sort-imports": ["error", { "ignoreDeclarationSort": true }],
+    // 类型导入支持尚不友好，期望类型导入也支持基本组，例如：builtin, external, internal 等等
+    // https://github.com/import-js/eslint-plugin-import/issues/2172
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "type"],
+        "pathGroups": [
+          {
+            "pattern": "+(react|react-dom|webpack)",
+            "group": "builtin",
+            "position": "before"
+          },
+          {
+            "pattern": "rc-*/**",
+            "group": "type",
+            "position": "before"
+          },
+          {
+            "pattern": "@/**",
+            "group": "internal"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": [],
+        "alphabetize": { "order": "asc", "caseInsensitive": false }
+      }
+    ],
     "import/no-unresolved": [
       "error",
       {

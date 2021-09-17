@@ -1,6 +1,6 @@
-import { serialize, parse } from 'cookie';
+import { parse, serialize } from 'cookie';
 import type { IncomingMessage } from 'http';
-import type { IntlShape, IntlFormatters } from 'react-intl';
+import type { IntlFormatters, IntlShape } from 'react-intl';
 
 const LOCALE_KEY = 'locale';
 

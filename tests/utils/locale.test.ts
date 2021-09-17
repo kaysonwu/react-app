@@ -1,5 +1,5 @@
+import { LOCALE_CHANGE, getLocale, getLocaleFromRequest, setLocale } from '@/utils/locale';
 import type { IncomingMessage } from 'http';
-import { getLocale, setLocale, getLocaleFromRequest, LOCALE_CHANGE } from '@/utils/locale';
 
 const LANGUAGE_KEY = 'locale';
 

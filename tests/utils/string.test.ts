@@ -1,4 +1,4 @@
-import { lowerFirst, upperFirst, upperWords, studly, camel, snake, kebab } from '@/utils/string';
+import { camel, kebab, lowerFirst, snake, studly, upperFirst, upperWords } from '@/utils/string';
 
 describe('Test locale util', () => {
   test('lowerFirst', () => {

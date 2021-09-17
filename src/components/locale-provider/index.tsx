@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import Dayjs from 'dayjs';
-import { createIntlCache, createIntl, RawIntlProvider } from 'react-intl';
 import { ConfigProvider } from 'antd';
-import { ConfigProviderProps } from 'antd/lib/config-provider';
+import Dayjs from 'dayjs';
+import { RawIntlProvider, createIntl, createIntlCache } from 'react-intl';
+import { Locale } from '@/components/loadable';
 import { injectionIntl } from '@/utils/locale';
-import Loadable from '../loadable/locale';
+import type { ConfigProviderProps } from 'antd/lib/config-provider';
 
 interface LocaleProviderProps extends Omit<ConfigProviderProps, 'locale' | 'form'> {
   /**
@@ -21,7 +21,7 @@ interface LocaleProviderProps extends Omit<ConfigProviderProps, 'locale' | 'form
 const cache = createIntlCache();
 
 const LocaleProvider: FC<LocaleProviderProps> = ({ locale, files, children, ...props }) => (
-  <Loadable paths={files || [locale]}>
+  <Locale paths={files || [locale]}>
     {({ antd, dayjs, ...messages }) => {
       const intl = createIntl({ locale, messages }, cache);
       const provider = <RawIntlProvider value={intl}>{children}</RawIntlProvider>;
@@ -42,7 +42,7 @@ const LocaleProvider: FC<LocaleProviderProps> = ({ locale, files, children, ...p
         </ConfigProvider>
       );
     }}
-  </Loadable>
+  </Locale>
 );
 
 export default LocaleProvider;

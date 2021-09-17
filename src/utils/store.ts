@@ -1,5 +1,5 @@
-import { parse } from 'qs';
 import { parse as parseUrl } from 'url';
+import { parse } from 'qs';
 import type { IncomingMessage } from 'http';
 
 export function pullInitialProps<T>(key: string, defaultValue?: T): T | undefined {

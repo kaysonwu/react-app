@@ -1,8 +1,8 @@
 import type {
   FormInstance,
   NamePath,
-  StoreValue,
   RuleObject as RuleObjectBase,
+  StoreValue,
 } from 'rc-field-form/lib/interface';
 
 type ValidateMessage = string | (() => string);

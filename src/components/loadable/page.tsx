@@ -1,6 +1,6 @@
-import React, { FC, ComponentType, useState, useRef } from 'react';
-import { pullInitialProps, makeRequestContext } from '@/utils/store';
+import React, { ComponentType, FC, useRef, useState } from 'react';
 import usePrevious from '@/hooks/usePrevious';
+import { makeRequestContext, pullInitialProps } from '@/utils/store';
 
 interface PageProps {
   /**

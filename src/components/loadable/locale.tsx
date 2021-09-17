@@ -1,6 +1,6 @@
-import { FC, Dispatch, SetStateAction, useState } from 'react';
-import { onLoadError } from '@/utils/loadable';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 import usePrevious from '@/hooks/usePrevious';
+import { onLoadError } from '@/utils/loadable';
 
 interface LocaleProps {
   /**
