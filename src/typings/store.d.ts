@@ -12,7 +12,13 @@ declare namespace NodeJS {
 
 declare namespace React {
   interface RequestContext {
+    hash: string | null;
+    host: string | null;
+    hostname: string | null;
+    href: string;
     pathname: string | null;
+    protocol: string | null;
+    port: string | null;
     query: Record<string, any>;
     // HTTP request object (server only)
     request?: import('http').IncomingMessage;
