@@ -70,7 +70,9 @@
         "devDependencies": ["tests/**", "scripts/**", "mocks/**", "*.config*.{js,ts}"]
       }
     ],
+    "jsx-a11y/click-events-have-key-events": "off",
     "react/prop-types": "off",
+    "react/jsx-sort-props": ["error", { "reservedFirst": true, "shorthandFirst": true, "callbacksLast": true }],
     "react/jsx-props-no-spreading": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
     "react-hooks/rules-of-hooks": "error",
