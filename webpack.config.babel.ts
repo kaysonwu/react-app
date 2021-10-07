@@ -1,3 +1,4 @@
+/* eslint no-console: ["error", { allow: ["warn", "error", "info"] }] */
 import { Configuration, WebpackPluginInstance } from 'webpack';
 import { join, resolve } from 'path';
 import ReactRefreshPlugin from '@pmmmwh/react-refresh-webpack-plugin';
@@ -125,7 +126,19 @@ const makeConfig = (target: string) => {
       proxy,
       after: withoutMock
         ? undefined
-        : app => app.all('*', createServe(resolve(__dirname, 'mocks'))),
+        : (app, server) =>
+            app.all(
+              '*',
+              createServe(resolve(__dirname, 'mocks'), {
+                onWatch: name => {
+                  if (name === 'change') {
+                    console.info('\x1b[34mℹ\x1b[0m \x1b[90m｢mock｣\x1b[0m: Compiling...');
+                    server.sockWrite(server.sockets, 'content-changed');
+                    console.info('\x1b[34mℹ\x1b[0m \x1b[90m｢mock｣\x1b[0m: Compiled successfully.');
+                  }
+                },
+              }),
+            ),
     },
     optimization: {
       minimizer: [
