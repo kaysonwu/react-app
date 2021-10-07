@@ -6,7 +6,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "postinstall": "husky install",
+    "prepare": "husky install",
     "dev": "webpack server --node-env development --progress",
     "build": "webpack build --node-env production --progress",
     "prebuild:server": "rm -rf server",
