@@ -10,9 +10,6 @@ const Forbidden: FC = () => {
   return (
     <>
       <Result
-        status="403"
-        title={formatMessage({ id: 'Forbidden' })}
-        subTitle={formatMessage({ id: "Sorry, you don't have access to this page." })}
         extra={
           <Space>
             <Button onClick={goBack}>{formatMessage({ id: 'Go back' })}</Button>
@@ -21,6 +18,9 @@ const Forbidden: FC = () => {
             </Button>
           </Space>
         }
+        status="403"
+        subTitle={formatMessage({ id: "Sorry, you don't have access to this page." })}
+        title={formatMessage({ id: 'Forbidden' })}
       />
     </>
   );

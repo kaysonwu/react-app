@@ -10,9 +10,6 @@ const InternalServerError: FC = () => {
   return (
     <>
       <Result
-        status={500}
-        title={formatMessage({ id: 'Internal Server Error' })}
-        subTitle={formatMessage({ id: 'Sorry, the server is reporting an error.' })}
         extra={
           <Space>
             <Button onClick={() => replace('/')}>{formatMessage({ id: 'Back home' })}</Button>
@@ -21,6 +18,9 @@ const InternalServerError: FC = () => {
             </Button>
           </Space>
         }
+        status={500}
+        subTitle={formatMessage({ id: 'Sorry, the server is reporting an error.' })}
+        title={formatMessage({ id: 'Internal Server Error' })}
       />
     </>
   );

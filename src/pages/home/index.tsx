@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import { useIntl } from 'react-intl';
 import { Button } from 'antd';
+import { useIntl } from 'react-intl';
 import './index.less';
 
 interface HomeProps {
@@ -13,12 +13,12 @@ const Home: FC<HomeProps> = ({ logo }) => {
   return (
     <div className="home-page">
       <header className="header">
-        <img src={logo} className="logo" alt="logo" />
+        <img alt="logo" className="logo" src={logo} />
         <p>
           Edit <code>src/pages/home/index.tsx</code> and save to reload.
         </p>
       </header>
-      <Button type="link" href="https://reactjs.org" target="_blank">
+      <Button href="https://reactjs.org" target="_blank" type="link">
         {formatMessage({ id: 'Learn React' })}
       </Button>
     </div>
